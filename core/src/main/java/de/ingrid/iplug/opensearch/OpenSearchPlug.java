@@ -193,8 +193,9 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 	public IngridHitDetail getDetail(IngridHit arg0, IngridQuery arg1,
 			String[] arg2) throws Exception {
 		log.debug("getOpenSeach-Detail");
-		// TODO Auto-generated method stub
 		IngridHitDetail hitDetail = new IngridHitDetail();
+		// FIXME set correct id
+		hitDetail.setDocumentId(1);
 		return hitDetail;
 	}
 
@@ -202,8 +203,12 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 	public IngridHitDetail[] getDetails(IngridHit[] arg0, IngridQuery arg1,
 			String[] arg2) throws Exception {
 		log.debug("getOpenSeach-Details");
-		// TODO Auto-generated method stub
-		IngridHitDetail[] hitDetails = {new IngridHitDetail()};
+		IngridHitDetail[] hitDetails = new IngridHitDetail[arg0.length];
+		int c = 0;
+		for (IngridHitDetail ingridHitDetail : hitDetails) {
+			ingridHitDetail = getDetail(arg0[c], arg1, arg2);
+			c++;
+		}
 		return hitDetails;
 	}
 	
