@@ -1,0 +1,128 @@
+<rss xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:ingridsearch="http://www.wemove.com/ingrid/opensearchextension/0.1/" version="2.0">
+  <channel>
+    <title>ingrid OpenSearch: boden</title>
+    <link>http://213.144.28.233/opensearch/query?q=boden&amp;p=0&amp;h=10&amp;format=rss</link>
+    <description>Search results</description>
+    <totalResults xmlns="opensearch">103</totalResults>
+    <startIndex xmlns="opensearch">1</startIndex>
+    <itemsPerPage xmlns="opensearch">10</itemsPerPage>
+    <Query xmlns="opensearch" role="request" searchTerms="boden" />
+    <item>
+      <title>Trefferliste vom Portal des UOK Bayern</title>
+      <link>http://www.uok.bayern.de/portal/search.htm?_caller=complex&amp;o=1&amp;q=VU9LX3B1YmxpY1sufj0nYm9kZW4nXS9NZXRhZGF0ZW4@</link>
+      <description>3752 Treffer</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-g2k-uok</plugid>
+      <docid xmlns="ingridsearch">19101</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">Umweltobjektkatalog Bayern</source>
+    </item>
+    <item>
+      <title>UBA: Umweltliteratur-Datenbank (ULIDAT)</title>
+      <link>
+      http://doku.uba.de:80/cgi-bin/g2kadis?WEB=JA&amp;ADISDB=AK&amp;%24VTIV1=J&amp;THEMA1=boden+&amp;TITEL=boden+&amp;THEMA2=boden+&amp;GEJAHR=&amp;GEJAHV=&amp;GEJAHB=&amp;%24TMPLG=(DW0720*TH=TTDWDE,L=L0720,Q=SWVF/DW0720,M=U*+o+(THA710*TH=THESAW,L=L0710,Q=SWVF/THA710,M=u*+u+A0712*Q=BIBDE1,M=u*+o+CASNR*Q=CASNR1,M=u*+o+STOFFN*Q=STOFF1,M=u*)+o+A0720P*Q=A0720P,M=u*+o+A0720*Q=A0720,M=u*)</link>
+      <description>26606 Treffer zu: boden</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-g2k-ulidat</plugid>
+      <docid xmlns="ingridsearch">36306</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">ULIDAT</source>
+    </item>
+    <item>
+      <title>UBA: Umweltforschungs-Datenbank (UFORDAT)</title>
+      <link>
+      http://doku.uba.de:80/cgi-bin/g2kadis?WEB=JA&amp;ADISDB=VH&amp;%24VTIV1=J&amp;THEMA1=boden+&amp;TITEL=boden+&amp;THEMA2=boden+&amp;VHBEG=&amp;VHBEGF=&amp;STATUS=G,X&amp;VERSTA=x,f&amp;%24TMPLG=(DW0720*TH=TTDWDE,L=L0720,Q=SWVF/DW0720,M=u*+o+(THKEY*TH=THESAW,L=L0710,Q=SWVF/THKEY,M=u*+u+AUTDD*Q=AUTDD1,M=u*+o+CASNR*Q=CASNR1,M=u*+o+STOFFN*Q=STOFF1,M=u*)+o+A0720P*Q=A0720P,M=u*+o+A0720*Q=A0720,M=u*)+u+STATUS*Q=STATUS*+u+VERSTA*Q=VERSTA*</link>
+      <description>6130 Treffer zu: boden</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-g2k-ufordat</plugid>
+      <docid xmlns="ingridsearch">37214</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">UFORDAT</source>
+    </item>
+    <item>
+      <title>boden bn Rheinische Friedrich-Wilhelms-Universit&#195;&#164;t Bonn</title>
+      <link></link>
+      <description>Institut f&#239;&#191;&#189;r Bodenkunde der Universit&#239;&#191;&#189;t Bonn Unsere Homepage hat eine neue Adresse: http://www.uni bonn.de/boden/</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-fpn</plugid>
+      <docid xmlns="ingridsearch">65801</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">Forschungsportal.Net</source>
+    </item>
+    <item>
+      <title>Index of /Boden Technische Universit&#195;&#164;t Dresden</title>
+      <link></link>
+      <description>Index of /Boden Name Last modified Size Description (...) Directory 21 Dec 04 08:05 Boden eng/ 04 Jan 05 05:28 (...) DBG LOGO.gif 19 Nov 04 04:53 5k Einfuehrung.htm 04 Jan 05 08:15 5k Thumbs.db 19 Nov 04 04:54 169k aktuell.htm 14 Feb 05 08:40 6k aktuelles/ 14 Feb 05 08:39
+      anfahrt.htm 19 Nov 04 04:53 4k anfahrt/ 22</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-fpn</plugid>
+      <docid xmlns="ingridsearch">65802</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">Forschungsportal.Net</source>
+    </item>
+    <item>
+      <title>Index of / Boden Philipps-Universit&#195;&#164;t Marburg</title>
+      <link></link>
+      <description>Index of / Boden Name Last modified Size Description (...) Parent Directory 27 Apr 2004 11:10 Apache/1.3.31 Server at www.students.uni marburg.de Port 80</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-fpn</plugid>
+      <docid xmlns="ingridsearch">65803</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">Forschungsportal.Net</source>
+    </item>
+    <item>
+      <title>A.K. Boden in Schule und Weiterbildung Universit&#195;&#164;t Hohenheim</title>
+      <link></link>
+      <description>Arbeitskreis Boden in Unterricht und Weiterbildung der Deutschen Bodenkundlichen Gesellschaft. FASZINATION BODEN english Aktuelles Der Arbeitskreis stellt (...) Diskussionsforum Didaktik rund um den Boden Publikationen und Neuerscheinungen Studium der Bodenwissenschaften Internet
+      Adressen Homepage der Deutschen Bodenkundlichen Gesellschaft Impressum</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-fpn</plugid>
+      <docid xmlns="ingridsearch">65804</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">Forschungsportal.Net</source>
+    </item>
+    <item>
+      <title>PPT Universit&#195;&#164;t Regensburg</title>
+      <link></link>
+      <description>/var/tmp/aaahVaqgt Wirkungsweise des Fluxgate (Saturationsmagnetometer) Macht sich (...) Eigenschaften im Vergleich zum umgebenden Boden Nat&#239;&#191;&#189;rliche Prozesse erzeugen keine erkennbaren Muster im Gegensatz zu anthropogenen Prozessen Messung der
+      oberfl&#239;&#191;&#189;chennahen Intensit&#239;&#191;&#189;t des Erdmagnetfeldes in engmaschigem Raster Arch&#239;&#191;&#189;ologische Strukturen zeigen sich im Bild,</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-fpn</plugid>
+      <docid xmlns="ingridsearch">65805</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">Forschungsportal.Net</source>
+    </item>
+    <item>
+      <title>Boden und Sedimentmineralogische &#239;&#191;&#189;bungen Universit&#195;&#164;t Fridericiana zu Karlsruhe</title>
+      <link></link>
+      <description>Boden und Sedimentmineralogische &#239;&#191;&#189;bungen 10012 fr&#239;&#191;&#189;her: (...) praktische Teil, in welchem an Boden und Sedimentproben mineralogische Phasen bestimmt (...) ein Schein ausgestellt wird. Hinweis(e): Boden und Sedimentmineralogische
+      &#239;&#191;&#189;bungen Interessenten werden gebeten sich in die Teilnehmer Liste einzutragen; die Liste h&#239;&#191;&#189;ngt in Geb. 30.44, 5.OG aus (Schwarzes Brett links, im Eingangsbereich zu den</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-fpn</plugid>
+      <docid xmlns="ingridsearch">65806</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">Forschungsportal.Net</source>
+    </item>
+    <item>
+      <title>AGB&#239;&#191;&#189;S: Boden und ...Universit&#195;&#164;t Hohenheim</title>
+      <link></link>
+      <description>AG B&#239;&#191;&#189;S: Arbeitsgruppe B&#239;&#191;&#189;den und &#239;&#191;&#189;kologie in (...) besonderen hinsichtlich unserer regelm&#239;&#191;&#189;&#239;&#191;&#189;igen Treffen! Boden und Fl&#239;&#191;&#189;chenressourcenmanagement in Ballungs&#239;&#191;&#189;umen
+      Bewertungssysteme Das Projekt Das Projekt bei BW PLUS Links &#239;&#191;&#189;kosystemare Potentiale Das Projekt Das Projekt bei BW PLUS Links Bodenbiologie Das Projekt Das Projekt bei BW PLUS Links</description>
+      <plugid xmlns="ingridsearch">/kug-group:iplug-fpn</plugid>
+      <docid xmlns="ingridsearch">65807</docid>
+      <docuuid xmlns="ingridsearch"></docuuid>
+      <provider xmlns="ingridsearch"></provider>
+      <partner xmlns="ingridsearch"></partner>
+      <source xmlns="ingridsearch">Forschungsportal.Net</source>
+    </item>
+  </channel>
+</rss>
