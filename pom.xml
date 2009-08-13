@@ -13,7 +13,7 @@
   <name>ingrid-iplug-opensearch:pom</name>
   <modules>
     <module>core</module>
-    <module>ui</module>
+    <!--<module>ui</module>-->
   </modules>
   <scm>
     <connection>scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-iplug-opensearch/trunk</connection>
