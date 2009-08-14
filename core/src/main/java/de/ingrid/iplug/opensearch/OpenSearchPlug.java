@@ -15,6 +15,7 @@ import de.ingrid.iplug.opensearch.converter.IngridConverter;
 import de.ingrid.iplug.opensearch.converter.IngridRSSConverter;
 import de.ingrid.iplug.opensearch.query.OSDescriptor;
 import de.ingrid.iplug.opensearch.query.OSDescriptorBuilder;
+import de.ingrid.iplug.opensearch.query.OSQuery;
 import de.ingrid.iplug.opensearch.query.OSQueryBuilder;
 import de.ingrid.iplug.opensearch.query.OSRequest;
 import de.ingrid.utils.IPlug;
@@ -118,8 +119,10 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 		log.info("  - SOAP-Version: " + fSOAPVersion);
 		// log.info(" - Language: " + fLanguage);
 			
+		log.info("Receiving OpenSearch-Descriptor ...");
 		OSDescriptorBuilder descrBuilder = new OSDescriptorBuilder();
 		osDescriptor = descrBuilder.receiveDescriptor(fServiceURL);
+		log.info("OpenSearch-Descriptor received!");
 		
 		log.info("iPlug initialized; waiting for incoming queries.");
 	}
@@ -190,23 +193,27 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 	}
 
 	@Override
-	public IngridHitDetail getDetail(IngridHit arg0, IngridQuery arg1,
+	public IngridHitDetail getDetail(IngridHit hit, IngridQuery query,
 			String[] arg2) throws Exception {
-		log.debug("getOpenSeach-Detail");
-		IngridHitDetail hitDetail = new IngridHitDetail();
+		log.debug("getOpenSearch-Detail");
+		IngridHitDetail hitDetail = new IngridHitDetail(hit, hit.getString("title"), hit.getString("abstract"));
 		// FIXME set correct id
-		hitDetail.setDocumentId(1);
+		hitDetail.setDocumentId(hit.getDocumentId());
+		hitDetail.setPlugId(hit.getPlugId());
+		hitDetail.setDataSourceId(hit.getDataSourceId());
+		hitDetail.put("url", hit.get("url"));
+		
 		return hitDetail;
 	}
 
 	@Override
-	public IngridHitDetail[] getDetails(IngridHit[] arg0, IngridQuery arg1,
+	public IngridHitDetail[] getDetails(IngridHit[] hits, IngridQuery query,
 			String[] arg2) throws Exception {
-		log.debug("getOpenSeach-Details");
-		IngridHitDetail[] hitDetails = new IngridHitDetail[arg0.length];
+		log.debug("getOpenSearch-Details");
+		IngridHitDetail[] hitDetails = new IngridHitDetail[hits.length];
 		int c = 0;
-		for (IngridHitDetail ingridHitDetail : hitDetails) {
-			ingridHitDetail = getDetail(arg0[c], arg1, arg2);
+		for (IngridHit singleHit : hits) {
+			hitDetails[c] = getDetail(singleHit, query, arg2);
 			c++;
 		}
 		return hitDetails;

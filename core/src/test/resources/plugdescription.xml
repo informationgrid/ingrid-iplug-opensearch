@@ -39,7 +39,7 @@
   <string>Landesanstalt für Umwelt, Messungen und Naturschutz Baden-Württemberg</string>
   <string>ranking</string>
   <list>
-    <string>off</string>
+    <string>score</string>
   </list>
   <string>personPhone</string>
   <string>120-3466</string>
@@ -50,14 +50,15 @@
   <string>language</string>
   <string>de</string>
   <string>serviceUrl</string>
-  <string>http://192.168.0.248:8083/descriptor</string>
+  <!--<string>http://192.168.0.248:8083/descriptor</string>-->
+  <string>http://193.197.158.225/search?q=boden&amp;output=xml&amp;client=BW_OpenSearch_xml&amp;oe=UTF-8&amp;ie=UTF-8&amp;proxystylesheet=BW_OpenSearch_xml&amp;site=BW_UP&amp;markup=opensearch</string>
   <string>organisationAbbr</string>
   <string>bw_lu</string>
   <string>soapVersion</string>
   <string>12</string>
   <string>busUrls</string>
   <list>
-    <string>/torwald-group:torwald-ibus</string>
+    <string>/ingrid-group:ibus-vm</string>
   </list>
   <string>md5Hash</string>
   <string>/torwald-group:torwald-iplug-opensearch-test</string>

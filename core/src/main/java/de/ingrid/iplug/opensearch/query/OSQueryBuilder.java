@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.ingrid.iplug.opensearch.OSQuery;
 import de.ingrid.utils.IngridQueryTools;
 import de.ingrid.utils.query.FieldQuery;
 import de.ingrid.utils.query.IngridQuery;

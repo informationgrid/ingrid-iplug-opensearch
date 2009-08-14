@@ -21,17 +21,17 @@ public class StringUtils {
 		
 		String pattern = "\\{"+parameter+"\\??\\}";
 		String res = text.replaceAll(pattern, insert);
-		System.out.println(res);
 		return res;
 		
 	}
 
 	public static String removeUnusedParameter(String query) {
 		// this pattern represents:
-		// 
+		// [in front or middle      ] [at the end of the query]
+		// xxx={yyy}& | xxx={yyy?}& | &xxx={yyy}& | &xxx={yyy?}
+		// where in "yyy" no "&" must occur!
 		String pattern = "(\\w*=\\{[^&]*\\??\\}&?|&\\w*=\\{[^&]*\\??\\})";
 		String res = query.replaceAll(pattern, "");
-		System.out.println(res);
 		return res;
 	}
 }

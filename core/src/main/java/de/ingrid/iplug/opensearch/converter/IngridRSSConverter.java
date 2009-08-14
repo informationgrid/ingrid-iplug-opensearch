@@ -27,6 +27,9 @@ public class IngridRSSConverter implements IngridConverter {
 
 	public static final String TYPE = "application/rss+xml";
 	
+	// for results not having an InGrid-DocumentId
+	private static int customDocId = 0;
+	
 	@Override
 	public IngridHits processResult(String plugId, InputStream result) {
 		IngridHits hits = null;
@@ -73,9 +76,8 @@ public class IngridRSSConverter implements IngridConverter {
 			hit.put("title", getTitle(nodes.item(i)));
 			hit.put("url", getLink(nodes.item(i)));
 			hit.put("abstract", getAbstract(nodes.item(i)));
-			hit.put("no_of_hits", "999");
+			//hit.put("no_of_hits", "222");
 			hit.setDocumentId(getDocumentId(nodes.item(i)));
-			
 			hits[i] = hit;
 		}
 		return hits;
@@ -84,7 +86,11 @@ public class IngridRSSConverter implements IngridConverter {
 	private int getDocumentId(Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("docid", item, XPathConstants.NODE);
-		return Integer.valueOf(node.getTextContent());
+		if (node == null) {
+			return customDocId++;
+		} else {
+			return Integer.valueOf(node.getTextContent());
+		}
 	}
 
 	private Object getAbstract(Node item) throws XPathExpressionException {
@@ -107,7 +113,7 @@ public class IngridRSSConverter implements IngridConverter {
 
 	private boolean getIsRanked(Document doc) {
 		// TODO: !!!
-		return false;
+		return true;
 	}
 
 	private int getTotalResults(Document doc) throws XPathExpressionException {

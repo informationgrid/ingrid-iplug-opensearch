@@ -1,4 +1,4 @@
-package de.ingrid.iplug.opensearch;
+package de.ingrid.iplug.opensearch.query;
 
 import java.util.ArrayList;
 import java.util.HashMap;
