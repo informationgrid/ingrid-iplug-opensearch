@@ -1,13 +1,12 @@
 package de.ingrid.iplug.opensearch.converter;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import junit.framework.TestCase;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-
-import junit.framework.TestCase;
 
 public class IngridRSSConverterTest extends TestCase {
 
@@ -28,7 +27,7 @@ public class IngridRSSConverterTest extends TestCase {
 			e.printStackTrace();
 		}
 		
-		fail("Not yet implemented"); // TODO
+		//fail("Not yet implemented"); // TODO
 	}
 
 }

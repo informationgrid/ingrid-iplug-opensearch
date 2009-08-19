@@ -1,11 +1,7 @@
 package de.ingrid.iplug.opensearch.converter;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,6 +11,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -24,11 +22,20 @@ import de.ingrid.utils.IngridHit;
 import de.ingrid.utils.IngridHits;
 
 public class IngridRSSConverter implements IngridConverter {
+	/**
+	 * The logging object
+	 */
+	private static Log log = LogFactory.getLog(IngridRSSConverter.class);
+
 
 	public static final String TYPE = "application/rss+xml";
 	
 	// for results not having an InGrid-DocumentId
 	private static int customDocId = 0;
+	
+	public IngridRSSConverter() {
+		
+	}
 	
 	@Override
 	public IngridHits processResult(String plugId, InputStream result) {
@@ -42,45 +49,54 @@ public class IngridRSSConverter implements IngridConverter {
 			
 			boolean isRanked = getIsRanked(doc);
 			
-			IngridHit[] hitArray = getHits(doc, plugId);
+			IngridHit[] hitArray = getHits(doc, plugId, totalResults);
 
 			hits = new IngridHits(plugId, totalResults, hitArray, isRanked);
-			//hits = new IngridHits(totalResults, hitArray);
 			
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
+			log.error("Error while parsing the InputStream!");
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
+			log.error("Error while parsing the InputStream!");
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			log.error("Error while parsing the InputStream!");
 			e.printStackTrace();
 		} catch (XPathExpressionException e) {
-			// TODO Auto-generated catch block
+			log.error("Error while performing xpath.evaluate on a document!");
 			e.printStackTrace();
 		}
 		
-		//System.out.println(convertStreamToString(result));
-
 		return hits;
 	}
 
-	private IngridHit[] getHits(Document doc, String plugId) throws XPathExpressionException {
+	private IngridHit[] getHits(Document doc, String plugId, int totalResults) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		NodeList nodes = (NodeList) xpath.evaluate("/rss/channel/item", doc, XPathConstants.NODESET);
 		IngridHit[] hits = new IngridHit[nodes.getLength()];
 		
 		for (int i=0; i<nodes.getLength(); i++) {
 			IngridHit hit = new IngridHit(plugId, 0, 0,(float) 1.0);
-			hit.put("title", getTitle(nodes.item(i)));
-			hit.put("url", getLink(nodes.item(i)));
-			hit.put("abstract", getAbstract(nodes.item(i)));
-			//hit.put("no_of_hits", "222");
-			hit.setDocumentId(getDocumentId(nodes.item(i)));
+			Node node = nodes.item(i);
+			hit.put("title", getTitle(node));
+			hit.put("url", getLink(node));
+			hit.put("abstract", getAbstract(node));
+			hit.put("no_of_hits", String.valueOf(totalResults));
+			hit.setDocumentId(getDocumentId(node));
+			hit.setScore(getScore(node));
 			hits[i] = hit;
 		}
 		return hits;
+	}
+
+	private float getScore(Node item) throws XPathExpressionException {
+		XPath xpath = XPathFactory.newInstance().newXPath();
+		Node node = (Node) xpath.evaluate("score", item, XPathConstants.NODE);
+		if (node == null) {
+			return (float) 1.0;
+		} else {
+			return Float.valueOf(node.getTextContent());
+		}
 	}
 
 	private int getDocumentId(Node item) throws XPathExpressionException {
@@ -119,7 +135,11 @@ public class IngridRSSConverter implements IngridConverter {
 	private int getTotalResults(Document doc) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("/rss/channel/totalResults", doc, XPathConstants.NODE);
-		return Integer.valueOf(node.getTextContent());
+		if (node.getTextContent() == "") {
+			return 0;
+		} else {
+			return Integer.valueOf(node.getTextContent());
+		}
 	}
 
 	private Document getDocumentFromStream(InputStream result)
@@ -129,27 +149,4 @@ public class IngridRSSConverter implements IngridConverter {
 		Document descriptorDoc = builder.parse(result);
 		return descriptorDoc;
 	}
-	
-	public String convertStreamToString(InputStream is) {
-		        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		        StringBuilder sb = new StringBuilder();
-		 
-		        String line = null;
-		       try {
-		            while ((line = reader.readLine()) != null) {
-		                sb.append(line + "\n");
-		            }
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        } finally {
-		            try {
-		                is.close();
-		            } catch (IOException e) {
-	                e.printStackTrace();
-		            }
-		        }
-		 
-		        return sb.toString();
-		    }
-
 }

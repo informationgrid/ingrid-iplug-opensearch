@@ -11,8 +11,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.ingrid.iplug.communication.OSCommunication;
+import de.ingrid.iplug.opensearch.converter.ConverterFactory;
 import de.ingrid.iplug.opensearch.converter.IngridConverter;
-import de.ingrid.iplug.opensearch.converter.IngridRSSConverter;
 import de.ingrid.iplug.opensearch.query.OSDescriptor;
 import de.ingrid.iplug.opensearch.query.OSDescriptorBuilder;
 import de.ingrid.iplug.opensearch.query.OSQuery;
@@ -26,6 +26,7 @@ import de.ingrid.utils.IngridHits;
 import de.ingrid.utils.PlugDescription;
 import de.ingrid.utils.dsc.Record;
 import de.ingrid.utils.query.IngridQuery;
+import de.ingrid.utils.tool.SpringUtil;
 
 /**
  * iPlug for connecting CSW services to Ingrid 1.0
@@ -78,8 +79,7 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 	 */
 	private int fTimeOut = INITIALTIMEOUT;
 	
-	// will be injected by Spring
-	private IngridConverter ingridConverter = new IngridRSSConverter();
+	private IngridConverter ingridConverter;
 	
 	private OSDescriptor osDescriptor = null;
 
@@ -124,6 +124,9 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 		osDescriptor = descrBuilder.receiveDescriptor(fServiceURL);
 		log.info("OpenSearch-Descriptor received!");
 		
+		ConverterFactory converterFactory = (new SpringUtil("spring/spring.xml")).getBean("opensearchConverterFactory", ConverterFactory.class);
+		ingridConverter = converterFactory.getConverter(osDescriptor);
+		
 		log.info("iPlug initialized; waiting for incoming queries.");
 	}
 	
@@ -156,13 +159,14 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 			
 			OSCommunication comm = new OSCommunication();
 			InputStream result = comm.sendRequest(OSRequest.getOSQueryString(osQuery, osDescriptor));
-			
+			log.debug("Converter:" + ingridConverter);
 			hits = ingridConverter.processResult(fPlugID, result);
 			comm.releaseConnection();
 		
 			return hits;
 		} catch (Exception se) {
 			log.warn("An error has occured! Returning no hits! Exception is: " + se.getMessage());
+			se.printStackTrace();
 			return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
 		}
 	}
@@ -218,5 +222,9 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 		}
 		return hitDetails;
 	}
+	
+	/*public void setIngridConverter(IngridConverter ingridConverter) {
+		this.ingridConverter = ingridConverter;
+	}*/
 	
 }

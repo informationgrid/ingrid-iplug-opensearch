@@ -17,7 +17,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import de.ingrid.iplug.communication.OSCommunication;
-import de.ingrid.iplug.opensearch.converter.IngridRSSConverter;
 
 public class OSDescriptorBuilder {
 	private static Log log = LogFactory.getLog(OSDescriptorBuilder.class);
@@ -37,14 +36,8 @@ public class OSDescriptorBuilder {
 			NodeList typeList = (NodeList) xpath.evaluate("/OpenSearchDescription/Url/@type", descriptorDoc, XPathConstants.NODESET);
 			NodeList templateList= (NodeList) xpath.evaluate("/OpenSearchDescription/Url/@template", descriptorDoc, XPathConstants.NODESET);
 			
-			if (nodeListContainsType(typeList, IngridRSSConverter.TYPE)) {
-				for (int i=0; i<typeList.getLength(); i++) {
-					osDesciptor.setTypeAndUrl(typeList.item(i).getTextContent(), templateList.item(i).getTextContent());
-				}
-			} else {
-				// unsupported types
-				log.error("Unsupported type! Received types were: \n" + printTypes(typeList));
-				throw new Exception();
+			for (int i=0; i<typeList.getLength(); i++) {
+				osDesciptor.setTypeAndUrl(typeList.item(i).getTextContent(), templateList.item(i).getTextContent());
 			}
 		} catch (ParserConfigurationException e) {
 			log.error("Error while parsing DescriptorFile from: " + descriptorAddress);
