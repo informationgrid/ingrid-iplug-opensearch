@@ -11,6 +11,9 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import net.sf.ehcache.Element;
+import net.sf.ehcache.hibernate.EhCache;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
@@ -19,23 +22,19 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import de.ingrid.utils.IngridHit;
+import de.ingrid.utils.IngridHitDetail;
 import de.ingrid.utils.IngridHits;
 
-public class IngridRSSConverter implements IngridConverter {
+public class IngridRSSConverter extends IngridDefaultConverter {
 	/**
 	 * The logging object
 	 */
 	private static Log log = LogFactory.getLog(IngridRSSConverter.class);
 
-
 	public static final String TYPE = "application/rss+xml";
 	
 	// for results not having an InGrid-DocumentId
 	private static int customDocId = 0;
-	
-	public IngridRSSConverter() {
-		
-	}
 	
 	@Override
 	public IngridHits processResult(String plugId, InputStream result) {
@@ -82,21 +81,79 @@ public class IngridRSSConverter implements IngridConverter {
 			hit.put("url", getLink(node));
 			hit.put("abstract", getAbstract(node));
 			hit.put("no_of_hits", String.valueOf(totalResults));
-			hit.setDocumentId(getDocumentId(node));
-			hit.setScore(getScore(node));
+			setScore(hit, getScore(node));
+			
+			// ingrid specific data
+			setIngridHitDetail(hit, node);
+
 			hits[i] = hit;
 		}
 		return hits;
 	}
 
+	private void setIngridHitDetail(IngridHit hit, Node item) throws XPathExpressionException {
+		XPath xpath = XPathFactory.newInstance().newXPath();
+		
+		// get plug id
+		Node node = (Node) xpath.evaluate("plugid", item, XPathConstants.NODE);
+		if (node != null) {
+			hit.setPlugId(node.getTextContent());
+		}
+		
+		// get doc id
+		hit.setDocumentId(getDocumentId(item));
+		
+		//=====================================================================
+		// the following must be put into the HitDetail
+		// this detail will be put into a cache and returned when getDetail()
+		// is called
+		//=====================================================================
+		IngridHitDetail hitDetail = new IngridHitDetail(hit, (String)hit.get("title"),(String)hit.get("abstract"));
+		node = (Node) xpath.evaluate("timeReference/start", item, XPathConstants.NODE);		
+		if (node != null) {
+			hitDetail.put("t1", node.getTextContent());
+		}
+		node = (Node) xpath.evaluate("timeReference/stop", item, XPathConstants.NODE);		
+		if (node != null) {
+			hitDetail.put("t2", node.getTextContent());
+		}
+		
+		// get box
+		node = (Node) xpath.evaluate("box", item, XPathConstants.NODE);
+		if (node != null) {
+			String[] box = node.getTextContent().split(" ");
+			hitDetail.put("x1", box[0]);
+			hitDetail.put("y1", box[0]);
+			hitDetail.put("x2", box[0]);
+			hitDetail.put("y2", box[0]);
+		}
+		
+		// add some important default values
+		hitDetail.setDocumentId(hit.getDocumentId());
+		hitDetail.setPlugId(hit.getPlugId());
+		hitDetail.setDataSourceId(hit.getDataSourceId());
+		hitDetail.put("url", hit.get("url"));
+		
+		// put detail into cache
+		cache.put(new Element(hit.getDocumentId(), hitDetail));
+	}
+
+	/**
+	 * Extract the score value from a given node and return it as a float value.
+	 * In case no score node could be found 0.0f is returned. This score will not
+	 * be put into an IngridHit then.
+	 * 
+	 * @param item is the node to look for the score entry
+	 * @return the score but 0.0f if no ranking is supported
+	 * @throws XPathExpressionException
+	 */
 	private float getScore(Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("score", item, XPathConstants.NODE);
-		if (node == null) {
-			return (float) 1.0;
-		} else {
+		if (node != null) {
 			return Float.valueOf(node.getTextContent());
 		}
+		return 0.0f;
 	}
 
 	private int getDocumentId(Node item) throws XPathExpressionException {

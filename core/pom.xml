@@ -33,6 +33,10 @@
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
     </dependency>
+    <dependency>
+      <groupId>net.sf.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <finalName>${artifactId}-${version}</finalName>
@@ -61,10 +65,10 @@
         <configuration>
           <archive>
             <manifestEntries>
-							<!--
-								one of these: IPLUG_SE, IPLUG_DSC, IPLUG_SNS, IPLUG_TAMINO,
-								IPLUG_FPN, IPLUG_G2K, IPLUG_CSW, IPLUG_CSW_DSC, OTHER
-							-->
+				<!--
+					one of these: IPLUG_SE, IPLUG_DSC, IPLUG_SNS, IPLUG_TAMINO,
+					IPLUG_FPN, IPLUG_G2K, IPLUG_CSW, IPLUG_CSW_DSC, IPLUG_OPENSEARCH OTHER
+				-->
               <!-- see ngrid-utils:de.ingrid.utils.metadata.IPlugType -->
               <iPlug-Type>IPLUG_OPENSEARCH</iPlug-Type>
             </manifestEntries>

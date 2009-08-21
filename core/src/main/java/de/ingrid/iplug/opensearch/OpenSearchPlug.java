@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import de.ingrid.iplug.communication.OSCommunication;
 import de.ingrid.iplug.opensearch.converter.ConverterFactory;
 import de.ingrid.iplug.opensearch.converter.IngridConverter;
+import de.ingrid.iplug.opensearch.converter.RankingModifier;
 import de.ingrid.iplug.opensearch.query.OSDescriptor;
 import de.ingrid.iplug.opensearch.query.OSDescriptorBuilder;
 import de.ingrid.iplug.opensearch.query.OSQuery;
@@ -37,37 +38,37 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 	/**
 	 * The logging object
 	 */
-	private static Log log = LogFactory.getLog(OpenSearchPlug.class);
+	private static Log log 				= LogFactory.getLog(OpenSearchPlug.class);
 
 	/**
 	 * The <code>PlugDescription</code> object passed at startup
 	 */
-	private PlugDescription fPlugDesc = null;
+	private PlugDescription fPlugDesc 	= null;
 
 	/**
 	 * Workingdirectory of the iPlug instance as absolute path
 	 */
-	private String fWorkingDir = ".";
+	private String fWorkingDir 			= ".";
 
 	/**
 	 * Does this iPlug return ranked hits?
 	 */
-	private boolean fIsRanked = false;
+	private boolean fIsRanked 			= false;
 
 	/**
 	 * Unique Plug-iD
 	 */
-	private String fPlugID = null;
+	private String fPlugID 				= null;
 
 	/**
 	 * SOAP-Service URL
 	 */
-	private String fServiceURL = null;
+	private String fServiceURL 			= null;
 
 	/**
 	 * SOAP-Service Version
 	 */
-	private int fSOAPVersion = 0;
+//	private int fSOAPVersion 			= 0;
 
 	/**
 	 * the initial timout
@@ -77,12 +78,12 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 	/**
 	 * Time out for request
 	 */
-	private int fTimeOut = INITIALTIMEOUT;
+	private int fTimeOut 				= INITIALTIMEOUT;
 	
 	private IngridConverter ingridConverter;
 	
-	private OSDescriptor osDescriptor = null;
-
+	private OSDescriptor osDescriptor 	= null;
+	
 	/**
 	 * This methode is called by the iBus to initialize the iPlug. If it was
 	 * impossible to initialize the iPlug correctly, it will return no hits in
@@ -98,16 +99,24 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 	public final void configure(final PlugDescription plugDescription) throws Exception {
 		log.info("Configuring OpenSearch-iPlug...");
 
-		this.fIsRanked = false;
 		this.fPlugDesc = plugDescription;
+		
+		if (fPlugDesc.getRankingTypes()[0].equals("off")) {
+			this.fIsRanked = false;
+		} else {
+			this.fIsRanked = true;
+		}
+				
 		this.fPlugID = fPlugDesc.getPlugId();
 		this.fWorkingDir = fPlugDesc.getWorkinDirectory().getCanonicalPath();
 		this.fServiceURL = (String) fPlugDesc.get("serviceUrl");
-		this.fSOAPVersion = Integer.parseInt((String) fPlugDesc.get("soapVersion"));
+		//this.fSOAPVersion = Integer.parseInt((String) fPlugDesc.get("soapVersion"));
 		this.fTimeOut = Integer.parseInt((String) fPlugDesc.get("timeOut"));
 		
-		// this.fLanguage = (String) plugDescription.get("language");
-
+		RankingModifier rankingModifier = new RankingModifier();
+		rankingModifier.setMultiplier((String) fPlugDesc.get("rankingMul"));
+		rankingModifier.setAdditional((String) fPlugDesc.get("rankingAdd"));
+		
 		// TODO Disconnect iPlug from iBus if configuration wasn't succesfull
 		// Throw Exception for disconnect iPlug
 		// Write logging information...
@@ -116,16 +125,19 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 		log.info("  - Plug-Time out: " + fTimeOut);
 		log.info("  - Working directory: " + fWorkingDir);
 		log.info("  - SOAP-Service URL: " + fServiceURL);
-		log.info("  - SOAP-Version: " + fSOAPVersion);
+		//log.info("  - SOAP-Version: " + fSOAPVersion);
 		// log.info(" - Language: " + fLanguage);
 			
 		log.info("Receiving OpenSearch-Descriptor ...");
 		OSDescriptorBuilder descrBuilder = new OSDescriptorBuilder();
 		osDescriptor = descrBuilder.receiveDescriptor(fServiceURL);
-		log.info("OpenSearch-Descriptor received!");
+		log.info("OpenSearch-Descriptor received");
 		
 		ConverterFactory converterFactory = (new SpringUtil("spring/spring.xml")).getBean("opensearchConverterFactory", ConverterFactory.class);
 		ingridConverter = converterFactory.getConverter(osDescriptor);
+		
+		// set the normalizer for the ranking
+		ingridConverter.setRankingModifier(rankingModifier);
 		
 		log.info("iPlug initialized; waiting for incoming queries.");
 	}
@@ -159,8 +171,11 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 			
 			OSCommunication comm = new OSCommunication();
 			InputStream result = comm.sendRequest(OSRequest.getOSQueryString(osQuery, osDescriptor));
-			log.debug("Converter:" + ingridConverter);
 			hits = ingridConverter.processResult(fPlugID, result);
+			
+			// set the ranking received from the plugdescription
+			hits.setRanked(fIsRanked);
+			
 			comm.releaseConnection();
 		
 			return hits;
@@ -200,12 +215,16 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 	public IngridHitDetail getDetail(IngridHit hit, IngridQuery query,
 			String[] arg2) throws Exception {
 		log.debug("getOpenSearch-Detail");
-		IngridHitDetail hitDetail = new IngridHitDetail(hit, hit.getString("title"), hit.getString("abstract"));
-		// FIXME set correct id
-		hitDetail.setDocumentId(hit.getDocumentId());
-		hitDetail.setPlugId(hit.getPlugId());
-		hitDetail.setDataSourceId(hit.getDataSourceId());
-		hitDetail.put("url", hit.get("url"));
+		IngridHitDetail hitDetail = ingridConverter.getHitDetailFromCache(hit.getDocumentId());
+		
+		if (hitDetail == null) { // this shouldn't happen
+			log.warn("IngridHitDetail not found in cache! Creating one with fewer information.");
+			hitDetail = new IngridHitDetail(hit, hit.getString("title"), hit.getString("abstract"));
+			hitDetail.setDocumentId(hit.getDocumentId());
+			hitDetail.setPlugId(hit.getPlugId());
+			hitDetail.setDataSourceId(hit.getDataSourceId());
+			hitDetail.put("url", hit.get("url"));
+		}
 		
 		return hitDetail;
 	}
@@ -221,10 +240,5 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 			c++;
 		}
 		return hitDetails;
-	}
-	
-	/*public void setIngridConverter(IngridConverter ingridConverter) {
-		this.ingridConverter = ingridConverter;
-	}*/
-	
+	}	
 }
