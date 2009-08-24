@@ -12,7 +12,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import net.sf.ehcache.Element;
-import net.sf.ehcache.hibernate.EhCache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

@@ -5,8 +5,6 @@ import java.io.InputStream;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-import net.sf.ehcache.hibernate.EhCache;
-import net.sf.ehcache.hibernate.EhCacheProvider;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +24,7 @@ import de.ingrid.utils.IngridHits;
 public abstract class IngridDefaultConverter implements IngridConverter{
 	private static Log log = LogFactory.getLog(IngridDefaultConverter.class);
 	
-	private RankingModifier rankingModifier = null;
+	private RankingModifier rankingModifier;
 	
 	protected Cache cache;
 	
@@ -46,6 +44,7 @@ public abstract class IngridDefaultConverter implements IngridConverter{
 	}
 	
 	@Override
+	// this must be implemented with a concrete class!
 	public abstract IngridHits processResult(String plugId, InputStream result);
 	
 	public void setRankingModifier(RankingModifier normalizer) {

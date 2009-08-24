@@ -13,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
 import de.ingrid.iplug.communication.OSCommunication;
 import de.ingrid.iplug.opensearch.converter.ConverterFactory;
 import de.ingrid.iplug.opensearch.converter.IngridConverter;
-import de.ingrid.iplug.opensearch.converter.RankingModifier;
 import de.ingrid.iplug.opensearch.query.OSDescriptor;
 import de.ingrid.iplug.opensearch.query.OSDescriptorBuilder;
 import de.ingrid.iplug.opensearch.query.OSQuery;
@@ -113,9 +112,9 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 		//this.fSOAPVersion = Integer.parseInt((String) fPlugDesc.get("soapVersion"));
 		this.fTimeOut = Integer.parseInt((String) fPlugDesc.get("timeOut"));
 		
-		RankingModifier rankingModifier = new RankingModifier();
-		rankingModifier.setMultiplier((String) fPlugDesc.get("rankingMul"));
-		rankingModifier.setAdditional((String) fPlugDesc.get("rankingAdd"));
+		//RankingModifierFromPD rankingModifier = new RankingModifierFromPD();
+		//rankingModifier.setMultiplier((String) fPlugDesc.get("rankingMul"));
+		//rankingModifier.setAdditional((String) fPlugDesc.get("rankingAdd"));
 		
 		// TODO Disconnect iPlug from iBus if configuration wasn't succesfull
 		// Throw Exception for disconnect iPlug
@@ -137,7 +136,7 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 		ingridConverter = converterFactory.getConverter(osDescriptor);
 		
 		// set the normalizer for the ranking
-		ingridConverter.setRankingModifier(rankingModifier);
+		//ingridConverter.setRankingModifier(rankingModifier);
 		
 		log.info("iPlug initialized; waiting for incoming queries.");
 	}

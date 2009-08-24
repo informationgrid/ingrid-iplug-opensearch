@@ -20,6 +20,10 @@ public class OSRequest {
 			mergedResult = StringUtils.replaceParameter(mergedResult, param, osQuery.get(param));
 		}
 		
+		// set ingrid specific parameters if they exist
+		mergedResult = StringUtils.replaceParameter(mergedResult, "ingridsearch:georss", "1");
+		mergedResult = StringUtils.replaceParameter(mergedResult, "ingridsearch:xml", "1");
+		
 		String finalQueryString = StringUtils.removeUnusedParameter(mergedResult);
 		log.debug("OpenSearch Query: " + finalQueryString);
 		return finalQueryString;

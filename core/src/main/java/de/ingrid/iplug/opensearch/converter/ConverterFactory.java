@@ -15,6 +15,9 @@ public class ConverterFactory {
 	private OpensearchRequestStrategy opensearchRequestStrategy;
 	
 	// injected by Spring
+	private RankingModifier rankingModifier;
+
+	// injected by Spring
 	private Map<String, String> converterMap;
 
 	public IngridConverter getConverter(OSDescriptor descriptor) throws Exception {
@@ -25,7 +28,9 @@ public class ConverterFactory {
 				descriptor.setUsedType(type);
 				
 				// return the class that is used for the conversion
-				return (IngridConverter)Class.forName(converterMap.get(type)).newInstance();
+				IngridConverter iConverter = (IngridConverter)Class.forName(converterMap.get(type)).newInstance();
+				iConverter.setRankingModifier(rankingModifier);
+				return iConverter;
 			}
 		}
 		log.error("There's no supported type within the received descriptor!");
@@ -47,5 +52,9 @@ public class ConverterFactory {
 
 	public void setConverterMap(Map<String, String> converterMap) {
 		this.converterMap = converterMap;
+	}
+	
+	public void setRankingModifier(RankingModifier rankingModifier) {
+		this.rankingModifier = rankingModifier;
 	}
 }

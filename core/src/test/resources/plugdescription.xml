@@ -2,6 +2,7 @@
   <int>26</int>
   <string>dataType</string>
   <list>
+    <string>default</string>
     <string>opensearch</string>
   </list>
   <string>fields</string>
@@ -51,7 +52,9 @@
   <string>de</string>
   <string>serviceUrl</string>
   <!--<string>http://192.168.0.248:8083/descriptor</string>-->
-  <string>http://193.197.158.225/search?q=boden&amp;output=xml&amp;client=BW_OpenSearch_xml&amp;oe=UTF-8&amp;ie=UTF-8&amp;proxystylesheet=BW_OpenSearch_xml&amp;site=BW_UP&amp;markup=opensearch</string>
+  <!--<string>http://193.197.158.225/search?q=boden&amp;output=xml&amp;client=BW_OpenSearch_xml&amp;oe=UTF-8&amp;ie=UTF-8&amp;proxystylesheet=BW_OpenSearch_xml&amp;site=BW_UP&amp;markup=opensearch</string>-->
+  <!-- <string>http://harrison.its-technidata.de/opensearch/descriptor</string>-->
+  <string>http://213.144.28.233/opensearch/descriptor</string>
   <string>organisationAbbr</string>
   <string>bw_lu</string>
   <string>soapVersion</string>
@@ -68,4 +71,8 @@
   <list>
     <string>bw_lu</string>
   </list>
+  <!-- <string>rankingMul</string>
+  <string>1.3</string>
+  <string>rankingAdd</string>
+  <string>2.1</string>-->
 </de.ingrid.utils.PlugDescription>
