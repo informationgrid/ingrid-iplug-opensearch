@@ -9,7 +9,9 @@ import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 
+import de.ingrid.iplug.HeartBeatPlug;
 import de.ingrid.iplug.communication.OSCommunication;
 import de.ingrid.iplug.opensearch.converter.ConverterFactory;
 import de.ingrid.iplug.opensearch.converter.IngridConverter;
@@ -33,7 +35,9 @@ import de.ingrid.utils.tool.SpringUtil;
  * 
  * @author rschaefer
  */
-public class OpenSearchPlug implements IPlug, IRecordLoader {
+@Service
+public class OpenSearchPlug extends HeartBeatPlug implements IPlug, IRecordLoader {
+
 	/**
 	 * The logging object
 	 */
@@ -82,6 +86,16 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 	private IngridConverter ingridConverter;
 	
 	private OSDescriptor osDescriptor 	= null;
+	
+	
+	public OpenSearchPlug() {
+		super(0);
+	}
+	
+	public OpenSearchPlug(int period) {
+		super(period);
+		// TODO Auto-generated constructor stub
+	}
 	
 	/**
 	 * This methode is called by the iBus to initialize the iPlug. If it was
@@ -239,5 +253,11 @@ public class OpenSearchPlug implements IPlug, IRecordLoader {
 			c++;
 		}
 		return hitDetails;
+	}
+
+	@Override
+	public boolean isRecordLoader() {
+		// TODO Auto-generated method stub
+		return false;
 	}	
 }

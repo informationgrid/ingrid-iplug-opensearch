@@ -1,5 +1,5 @@
 <de.ingrid.utils.PlugDescription>
-  <int>26</int>
+  <int>28</int>
   <string>dataType</string>
   <list>
     <string>default</string>
@@ -52,16 +52,17 @@
   <string>de</string>
   <string>serviceUrl</string>
   <!--<string>http://192.168.0.248:8083/descriptor</string>-->
-  <!--<string>http://193.197.158.225/search?q=boden&amp;output=xml&amp;client=BW_OpenSearch_xml&amp;oe=UTF-8&amp;ie=UTF-8&amp;proxystylesheet=BW_OpenSearch_xml&amp;site=BW_UP&amp;markup=opensearch</string>-->
+  <string>http://193.197.158.225/search?q=boden&amp;output=xml&amp;client=BW_OpenSearch_xml&amp;oe=UTF-8&amp;ie=UTF-8&amp;proxystylesheet=BW_OpenSearch_xml&amp;site=BW_UP&amp;markup=opensearch</string>
   <!-- <string>http://harrison.its-technidata.de/opensearch/descriptor</string>-->
-  <string>http://213.144.28.233/opensearch/descriptor</string>
+  <!-- <string>http://213.144.28.233/opensearch/descriptor</string>-->
   <string>organisationAbbr</string>
   <string>bw_lu</string>
   <string>soapVersion</string>
   <string>12</string>
   <string>busUrls</string>
   <list>
-    <string>/ingrid-group:ibus-vm</string>
+    <!-- <string>/ingrid-group:ibus-vm</string>-->
+    <string>/torwald-group:torwald-ibus</string>
   </list>
   <string>md5Hash</string>
   <string>/torwald-group:torwald-iplug-opensearch-test</string>
@@ -71,8 +72,8 @@
   <list>
     <string>bw_lu</string>
   </list>
-  <!-- <string>rankingMul</string>
-  <string>1.3</string>
+  <string>rankingMul</string>
+  <string>0.1</string>
   <string>rankingAdd</string>
-  <string>2.1</string>-->
+  <string>-0.05</string>
 </de.ingrid.utils.PlugDescription>

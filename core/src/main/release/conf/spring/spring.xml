@@ -41,7 +41,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <!--<bean id="rankingModifierOther" class="de.ingrid.iplug.opensearch.converter.RankingModifierOther"/>-->
     
     <bean id="plugDescription" class="de.ingrid.iplug.PlugServer" factory-method="getPlugDescription">
-        <!--<constructor-arg value="src\test\resources\plugdescription.xml"/>-->
+        <constructor-arg value="src\test\resources\plugdescription.xml"/>
     </bean>
   
 </beans>
