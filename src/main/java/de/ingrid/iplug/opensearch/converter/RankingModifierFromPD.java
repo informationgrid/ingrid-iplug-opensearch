@@ -1,6 +1,11 @@
 package de.ingrid.iplug.opensearch.converter;
 
-import de.ingrid.utils.PlugDescription;
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import de.ingrid.admin.service.PlugDescriptionService;
 
 /**
  * This class is used to normalize a score received from search results.
@@ -8,6 +13,7 @@ import de.ingrid.utils.PlugDescription;
  * @author Andre
  *
  */
+@Service
 public class RankingModifierFromPD implements RankingModifier {
 	// value for multiplying the score
 	private float multiplier;
@@ -35,14 +41,15 @@ public class RankingModifierFromPD implements RankingModifier {
 		this.additional = add;
 	}
 	
-	public RankingModifierFromPD(PlugDescription pd) {
+	@Autowired
+	public RankingModifierFromPD(PlugDescriptionService pdService) throws IOException {
 		// default values
 		setMultiplier(1.0f);
 		setAdditional(0.0f);
 		
 		// get values from plugDescription if any
-		setMultiplier((String)pd.get("rankingMul"));
-		setAdditional((String)pd.get("rankingAdd"));
+		setMultiplier((String)pdService.getPlugDescription().get("rankingMul"));
+		setAdditional((String)pdService.getPlugDescription().get("rankingAdd"));
 	}
 	
 	public float getMultiplier() {

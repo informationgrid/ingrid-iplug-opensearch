@@ -10,7 +10,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 
 	<bean id="opensearchConverterFactory" class="de.ingrid.iplug.opensearch.converter.ConverterFactory">
       	<property name="opensearchRequestStrategy" ref="opensearchRequestStrategy" />
-        <property name="rankingModifier" ref="rankingModifierPD" />
+        <!--<property name="rankingModifier" ref="rankingModifierPD" />-->
         <property name="converterMap">
     	      <map>
               <!-- the mapping defines the class that is responsible to convert a certain type -->
@@ -33,15 +33,15 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 		</property>
 	</bean>
       
-    <bean id="rankingModifierPD" class="de.ingrid.iplug.opensearch.converter.RankingModifierFromPD">
-        <constructor-arg ref="plugDescription"/>
+    <!--<bean id="rankingModifierPD" class="de.ingrid.iplug.opensearch.converter.RankingModifierFromPD">
+        <constructor-arg ref="plugDescription"/>-->
         <!-- <property name="plugDescription" ref="plugDescription"/>-->
-    </bean>
+    <!--</bean>-->
     
     <!--<bean id="rankingModifierOther" class="de.ingrid.iplug.opensearch.converter.RankingModifierOther"/>-->
     
-    <bean id="plugDescription" class="de.ingrid.iplug.PlugServer" factory-method="getPlugDescription">
-        <constructor-arg value="src\test\resources\plugdescription.xml"/>
-    </bean>
+    <!--<bean id="plugDescription" class="de.ingrid.admin.service.PlugDescriptionService" factory-method="getPlugDescription">-->
+        <!--<constructor-arg value="plugdescription.xml"/>-->
+    <!--</bean>-->
   
 </beans>

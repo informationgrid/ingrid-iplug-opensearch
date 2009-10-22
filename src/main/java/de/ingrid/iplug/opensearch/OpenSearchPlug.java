@@ -9,9 +9,12 @@ import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.ingrid.iplug.HeartBeatPlug;
+import de.ingrid.iplug.IPlugdescriptionFieldFilter;
+import de.ingrid.iplug.PlugDescriptionFieldFilters;
 import de.ingrid.iplug.communication.OSCommunication;
 import de.ingrid.iplug.opensearch.converter.ConverterFactory;
 import de.ingrid.iplug.opensearch.converter.IngridConverter;
@@ -20,8 +23,6 @@ import de.ingrid.iplug.opensearch.query.OSDescriptorBuilder;
 import de.ingrid.iplug.opensearch.query.OSQuery;
 import de.ingrid.iplug.opensearch.query.OSQueryBuilder;
 import de.ingrid.iplug.opensearch.query.OSRequest;
-import de.ingrid.utils.IPlug;
-import de.ingrid.utils.IRecordLoader;
 import de.ingrid.utils.IngridHit;
 import de.ingrid.utils.IngridHitDetail;
 import de.ingrid.utils.IngridHits;
@@ -36,7 +37,7 @@ import de.ingrid.utils.tool.SpringUtil;
  * @author rschaefer
  */
 @Service
-public class OpenSearchPlug extends HeartBeatPlug implements IPlug, IRecordLoader {
+public class OpenSearchPlug extends HeartBeatPlug {
 
 	/**
 	 * The logging object
@@ -76,25 +77,26 @@ public class OpenSearchPlug extends HeartBeatPlug implements IPlug, IRecordLoade
 	/**
 	 * the initial timout
 	 */
-	private static final int INITIALTIMEOUT = 10000;
+	//private static final int INITIALTIMEOUT = 10000;
 
 	/**
 	 * Time out for request
 	 */
-	private int fTimeOut 				= INITIALTIMEOUT;
+	//private int fTimeOut 				= INITIALTIMEOUT;
 	
 	private IngridConverter ingridConverter;
 	
 	private OSDescriptor osDescriptor 	= null;
 	
-	
+	/*
 	public OpenSearchPlug() {
 		super(0, null);
-	}
+		log.info("OpenSearch-Constructor");
+	}*/
 	
-	public OpenSearchPlug(int period) {
-		super(period, null);
-		// TODO Auto-generated constructor stub
+	@Autowired
+	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters) {
+		super(10000, new PlugDescriptionFieldFilters(fieldFilters));
 	}
 	
 	/**
@@ -106,9 +108,8 @@ public class OpenSearchPlug extends HeartBeatPlug implements IPlug, IRecordLoade
 	 *            Descriptionfile for initialization
 	 * @see de.ingrid.iplug.IPlug#configure(PlugDescription)
 	 */
-	public final void configure(final PlugDescription plugDescription) {
-		log.info("Configuring OpenSearch-iPlug...");
-
+	public final void configureIPlug(final PlugDescription plugDescription) {
+		log.info("Configuring OpenSearch-iPlug...");		
 		this.fPlugDesc = plugDescription;
 		
 		try {
@@ -147,6 +148,9 @@ public class OpenSearchPlug extends HeartBeatPlug implements IPlug, IRecordLoade
 			
 			// set the normalizer for the ranking
 			//ingridConverter.setRankingModifier(rankingModifier);
+			
+			log.info("Starting heartbeat");
+			startHeartBeats();
 			
 			log.info("iPlug initialized; waiting for incoming queries.");
 		} catch (IOException e) {
