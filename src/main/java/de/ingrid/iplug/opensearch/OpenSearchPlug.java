@@ -89,11 +89,11 @@ public class OpenSearchPlug extends HeartBeatPlug implements IPlug, IRecordLoade
 	
 	
 	public OpenSearchPlug() {
-		super(0);
+		super(0, null);
 	}
 	
 	public OpenSearchPlug(int period) {
-		super(period);
+		super(period, null);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -104,55 +104,58 @@ public class OpenSearchPlug extends HeartBeatPlug implements IPlug, IRecordLoade
 	 * 
 	 * @param plugDescription
 	 *            Descriptionfile for initialization
-	 * @throws Exception
-	 *             e
-	 * 
 	 * @see de.ingrid.iplug.IPlug#configure(PlugDescription)
 	 */
-	public final void configure(final PlugDescription plugDescription) throws Exception {
+	public final void configure(final PlugDescription plugDescription) {
 		log.info("Configuring OpenSearch-iPlug...");
 
 		this.fPlugDesc = plugDescription;
 		
-		if (fPlugDesc.getRankingTypes()[0].equals("off")) {
-			this.fIsRanked = false;
-		} else {
-			this.fIsRanked = true;
-		}
+		try {
+		
+			if (/*fPlugDesc.getRankingTypes().length > 0 && */fPlugDesc.getRankingTypes()[0].equals("off")) {
+				this.fIsRanked = false;
+			} else {
+				this.fIsRanked = true;
+			}
 				
-		this.fPlugID = fPlugDesc.getPlugId();
-		this.fWorkingDir = fPlugDesc.getWorkinDirectory().getCanonicalPath();
-		this.fServiceURL = (String) fPlugDesc.get("serviceUrl");
-		//this.fSOAPVersion = Integer.parseInt((String) fPlugDesc.get("soapVersion"));
-		this.fTimeOut = Integer.parseInt((String) fPlugDesc.get("timeOut"));
+			this.fPlugID = fPlugDesc.getPlugId();
+			this.fWorkingDir = fPlugDesc.getWorkinDirectory().getCanonicalPath();
 		
-		//RankingModifierFromPD rankingModifier = new RankingModifierFromPD();
-		//rankingModifier.setMultiplier((String) fPlugDesc.get("rankingMul"));
-		//rankingModifier.setAdditional((String) fPlugDesc.get("rankingAdd"));
-		
-		// TODO Disconnect iPlug from iBus if configuration wasn't succesfull
-		// Throw Exception for disconnect iPlug
-		// Write logging information...
-
-		log.info("  - Plug-ID: " + fPlugID);
-		log.info("  - Plug-Time out: " + fTimeOut);
-		log.info("  - Working directory: " + fWorkingDir);
-		log.info("  - SOAP-Service URL: " + fServiceURL);
-		//log.info("  - SOAP-Version: " + fSOAPVersion);
-		// log.info(" - Language: " + fLanguage);
+			this.fServiceURL = (String) fPlugDesc.get("serviceUrl");
+			//this.fSOAPVersion = Integer.parseInt((String) fPlugDesc.get("soapVersion"));
+			//this.fTimeOut = Integer.parseInt((String) fPlugDesc.get("timeOut"));
 			
-		log.info("Receiving OpenSearch-Descriptor ...");
-		OSDescriptorBuilder descrBuilder = new OSDescriptorBuilder();
-		osDescriptor = descrBuilder.receiveDescriptor(fServiceURL);
-		log.info("OpenSearch-Descriptor received");
-		
-		ConverterFactory converterFactory = (new SpringUtil("spring/spring.xml")).getBean("opensearchConverterFactory", ConverterFactory.class);
-		ingridConverter = converterFactory.getConverter(osDescriptor);
-		
-		// set the normalizer for the ranking
-		//ingridConverter.setRankingModifier(rankingModifier);
-		
-		log.info("iPlug initialized; waiting for incoming queries.");
+			// TODO Disconnect iPlug from iBus if configuration wasn't succesfull
+			// Throw Exception for disconnect iPlug
+			// Write logging information...
+	
+			log.info("  - Plug-ID: " + fPlugID);
+			//log.info("  - Plug-Time out: " + fTimeOut);
+			log.info("  - Working directory: " + fWorkingDir);
+			log.info("  - SOAP-Service URL: " + fServiceURL);
+			//log.info("  - SOAP-Version: " + fSOAPVersion);
+			// log.info(" - Language: " + fLanguage);
+				
+			log.info("Receiving OpenSearch-Descriptor ...");
+			OSDescriptorBuilder descrBuilder = new OSDescriptorBuilder();
+			osDescriptor = descrBuilder.receiveDescriptor(fServiceURL);
+			log.info("OpenSearch-Descriptor received");
+			
+			ConverterFactory converterFactory = (new SpringUtil("spring/spring.xml")).getBean("opensearchConverterFactory", ConverterFactory.class);
+			ingridConverter = converterFactory.getConverter(osDescriptor);
+			
+			// set the normalizer for the ranking
+			//ingridConverter.setRankingModifier(rankingModifier);
+			
+			log.info("iPlug initialized; waiting for incoming queries.");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 
@@ -254,10 +257,4 @@ public class OpenSearchPlug extends HeartBeatPlug implements IPlug, IRecordLoade
 		}
 		return hitDetails;
 	}
-
-	@Override
-	public boolean isRecordLoader() {
-		// TODO Auto-generated method stub
-		return false;
-	}	
 }

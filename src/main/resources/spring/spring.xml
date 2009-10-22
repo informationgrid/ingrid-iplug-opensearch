@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<import resource="metadata-injectors.xml" />
+	<import resource="pre-post-processors.xml" />
+
+
+	<bean id="opensearchConverterFactory" class="de.ingrid.iplug.opensearch.converter.ConverterFactory">
+      	<property name="opensearchRequestStrategy" ref="opensearchRequestStrategy" />
+        <property name="rankingModifier" ref="rankingModifierPD" />
+        <property name="converterMap">
+    	      <map>
+              <!-- the mapping defines the class that is responsible to convert a certain type -->
+    	        <entry key="application/rss+xml"  value="de.ingrid.iplug.opensearch.converter.IngridRSSConverter"/>
+              <!--<entry key="application/atom+xml" value="de.ingrid.iplug.opensearch.converter.IngridAtomConverter"/>-->
+              <!--<entry key="text/html"            value="de.ingrid.iplug.opensearch.converter.IngridHTMLConverter"/>-->
+    	      </map>
+	   </property>
+    
+	</bean>
+
+	<bean id="opensearchRequestStrategy" class="de.ingrid.iplug.opensearch.converter.OpensearchRequestStrategy">
+        <property name="strategy">
+            <list>
+			    <!-- the order defines the priority of the converter that will be used -->
+		        <value>application/rss+xml</value>
+			    <!--<value>application/atom+xml</value>-->
+			    <!--<value>text/html</value>-->
+			</list>
+		</property>
+	</bean>
+      
+    <bean id="rankingModifierPD" class="de.ingrid.iplug.opensearch.converter.RankingModifierFromPD">
+        <constructor-arg ref="plugDescription"/>
+        <!-- <property name="plugDescription" ref="plugDescription"/>-->
+    </bean>
+    
+    <!--<bean id="rankingModifierOther" class="de.ingrid.iplug.opensearch.converter.RankingModifierOther"/>-->
+    
+    <bean id="plugDescription" class="de.ingrid.iplug.PlugServer" factory-method="getPlugDescription">
+        <constructor-arg value="src\test\resources\plugdescription.xml"/>
+    </bean>
+  
+</beans>
