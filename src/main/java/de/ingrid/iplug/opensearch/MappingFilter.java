@@ -8,7 +8,11 @@ import de.ingrid.iplug.IPlugdescriptionFieldFilter;
 public class MappingFilter implements IPlugdescriptionFieldFilter {
 
 	public boolean filter(Object object) {
-		
-		return true;
+		String key = object.toString();
+		if ("rankingMul".equals(key) ||
+			"rankingAdd".equals(key)) {
+			return true;
+		}
+		return false;
 	}
 }

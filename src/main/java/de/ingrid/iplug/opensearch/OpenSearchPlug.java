@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.ingrid.admin.service.PlugDescriptionService;
 import de.ingrid.iplug.HeartBeatPlug;
 import de.ingrid.iplug.IPlugdescriptionFieldFilter;
 import de.ingrid.iplug.PlugDescriptionFieldFilters;
@@ -87,15 +88,11 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	private IngridConverter ingridConverter;
 	
 	private OSDescriptor osDescriptor 	= null;
-	
-	/*
-	public OpenSearchPlug() {
-		super(0, null);
-		log.info("OpenSearch-Constructor");
-	}*/
+
+	private boolean fUseDescriptor = true;
 	
 	@Autowired
-	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters) {
+	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters) throws IOException {
 		super(10000, new PlugDescriptionFieldFilters(fieldFilters));
 	}
 	
@@ -108,7 +105,9 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	 *            Descriptionfile for initialization
 	 * @see de.ingrid.iplug.IPlug#configure(PlugDescription)
 	 */
-	public final void configureIPlug(final PlugDescription plugDescription) {
+	@Override
+	public final void configure(final PlugDescription plugDescription) {
+		super.configure(plugDescription);
 		log.info("Configuring OpenSearch-iPlug...");		
 		this.fPlugDesc = plugDescription;
 		
@@ -122,10 +121,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
 				
 			this.fPlugID = fPlugDesc.getPlugId();
 			this.fWorkingDir = fPlugDesc.getWorkinDirectory().getCanonicalPath();
-		
+			this.fUseDescriptor  = (boolean) fPlugDesc.getBoolean("useDescriptor");
 			this.fServiceURL = (String) fPlugDesc.get("serviceUrl");
-			//this.fSOAPVersion = Integer.parseInt((String) fPlugDesc.get("soapVersion"));
-			//this.fTimeOut = Integer.parseInt((String) fPlugDesc.get("timeOut"));
 			
 			// TODO Disconnect iPlug from iBus if configuration wasn't succesfull
 			// Throw Exception for disconnect iPlug
@@ -138,9 +135,9 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			//log.info("  - SOAP-Version: " + fSOAPVersion);
 			// log.info(" - Language: " + fLanguage);
 				
-			log.info("Receiving OpenSearch-Descriptor ...");
+			log.info("Receiving OpenSearch-Descriptor ... " + fUseDescriptor);
 			OSDescriptorBuilder descrBuilder = new OSDescriptorBuilder();
-			osDescriptor = descrBuilder.receiveDescriptor(fServiceURL);
+			osDescriptor = descrBuilder.createDescriptor(fServiceURL, fUseDescriptor);
 			log.info("OpenSearch-Descriptor received");
 			
 			ConverterFactory converterFactory = (new SpringUtil("spring/spring.xml")).getBean("opensearchConverterFactory", ConverterFactory.class);
@@ -149,16 +146,15 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			// set the normalizer for the ranking
 			//ingridConverter.setRankingModifier(rankingModifier);
 			
-			log.info("Starting heartbeat");
-			startHeartBeats();
+			//startHeartBeats();
 			
 			log.info("iPlug initialized; waiting for incoming queries.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("Error reading PlugDescription: " + e.getMessage());
+			//e.printStackTrace();
 		}
 	}
 	

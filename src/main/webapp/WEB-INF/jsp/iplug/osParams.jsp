@@ -18,7 +18,7 @@
     </div>
     <div id="help"><a href="#">[?]</a></div>
 
-    <c:set var="active" value="nothing" scope="request"/>
+    <c:set var="active" value="osConfig" scope="request"/>
     <c:import url="../base/subNavi.jsp"></c:import>
 
     <div id="contentBox" class="contentMiddle">
@@ -26,27 +26,43 @@
         <div class="controls">
             <a href="../base/fieldQuery.html">Zurück</a>
             <a href="../base/welcome.html">Abbrechen</a>
-            <a href="#" onclick="document.getElementById('submit').submit();">Weiter</a>
+            <a href="#" onclick="document.getElementById('osConfig').submit();">Weiter</a>
         </div>
         <div class="controls cBottom">
             <a href="../base/fieldQuery.html">Zurück</a>
             <a href="../base/welcome.html">Abbrechen</a>
-            <a href="#" onclick="document.getElementById('submit').submit();">Weiter</a>
+            <a href="#" onclick="document.getElementById('osConfig').submit();">Weiter</a>
         </div>
         <div id="content">
-            <form method="post" action="osParams.html" id="submit">
+            <form:form method="post" action="osParams.html" modelAttribute="osConfig">
                 <input type="hidden" name="action" value="submit" />
                 <input type="hidden" name="id" value="" />
                 <table id="konfigForm">
                     <br />
                     <tr>
-                        <td class="leftCol">Opensearch URL:</td>
+                        <td colspan="2"><h3>Auswahl der Quelle:</h3></td>
+                    </tr>
+                    <tr>
+                        <td><form:radiobutton path="osDescriptor" value="descriptor" /> Deskriptor</td>
                         <td>
-                            <input type="text" name="opensearchUrl" value="${plugDescription.serviceUrl}" />
+                            <form:input path="opensearchDescriptorUrl" />
+                            <form:errors path="opensearchDescriptorUrl" cssClass="error" element="div" />
+                            <br />
+                            Bitte geben Sie hier die URL des Opensearch-Deskriptors an, die Sie an das InGrid System anschließen wollen.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><form:radiobutton path="osDescriptor" value="url" /> Url</td>
+                        <td>
+                            <form:input path="opensearchUrl" />
                             <form:errors path="opensearchUrl" cssClass="error" element="div" />
                             <br />
-                            Bitte geben Sie hier die Opensearch URL an, die Sie an das InGrid System anschließen wollen.
+                            Bitte geben Sie hier die Opensearch URL mit Platzhaltern an, die Sie an das InGrid System anschließen wollen.
+                            Verfügbare Platzhalter sind ...
                         </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><form:errors path="osDescriptor" cssClass="error" element="div" /></td>
                     </tr>
                     <tr>
                         <td colspan="2"><h3>Ranking Parameter:</h3></td>
@@ -54,8 +70,7 @@
                     <tr>
                         <td class="leftCol">Ranking Unterstützung:</td>
                         <td>
-                            <input type="checkbox" name="rankSupport" ${rankSupport} />
-                            <form:errors path="rankSupport" cssClass="error" element="div" />
+                            <form:checkbox path="rankSupport" />
                             <br />
                             Unterstützt die Opensearch Schnittstelle ein Ranking der Suchergebnisse? (Wenn aktiviert, 
                             werden die Ergebnisse in die Hauptergbnisliste des Portals aufgenommen.)
@@ -64,7 +79,7 @@
                     <tr>
                         <td class="leftCol">Adapt. Ranking (Mult.):</td>
                         <td>
-                            <input type="text" name="rankMultiplier" value="${plugDescription.rankingMul}" />
+                            <form:input path="rankMultiplier" />
                             <form:errors path="rankMultiplier" cssClass="error" element="div" />
                             <br />
                             Bitte geben Sie hier den Faktor an, mit dem der ranking score multipliziert werden soll.
@@ -73,14 +88,14 @@
                     <tr>
                         <td class="leftCol">Adapt. Ranking (Add.):</td>
                         <td>
-                            <input type="text" name="rankAddition" value="${plugDescription.rankingAdd}" />
+                            <form:input path="rankAddition" />
                             <form:errors path="rankAddition" cssClass="error" element="div" />
                             <br />
                             Bitte geben Sie hier den Faktor an, mit dem der ranking score addiert werden soll.
                         </td>
                     </tr>
                 </table>
-            </form>
+            </form:form>
         </div>
     </div>
 

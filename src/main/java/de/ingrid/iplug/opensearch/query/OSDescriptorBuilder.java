@@ -21,6 +21,16 @@ import de.ingrid.iplug.communication.OSCommunication;
 public class OSDescriptorBuilder {
 	private static Log log = LogFactory.getLog(OSDescriptorBuilder.class);
 	
+	public OSDescriptor createDescriptor(String serviceUrl, boolean isDescriptor) throws Exception {
+		if (isDescriptor) {
+			return receiveDescriptor(serviceUrl);
+		} else {
+			OSDescriptor osDesciptor = new OSDescriptor();
+			osDesciptor.setTypeAndUrl("application/rss+xml", serviceUrl);
+			return osDesciptor;
+		}
+	}
+	
 	public OSDescriptor receiveDescriptor(String descriptorAddress) throws Exception {
 		OSCommunication comm = new OSCommunication();
 		OSDescriptor osDesciptor = new OSDescriptor();
