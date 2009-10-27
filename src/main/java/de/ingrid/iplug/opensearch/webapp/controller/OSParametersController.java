@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import de.ingrid.admin.command.PlugdescriptionCommandObject;
 import de.ingrid.admin.controller.AbstractController;
 import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
-import de.ingrid.iplug.webapp.validation.OSValidator;
+import de.ingrid.iplug.opensearch.webapp.validation.OSValidator;
 import de.ingrid.utils.query.IngridQuery;
 
 @Controller

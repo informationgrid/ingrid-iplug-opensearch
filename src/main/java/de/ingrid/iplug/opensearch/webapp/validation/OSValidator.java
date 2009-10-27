@@ -1,4 +1,4 @@
-package de.ingrid.iplug.webapp.validation;
+package de.ingrid.iplug.opensearch.webapp.validation;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
