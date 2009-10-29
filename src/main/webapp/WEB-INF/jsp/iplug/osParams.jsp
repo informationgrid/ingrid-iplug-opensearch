@@ -18,7 +18,7 @@
     </div>
     <div id="help"><a href="#">[?]</a></div>
 
-    <c:set var="active" value="osConfig" scope="request"/>
+    <c:set var="active" value="osParams" scope="request"/>
     <c:import url="../base/subNavi.jsp"></c:import>
 
     <div id="contentBox" class="contentMiddle">

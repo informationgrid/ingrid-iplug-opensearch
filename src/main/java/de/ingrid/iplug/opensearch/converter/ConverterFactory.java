@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import de.ingrid.iplug.opensearch.query.OSDescriptor;
 
@@ -20,6 +21,7 @@ public class ConverterFactory {
 	// injected by Spring
 	private Map<String, String> converterMap;
 
+	
 	public IngridConverter getConverter(OSDescriptor descriptor) throws Exception {
 		List<String> strategies = opensearchRequestStrategy.getStrategy();
 		for (String type : strategies) {
@@ -30,6 +32,7 @@ public class ConverterFactory {
 				// return the class that is used for the conversion
 				IngridConverter iConverter = (IngridConverter)Class.forName(converterMap.get(type)).newInstance();
 				iConverter.setRankingModifier(rankingModifier);
+				log.debug("Used RankingModifier: " + rankingModifier);
 				return iConverter;
 			}
 		}
@@ -54,6 +57,7 @@ public class ConverterFactory {
 		this.converterMap = converterMap;
 	}
 	
+	@Autowired
 	public void setRankingModifier(RankingModifier rankingModifier) {
 		this.rankingModifier = rankingModifier;
 	}

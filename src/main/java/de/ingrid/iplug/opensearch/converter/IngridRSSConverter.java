@@ -63,6 +63,10 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 		} catch (XPathExpressionException e) {
 			log.error("Error while performing xpath.evaluate on a document!");
 			e.printStackTrace();
+		} finally {
+			if (hits == null) {
+				hits = new IngridHits(plugId, 0, new IngridHit[0], true);
+			}
 		}
 		
 		return hits;

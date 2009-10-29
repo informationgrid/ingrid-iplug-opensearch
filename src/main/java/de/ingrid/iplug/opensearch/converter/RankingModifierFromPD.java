@@ -1,11 +1,10 @@
 package de.ingrid.iplug.opensearch.converter;
 
-import java.io.IOException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import de.ingrid.admin.service.PlugDescriptionService;
+import de.ingrid.utils.IConfigurable;
+import de.ingrid.utils.PlugDescription;
 
 /**
  * This class is used to normalize a score received from search results.
@@ -13,8 +12,9 @@ import de.ingrid.admin.service.PlugDescriptionService;
  * @author Andre
  *
  */
-@Service
-public class RankingModifierFromPD implements RankingModifier {
+public class RankingModifierFromPD implements RankingModifier, IConfigurable {
+	private static Log log = LogFactory.getLog(RankingModifierFromPD.class);
+	
 	// value for multiplying the score
 	private float multiplier;
 	
@@ -27,29 +27,6 @@ public class RankingModifierFromPD implements RankingModifier {
 	public RankingModifierFromPD() {
 		this.multiplier = 1;
 		this.additional = 0;
-	}
-	
-	/**
-	 * With a multiplier and another value that will be added to the score
-	 * it's possible to normalize the ranking to the own system.
-	 * 
-	 * @param mul is the multiplier the score will be mulitplied with
-	 * @param add is a value that will be added to the (already) multiplied score
-	 */
-	public RankingModifierFromPD(float mul, float add) {
-		this.multiplier = mul;
-		this.additional = add;
-	}
-	
-	@Autowired
-	public RankingModifierFromPD(PlugDescriptionService pdService) throws IOException {
-		// default values
-		setMultiplier(1.0f);
-		setAdditional(0.0f);
-		
-		// get values from plugDescription if any
-		setMultiplier((String)pdService.getPlugDescription().get("rankingMul"));
-		setAdditional((String)pdService.getPlugDescription().get("rankingAdd"));
 	}
 	
 	public float getMultiplier() {
@@ -67,6 +44,7 @@ public class RankingModifierFromPD implements RankingModifier {
 	}
 
 	public float getAdditional() {
+		
 		return additional;
 	}
 
@@ -78,5 +56,18 @@ public class RankingModifierFromPD implements RankingModifier {
 		if (additional != null) {
 			this.additional = Float.parseFloat(additional);
 		}
+	}
+	
+	/**
+	 * The configure method will always be called when PlugDescription
+	 * has changed. This happens to all classes that implement the IConfigurable
+	 * Interface. 
+	 */
+	@Override
+	public void configure(PlugDescription plugDescription) {
+		// get values from plugDescription if any
+		setMultiplier((String)plugDescription.get("rankingMul"));
+		setAdditional((String)plugDescription.get("rankingAdd"));
+		log.info("RankingModifier was correctly configured from PlugDescription!");
 	}
 }

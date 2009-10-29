@@ -2,13 +2,11 @@ package de.ingrid.iplug.opensearch.webapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import de.ingrid.admin.command.PlugdescriptionCommandObject;
@@ -33,8 +31,10 @@ public class OSParametersController extends AbstractController {
 		
 		OpensearchConfig osConfig = new OpensearchConfig();
 		
+		// put values from plugdescription into object being used by the web-form
 		mapParamsFromPD(osConfig, commandObject);		
 		
+		// write object into session
 		modelMap.addAttribute("osConfig", osConfig);
         return AdminViews.OS_PARAMS;
     }
@@ -44,11 +44,13 @@ public class OSParametersController extends AbstractController {
     		final BindingResult errors,
     		@ModelAttribute("plugDescription") final PlugdescriptionCommandObject pdCommandObject) {
     	
-    	mapParamsToPD(commandObject, pdCommandObject);
-    	
+		// check if page contains any errors
     	if (_validator.validateOSParams(errors).hasErrors()) {
             return AdminViews.OS_PARAMS;
         }
+    	
+    	// put values into plugdescription
+    	mapParamsToPD(commandObject, pdCommandObject);
     	
     	return redirect(AdminViews.SAVE + ".html");
     }
@@ -56,16 +58,13 @@ public class OSParametersController extends AbstractController {
 	
     private void mapParamsToPD(OpensearchConfig commandObject,
 			PlugdescriptionCommandObject pdCommandObject) {
-    	// write Ranking-information
-    	// empty list
+    	// write Ranking-information after list got emptied
     	if (pdCommandObject.getArrayList(IngridQuery.RANKED) != null )
     		pdCommandObject.getArrayList(IngridQuery.RANKED).clear();
     	
     	if (commandObject.getRankSupport()) {//enableRanking != null && enableRanking.equals("on")) {
-    		System.out.println("set ranking to score");
     		pdCommandObject.setRankinTypes(true, false, false);
     	} else {
-    		System.out.println("set ranking off");
     		pdCommandObject.setRankinTypes(false, false, true);
     	}
     	
