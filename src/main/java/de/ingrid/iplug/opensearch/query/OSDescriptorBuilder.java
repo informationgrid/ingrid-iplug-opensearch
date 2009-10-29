@@ -16,7 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import de.ingrid.iplug.communication.OSCommunication;
+import de.ingrid.iplug.opensearch.communication.OSCommunication;
 
 public class OSDescriptorBuilder {
 	private static Log log = LogFactory.getLog(OSDescriptorBuilder.class);

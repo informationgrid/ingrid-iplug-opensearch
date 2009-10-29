@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import de.ingrid.iplug.HeartBeatPlug;
 import de.ingrid.iplug.IPlugdescriptionFieldFilter;
 import de.ingrid.iplug.PlugDescriptionFieldFilters;
-import de.ingrid.iplug.communication.OSCommunication;
+import de.ingrid.iplug.opensearch.communication.OSCommunication;
 import de.ingrid.iplug.opensearch.converter.ConverterFactory;
 import de.ingrid.iplug.opensearch.converter.IngridConverter;
 import de.ingrid.iplug.opensearch.query.OSDescriptor;

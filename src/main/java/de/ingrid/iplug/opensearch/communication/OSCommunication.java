@@ -1,4 +1,4 @@
-package de.ingrid.iplug.communication;
+package de.ingrid.iplug.opensearch.communication;
 
 import java.io.IOException;
 import java.io.InputStream;
