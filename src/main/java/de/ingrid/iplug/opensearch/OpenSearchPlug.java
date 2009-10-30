@@ -71,21 +71,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	 */
 	private String fServiceURL 			= null;
 
-	/**
-	 * SOAP-Service Version
-	 */
-//	private int fSOAPVersion 			= 0;
-
-	/**
-	 * the initial timout
-	 */
-	//private static final int INITIALTIMEOUT = 10000;
-
-	/**
-	 * Time out for request
-	 */
-	//private int fTimeOut 				= INITIALTIMEOUT;
-	
 	private IngridConverter ingridConverter;
 	
 	private OSDescriptor osDescriptor 	= null;
@@ -120,7 +105,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		
 		try {
 		
-			if (/*fPlugDesc.getRankingTypes().length > 0 && */fPlugDesc.getRankingTypes()[0].equals("off")) {
+			if (fPlugDesc.getRankingTypes()[0].equals("off")) {
 				this.fIsRanked = false;
 			} else {
 				this.fIsRanked = true;
@@ -145,8 +130,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			log.info("OpenSearch-Descriptor received");
 			
 			ingridConverter = converterFactory.getConverter(osDescriptor);
-			
-			//startHeartBeats();
 			
 			log.info("iPlug initialized; waiting for incoming queries.");
 		} catch (IOException e) {
@@ -176,7 +159,10 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	 */
 	public final IngridHits search(final IngridQuery query, final int start, final int length)
 	throws Exception {
-		IngridHits hits = null;
+		IngridHits hits 	= null;
+		InputStream result 	= null;
+		String url 			= null;
+		
 		if (log.isDebugEnabled()) {
 		    log.debug("Incoming query: " + query.toString() + ", start=" + start + ", length=" + length);
         }
@@ -186,7 +172,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			OSQuery osQuery = queryBuilder.createQuery(query, start, length);
 			
 			OSCommunication comm = new OSCommunication();
-			InputStream result = comm.sendRequest(OSRequest.getOSQueryString(osQuery, osDescriptor));
+			url = OSRequest.getOSQueryString(osQuery, osDescriptor);
+			result = comm.sendRequest(url);
 			hits = ingridConverter.processResult(fPlugID, result);
 			
 			// set the ranking received from the plugdescription
@@ -197,8 +184,12 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		
 			return hits;
 		} catch (Exception se) {
-			log.warn("An error has occured! Returning no hits! Exception is: " + se.getMessage());
-			se.printStackTrace();
+			if (result == null) {
+				log.error("Could not receive answer from: " + url);
+			} else {
+				log.warn("An error has occured! Returning no hits! Exception is: " + se.getMessage());
+				se.printStackTrace();
+			}
 			return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
 		}
 	}
@@ -231,7 +222,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	@Override
 	public IngridHitDetail getDetail(IngridHit hit, IngridQuery query,
 			String[] arg2) throws Exception {
-		log.debug("getOpenSearch-Detail");
 		IngridHitDetail hitDetail = ingridConverter.getHitDetailFromCache(hit.getDocumentId());
 		
 		if (hitDetail == null) { // this shouldn't happen
@@ -249,7 +239,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	@Override
 	public IngridHitDetail[] getDetails(IngridHit[] hits, IngridQuery query,
 			String[] arg2) throws Exception {
-		log.debug("getOpenSearch-Details");
 		IngridHitDetail[] hitDetails = new IngridHitDetail[hits.length];
 		int c = 0;
 		for (IngridHit singleHit : hits) {
@@ -261,7 +250,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 
 	@Autowired
 	public void setConverterFactory(ConverterFactory converterFactory) {
-		log.debug("Set ConverterFactory!");
 		this.converterFactory = converterFactory;
 	}
 }

@@ -66,8 +66,10 @@ public class RankingModifierFromPD implements RankingModifier, IConfigurable {
 	@Override
 	public void configure(PlugDescription plugDescription) {
 		// get values from plugDescription if any
-		setMultiplier((String)plugDescription.get("rankingMul"));
-		setAdditional((String)plugDescription.get("rankingAdd"));
+		if (!plugDescription.getRankingTypes()[0].equals("off")) {
+			setMultiplier((String)plugDescription.get("rankingMul"));
+			setAdditional((String)plugDescription.get("rankingAdd"));
+		}
 		log.info("RankingModifier was correctly configured from PlugDescription!");
 	}
 }
