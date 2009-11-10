@@ -9,7 +9,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.ingrid.utils.IngridQueryTools;
-import de.ingrid.utils.query.FieldQuery;
 import de.ingrid.utils.query.IngridQuery;
 import de.ingrid.utils.query.TermQuery;
 
@@ -79,18 +78,18 @@ public class OSQueryBuilder {
 	}
 
 	private String getOutputEncoding(IngridQuery ingridQuery) {
-		// TODO Auto-generated method stub
+		// not supported yet
 		return null;
 	}
 
 	private String getInputEncoding(IngridQuery ingridQuery) {
-		// TODO Auto-generated method stub
+	    // not supported yet
 		return null;
 	}
 
 	private String getLanguage(IngridQuery ingridQuery) {
 		
-		// TODO Auto-generated method stub
+	    // not supported yet
 		return null;
 	}
 

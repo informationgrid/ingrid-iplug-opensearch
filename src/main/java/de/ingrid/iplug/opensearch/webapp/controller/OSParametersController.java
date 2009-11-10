@@ -62,7 +62,9 @@ public class OSParametersController extends AbstractController {
     	if (pdCommandObject.getArrayList(IngridQuery.RANKED) != null )
     		pdCommandObject.getArrayList(IngridQuery.RANKED).clear();
     	
-    	if (commandObject.getRankSupport()) {//enableRanking != null && enableRanking.equals("on")) {
+    	if (commandObject.getRankSupport() && commandObject.getShowAlsoAsUnranked()) {
+    		pdCommandObject.setRankinTypes(true, false, true);
+    	} else if (commandObject.getRankSupport()) { 
     		pdCommandObject.setRankinTypes(true, false, false);
     	} else {
     		pdCommandObject.setRankinTypes(false, false, true);
@@ -78,11 +80,15 @@ public class OSParametersController extends AbstractController {
     	} else {
     		pdCommandObject.putBoolean("useDescriptor", false);
     		pdCommandObject.put("serviceUrl", commandObject.getOpensearchUrl());
-    	}		
+    	}
+    	
+    	// add datatype opensearch to PD
+    	pdCommandObject.addDataType("opensearch");
 	}
 
 	private void mapParamsFromPD(OpensearchConfig osConfig, PlugdescriptionCommandObject pdObject) {
-    	osConfig.setRankSupport(rankSupported(pdObject.getRankingTypes()));
+    	osConfig.setRankSupport(rankSupported("score", pdObject.getRankingTypes()));
+    	osConfig.setShowAlsoAsUnranked(rankSupported("off", pdObject.getRankingTypes()));
 		
 		if (pdObject.containsKey("useDescriptor") && pdObject.getBoolean("useDescriptor")) {
 			osConfig.setOsDescriptor("descriptor");
@@ -96,10 +102,9 @@ public class OSParametersController extends AbstractController {
 		osConfig.setRankMultiplier((String)pdObject.get("rankingMul"));
 	}
     
-	public boolean rankSupported(String[] types) {
-		System.out.println("types: " + types.toString());
+	public boolean rankSupported(String rankType, String[] types) {
 		for (String type : types) {
-			if (type.contains("score"))
+			if (type.contains(rankType))
 				return true;
 		}
 		return false;

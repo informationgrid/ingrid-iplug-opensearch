@@ -18,6 +18,8 @@ public class OpensearchConfig implements Externalizable {
 	private String _rankAddition;
 	
 	private String _osDescriptor;
+	
+	private boolean _showAlsoAsUnranked;
 
 	
 	public String getOpensearchUrl() {
@@ -91,6 +93,14 @@ public class OpensearchConfig implements Externalizable {
 		System.out.println("opensearchUrl: " + _opensearchUrl);
 		System.out.println("opensearchDescriptorUrl: " + _opensearchDescriptorUrl);
 	}
+
+    public void setShowAlsoAsUnranked(boolean showAlsoAsUnranked) {
+        this._showAlsoAsUnranked = showAlsoAsUnranked;
+    }
+
+    public boolean getShowAlsoAsUnranked() {
+        return _showAlsoAsUnranked;
+    }
 
 
 }

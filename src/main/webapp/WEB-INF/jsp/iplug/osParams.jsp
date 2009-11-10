@@ -9,8 +9,30 @@
 <meta name="author" content="wemove digital solutions" />
 <meta name="copyright" content="wemove digital solutions GmbH" />
 <link rel="StyleSheet" href="../css/base/portal_u.css" type="text/css" media="all" />
+
+<script type="text/javascript">
+
+    function setListener() {    
+        rankingField = document.getElementById("ranking");
+        rankingField.onchange = function() { checkRanking(this); }
+        checkRanking(rankingField);
+    }
+    
+    function checkRanking(obj) {
+        if (obj.checked == true) {
+            document.getElementById("showAsUnranked").disabled = false;
+            document.getElementById("rankMultiplier").disabled = false;
+            document.getElementById("rankAddition").disabled = false;
+        } else {
+            document.getElementById("showAsUnranked").disabled = true;
+            document.getElementById("rankMultiplier").disabled = true;
+            document.getElementById("rankAddition").disabled = true;
+        }
+    }
+</script>
+
 </head>
-<body>
+<body onLoad="setListener()">
     <div id="header">
         <img src="../images/base/logo.gif" width="168" height="60" alt="Portal U" />
         <h1>Konfiguration</h1>
@@ -58,7 +80,9 @@
                             <form:errors path="opensearchUrl" cssClass="error" element="div" />
                             <br />
                             Bitte geben Sie hier die Opensearch URL mit Platzhaltern an, die Sie an das InGrid System anschließen wollen.
-                            Verfügbare Platzhalter sind ...
+                            Verfügbare Platzhalter sind {searchTerms}, {geo:box}, {startPage}, {count}, {ingridsearch:xml},
+                            {ingridsearch:georss}, {ingridsearch:ingrid}
+                            <p style="color: gray;">(Beispiel: http://127.0.0.1/query?q={searchTerms}+datatype:default+ranking:score&amp;bbox={geo:box?}&amp;p={startPage?}&amp;h={count?}&amp;xml={ingridsearch:xml?}&amp;georss={ingridsearch:georss?}&amp;ingrid={ingridsearch:ingrid?}&amp;format=rss")</p>
                         </td>
                     </tr>
                     <tr>
@@ -70,16 +94,25 @@
                     <tr>
                         <td class="leftCol">Ranking Unterstützung:</td>
                         <td>
-                            <form:checkbox path="rankSupport" />
+                            <form:checkbox path="rankSupport" id="ranking" />
                             <br />
                             Unterstützt die Opensearch Schnittstelle ein Ranking der Suchergebnisse? (Wenn aktiviert, 
                             werden die Ergebnisse in die Hauptergbnisliste des Portals aufgenommen.)
                         </td>
                     </tr>
                     <tr>
+                        <td class="leftCol">Zeige auch in Nebenergebnisliste:</td>
+                        <td>
+                            <form:checkbox path="showAlsoAsUnranked" id="showAsUnranked" />
+                            <br />
+                            Wenn die Ergebnisse auch in der Liste der nicht gerankten Resultate auftauchen soll, so
+                            aktivieren Sie diese Checkbox.
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="leftCol">Adapt. Ranking (Mult.):</td>
                         <td>
-                            <form:input path="rankMultiplier" />
+                            <form:input path="rankMultiplier" id="rankMultiplier" />
                             <form:errors path="rankMultiplier" cssClass="error" element="div" />
                             <br />
                             Bitte geben Sie hier den Faktor an, mit dem der ranking score multipliziert werden soll.
@@ -88,7 +121,7 @@
                     <tr>
                         <td class="leftCol">Adapt. Ranking (Add.):</td>
                         <td>
-                            <form:input path="rankAddition" />
+                            <form:input path="rankAddition" id="rankAddition" />
                             <form:errors path="rankAddition" cssClass="error" element="div" />
                             <br />
                             Bitte geben Sie hier den Faktor an, mit dem der ranking score addiert werden soll.

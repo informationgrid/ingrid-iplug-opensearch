@@ -1,14 +1,15 @@
 package de.ingrid.iplug.opensearch.query;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 public class OSQuery extends HashMap<String,String> {
-	/* The logging object
+
+    private static final long serialVersionUID = 7633577508030661464L;
+
+    /* The logging object
 	 */
 	private static Log log = LogFactory.getLog(OSQuery.class);
 	
@@ -24,19 +25,9 @@ public class OSQuery extends HashMap<String,String> {
 	// extended OpenSearch parameters
 	public static final String OS_GEO_BBOX			= "geo:box";
 		
-	// the template of the query
-	//private String templateQuery = null;
+	public OSQuery() {}
 	
-	// which parameter were offered by the descriptor 
-	List<String> templateParameter = new ArrayList<String>();
-	
-	public OSQuery() {
-		//this.templateQuery = template;
-		//checkAvailableParameters();
-	}
-	
-	//public void 
-	
+
 	/**
 	 * recognize all available parameters for an OpenSearch query 
 	 */
