@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/jsp/base/include.jsp" %>
+<%@page import="de.ingrid.admin.security.IngridPrincipal"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de">
 <head>
@@ -20,11 +21,11 @@
     
     function checkRanking(obj) {
         if (obj.checked == true) {
-            document.getElementById("showAsUnranked").disabled = false;
+            //document.getElementById("showAsUnranked").disabled = false;
             document.getElementById("rankMultiplier").disabled = false;
             document.getElementById("rankAddition").disabled = false;
         } else {
-            document.getElementById("showAsUnranked").disabled = true;
+            //document.getElementById("showAsUnranked").disabled = true;
             document.getElementById("rankMultiplier").disabled = true;
             document.getElementById("rankAddition").disabled = true;
         }
@@ -36,7 +37,14 @@
     <div id="header">
         <img src="../images/base/logo.gif" width="168" height="60" alt="Portal U" />
         <h1>Konfiguration</h1>
-        <div id="language"><a href="#">Englisch</a></div>
+        <%
+          java.security.Principal  principal = request.getUserPrincipal();
+          if(principal != null && !(principal instanceof IngridPrincipal.SuperAdmin)) {
+        %>
+            <div id="language"><a href="<%=request.getContextPath()%>/base/auth/logout.html">Logout</a></div>
+        <%
+          }
+        %>
     </div>
     <div id="help"><a href="#">[?]</a></div>
 
@@ -46,12 +54,12 @@
     <div id="contentBox" class="contentMiddle">
         <h1 id="head">Opensearch Parameter</h1>
         <div class="controls">
-            <a href="../base/fieldQuery.html">Zurück</a>
+            <a href="../base/extras.html">Zurück</a>
             <a href="../base/welcome.html">Abbrechen</a>
             <a href="#" onclick="document.getElementById('osConfig').submit();">Weiter</a>
         </div>
         <div class="controls cBottom">
-            <a href="../base/fieldQuery.html">Zurück</a>
+            <a href="../base/extras.html">Zurück</a>
             <a href="../base/welcome.html">Abbrechen</a>
             <a href="#" onclick="document.getElementById('osConfig').submit();">Weiter</a>
         </div>
@@ -100,7 +108,7 @@
                             werden die Ergebnisse in die Hauptergbnisliste des Portals aufgenommen.)
                         </td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                         <td class="leftCol">Zeige auch in Nebenergebnisliste:</td>
                         <td>
                             <form:checkbox path="showAlsoAsUnranked" id="showAsUnranked" />
@@ -108,7 +116,7 @@
                             Wenn die Ergebnisse auch in der Liste der nicht gerankten Resultate auftauchen soll, so
                             aktivieren Sie diese Checkbox.
                         </td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td class="leftCol">Adapt. Ranking (Mult.):</td>
                         <td>

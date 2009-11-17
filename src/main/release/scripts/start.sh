@@ -17,16 +17,27 @@ THIS_DIR=`dirname "$THIS"`
 INGRID_HOME=`cd "$THIS_DIR" ; pwd`
 PID=$INGRID_HOME/ingrid.pid
 
+INGRID_OPTS="-Djetty.port=8082 -Dindexing=false"
+if [ -f $INGRID_HOME/conf/plugDescription.xml ]; then
+	for tag in IPLUG_ADMIN_GUI_PORT
+	do
+		OUT=`grep --after-context=1 $tag $INGRID_HOME/conf/plugDescription.xml | tr -d '<string>'${tag}'</string>\n' | tr -d '\t' | sed 's/^<.*>\([^<].*\)<.*>$/\1/' `
+		eval ${tag}=`echo -ne \""${OUT}"\"`
+		done
+		P_ARRAY=( `echo ${IPLUG_ADMIN_GUI_PORT}` )
+		INGRID_OPTS="-Dindexing=false -Djetty.port="${P_ARRAY[0]}
+fi
+
 # functions
 stopIplug()
 {
-  echo "Try stopping ingrid component ($INGRID_HOME)..."
+  echo "Try stopping jetty ($INGRID_HOME)..."
   if [ -f $PID ]; then
       procid=`cat $PID`
       idcount=`ps -p $procid | wc -l`
       if [ $idcount -eq 2 ]; then
         echo stopping $command
-        kill `cat $PID`
+        kill -9 `cat $PID`
         echo "process ($procid) has been terminated."
       else
         echo "process is not running. Exit."
@@ -40,13 +51,13 @@ stopIplug()
 
 stopNoExitIplug()
 {
-  echo "Try stopping ingrid component ($INGRID_HOME)..."
+  echo "Try stopping jetty ($INGRID_HOME)..."
   if [ -f $PID ]; then
       procid=`cat $PID`
       idcount=`ps -p $procid | wc -l`
       if [ $idcount -eq 2 ]; then
         echo stopping $command
-        kill `cat $PID`
+        kill -9 `cat $PID`
         echo "process ($procid) has been terminated."
       else
         echo "process is not running. Exit."
@@ -59,7 +70,7 @@ stopNoExitIplug()
 
 startIplug()
 {
-  echo "Try starting ingrid component ($INGRID_HOME)..."
+  echo "Try starting jetty ($INGRID_HOME)..."
   if [ -f $PID ]; then
       procid=`cat $PID`
       idcount=`ps -p $procid | wc -l`
@@ -67,12 +78,6 @@ startIplug()
         echo plug running as process `cat $PID`.  Stop it first.
         exit 1
       fi
-  fi
-  
-  if [ -d "$INGRID_HOME/../repository/" ]; then
-  	echo 'syncronize libs from repository...'
-	rsync -av --update --existing $INGRID_HOME/../repository/ $INGRID_HOME/lib/
-	echo 'finished syncronize.'
   fi
   
   # some Java parameters
@@ -114,12 +119,10 @@ startIplug()
     CLASSPATH=`cygpath -p -w "$CLASSPATH"`
   fi
 
-  CLASS=de.ingrid.iplug.PlugServer
-  
   # run it
-  exec nohup "$JAVA" $JAVA_HEAP_MAX $INGRID_OPTS -classpath "$CLASSPATH" $CLASS --descriptor conf/communication.xml --plugdescription conf/plugdescription.xml > console.log &
+  exec nohup "$INGRID_JAVA_HOME"/bin/java $INGRID_HEAPSIZE $INGRID_OPTS -jar start.jar > console.log &
   
-  echo "ingrid component ($INGRID_HOME) started."
+  echo "jetty ($INGRID_HOME) started."
   echo $! > $PID
 }
 

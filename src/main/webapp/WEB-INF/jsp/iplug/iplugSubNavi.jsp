@@ -2,6 +2,21 @@
 <c:choose>
     <c:when test="${plugdescriptionClickable == 'false'}">
         <li
+        <c:if test="${active == 'extras'}">
+            class="active"
+        </c:if>
+        >Weitere Einstellungen</li>
+    </c:when>
+    <c:when test="${active != 'extras'}">
+        <li><a href="../base/extras.html">Weitere Einstellungen</a></li>
+    </c:when>
+    <c:otherwise>
+        <li class="active">Weitere Einstellungen</li>
+    </c:otherwise>
+</c:choose>
+<c:choose>
+    <c:when test="${plugdescriptionClickable == 'false'}">
+        <li
         <c:if test="${active == 'osParams'}">
             class="active"
         </c:if>
@@ -11,7 +26,7 @@
         <li><a href="../iplug/osParams.html">Opensearch Parameter</a></li>
     </c:when>
     <c:otherwise>
-        <li class="active"><a href="<%=request.getContextPath()%>/base/general.html">Opensearch Parameter</a></li>
+        <li class="active">Opensearch Parameter</li>
     </c:otherwise>
 </c:choose>
 

@@ -58,16 +58,26 @@ public class OSParametersController extends AbstractController {
 	
     private void mapParamsToPD(OpensearchConfig commandObject,
 			PlugdescriptionCommandObject pdCommandObject) {
-    	// write Ranking-information after list got emptied
-    	if (pdCommandObject.getArrayList(IngridQuery.RANKED) != null )
-    		pdCommandObject.getArrayList(IngridQuery.RANKED).clear();
     	
-    	if (commandObject.getRankSupport() && commandObject.getShowAlsoAsUnranked()) {
-    		pdCommandObject.setRankinTypes(true, false, true);
-    	} else if (commandObject.getRankSupport()) { 
-    		pdCommandObject.setRankinTypes(true, false, false);
-    	} else {
-    		pdCommandObject.setRankinTypes(false, false, true);
+    	String[] rankTypes = pdCommandObject.getRankingTypes();
+        boolean isOff = false;
+        boolean isDate  = false;
+        for (String type : rankTypes) {
+            if (type.equals("off"))  isOff   = true;
+            if (type.equals("date")) isDate  = true;
+        }
+        
+        // write Ranking-information after list got emptied
+        if (pdCommandObject.getArrayList(IngridQuery.RANKED) != null )
+            pdCommandObject.getArrayList(IngridQuery.RANKED).clear();
+    	
+    	if (commandObject.getRankSupport()) {
+    		pdCommandObject.setRankinTypes(true,  isDate, isOff);
+    	} else if (!isDate && !isOff) {
+    	    // there must be at least one "true" value!
+    	    pdCommandObject.setRankinTypes(false, false, true);
+        } else {
+    		pdCommandObject.setRankinTypes(false, isDate, isOff);
     	}
     	
     	pdCommandObject.put("rankingMul", commandObject.getRankMultiplier());
