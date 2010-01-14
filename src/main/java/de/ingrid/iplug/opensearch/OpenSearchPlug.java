@@ -84,7 +84,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			IMetadataInjector[] injector,
 			IPreProcessor[] preProcessors,
 			IPostProcessor[] postProcessors) throws IOException {
-		super(10000, new PlugDescriptionFieldFilters(fieldFilters), injector, preProcessors, postProcessors);
+		super(30000, new PlugDescriptionFieldFilters(fieldFilters), injector, preProcessors, postProcessors);
 	}
 	
 	/**
@@ -124,7 +124,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			log.info("  - Working directory: " + fWorkingDir);
 			log.info("  - SOAP-Service URL: " + fServiceURL);
 				
-			log.info("Receiving OpenSearch-Descriptor ... " + fUseDescriptor);
+			log.info("Receiving OpenSearch-Descriptor ... using one: " + fUseDescriptor);
 			OSDescriptorBuilder descrBuilder = new OSDescriptorBuilder();
 			osDescriptor = descrBuilder.createDescriptor(fServiceURL, fUseDescriptor);
 			log.info("OpenSearch-Descriptor received");
@@ -169,7 +169,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		
 		try {
 			OSQueryBuilder queryBuilder = new OSQueryBuilder();
-			OSQuery osQuery = queryBuilder.createQuery(query, start, length);
+			OSQuery osQuery = queryBuilder.createQuery(query, (start/length)+1, length);
 			
 			OSCommunication comm = new OSCommunication();
 			url = OSRequest.getOSQueryString(osQuery, osDescriptor);

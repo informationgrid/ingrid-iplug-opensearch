@@ -6,7 +6,7 @@
 			verbose		          ="true"
 			debug		            ="true"
 			lookAndFeel	        ="org.tp23.jgoodies.plaf.plastic.PlasticXPLookAndFeel"
-			name		            ="iPlug-Excel Installation"
+			name		            ="iPlug-Opensearch Installation"
 			windowIcon	        ="/resources/icons/logoIcon.gif"
 			defaultImageResource="/resources/makewavesdawn.png"
 			minJavaVersion		  ="1.6"

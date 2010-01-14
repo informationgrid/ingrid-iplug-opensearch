@@ -19,11 +19,8 @@ public class OpensearchConfig implements Externalizable {
 	
 	private String _osDescriptor;
 	
-	private boolean _showAlsoAsUnranked;
-
 	
 	public String getOpensearchUrl() {
-		//System.out.println("getOpensearchUrl");
 		return _opensearchUrl;
 	}
 	
@@ -53,16 +50,32 @@ public class OpensearchConfig implements Externalizable {
 		
 	}
 
+	/**
+	 * Set the modifier for multiplication of the ranking value.
+	 * Use "1" as default value.
+	 * @param rankMultiplier
+	 */
 	public void setRankMultiplier(String rankMultiplier) {
-		this._rankMultiplier = rankMultiplier;
+	    if (rankMultiplier == null)
+	        this._rankMultiplier = "1";
+	    else
+	        this._rankMultiplier = rankMultiplier;
 	}
 
 	public String getRankMultiplier() {
 		return _rankMultiplier;
 	}
 
+	/**
+	 * Set the modifier for addition of the ranking value.
+	 * Use "0" as default value.
+	 * @param rankAddition
+	 */
 	public void setRankAddition(String rankAddition) {
-		this._rankAddition = rankAddition;
+		if (rankAddition == null)
+		    this._rankAddition = "0";
+		else
+		    this._rankAddition = rankAddition;
 	}
 
 	public String getRankAddition() {
@@ -93,14 +106,4 @@ public class OpensearchConfig implements Externalizable {
 		System.out.println("opensearchUrl: " + _opensearchUrl);
 		System.out.println("opensearchDescriptorUrl: " + _opensearchDescriptorUrl);
 	}
-
-    public void setShowAlsoAsUnranked(boolean showAlsoAsUnranked) {
-        this._showAlsoAsUnranked = showAlsoAsUnranked;
-    }
-
-    public boolean getShowAlsoAsUnranked() {
-        return _showAlsoAsUnranked;
-    }
-
-
 }

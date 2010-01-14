@@ -1,7 +1,9 @@
 package de.ingrid.iplug.opensearch.converter;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import de.ingrid.utils.IngridHit;
@@ -206,6 +209,7 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 			throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
+		//Document descriptorDoc = builder.parse(new InputSource(new InputStreamReader(result, "UTF8")));
 		Document descriptorDoc = builder.parse(result);
 		return descriptorDoc;
 	}

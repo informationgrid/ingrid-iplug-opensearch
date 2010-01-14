@@ -146,6 +146,11 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
               <iPlug-Type>IPLUG_OPENSEARCH</iPlug-Type>
             </manifestEntries>
           </archive>
+          <webResources>
+            <resource>
+                <directory>target/base-webapp</directory>
+            </resource>
+          </webResources>
         </configuration>
       </plugin>
       <plugin>
@@ -177,7 +182,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
             <configuration>
               <source>ant.unzip(src:
               "${settings.localRepository}/de/ingrid/ingrid-base-webapp/0.1-SNAPSHOT/ingrid-base-webapp-0.1-SNAPSHOT-res.zip",
-              dest: "target/${artifactId}-${version}")</source>
+              dest: "target/base-webapp")</source>
             </configuration>
           </execution>
         </executions>

@@ -25,10 +25,10 @@ public class OSParametersController extends AbstractController {
 		_validator = validator;
 	}
 	
-	@RequestMapping(value = {"/iplug/welcome.html", "/iplug/osParams.html"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/iplug-pages/welcome.html", "/iplug-pages/osParams.html"}, method = RequestMethod.GET)
     public String getParameters(final ModelMap modelMap,
     		@ModelAttribute("plugDescription") final PlugdescriptionCommandObject commandObject) {
-		
+		System.out.println("In OSController");
 		OpensearchConfig osConfig = new OpensearchConfig();
 		
 		// put values from plugdescription into object being used by the web-form
@@ -39,7 +39,7 @@ public class OSParametersController extends AbstractController {
         return AdminViews.OS_PARAMS;
     }
 
-	@RequestMapping(value = "/iplug/osParams.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/iplug-pages/osParams.html", method = RequestMethod.POST)
     public String post(@ModelAttribute("osConfig") final OpensearchConfig commandObject,
     		final BindingResult errors,
     		@ModelAttribute("plugDescription") final PlugdescriptionCommandObject pdCommandObject) {
@@ -59,13 +59,8 @@ public class OSParametersController extends AbstractController {
     private void mapParamsToPD(OpensearchConfig commandObject,
 			PlugdescriptionCommandObject pdCommandObject) {
     	
-    	String[] rankTypes = pdCommandObject.getRankingTypes();
-        boolean isOff = false;
-        boolean isDate  = false;
-        for (String type : rankTypes) {
-            if (type.equals("off"))  isOff   = true;
-            if (type.equals("date")) isDate  = true;
-        }
+        boolean isOff  = pdCommandObject.containsRankingType("off");
+        boolean isDate = pdCommandObject.containsRankingType("date");
         
         // write Ranking-information after list got emptied
         if (pdCommandObject.getArrayList(IngridQuery.RANKED) != null )
@@ -73,6 +68,8 @@ public class OSParametersController extends AbstractController {
     	
     	if (commandObject.getRankSupport()) {
     		pdCommandObject.setRankinTypes(true,  isDate, isOff);
+    		pdCommandObject.put("rankingMul", commandObject.getRankMultiplier());
+            pdCommandObject.put("rankingAdd", commandObject.getRankAddition());
     	} else if (!isDate && !isOff) {
     	    // there must be at least one "true" value!
     	    pdCommandObject.setRankinTypes(false, false, true);
@@ -80,9 +77,6 @@ public class OSParametersController extends AbstractController {
     		pdCommandObject.setRankinTypes(false, isDate, isOff);
     	}
     	
-    	pdCommandObject.put("rankingMul", commandObject.getRankMultiplier());
-    	pdCommandObject.put("rankingAdd", commandObject.getRankAddition());
-    	    	
     	// write information if Descriptor is used
     	if (commandObject.getOsDescriptor() != null && commandObject.getOsDescriptor().equals("descriptor")) { //useDescriptor.equals("descriptor")) {
     		pdCommandObject.putBoolean("useDescriptor", true);
@@ -98,7 +92,6 @@ public class OSParametersController extends AbstractController {
 
 	private void mapParamsFromPD(OpensearchConfig osConfig, PlugdescriptionCommandObject pdObject) {
     	osConfig.setRankSupport(rankSupported("score", pdObject.getRankingTypes()));
-    	osConfig.setShowAlsoAsUnranked(rankSupported("off", pdObject.getRankingTypes()));
 		
 		if (pdObject.containsKey("useDescriptor") && pdObject.getBoolean("useDescriptor")) {
 			osConfig.setOsDescriptor("descriptor");
