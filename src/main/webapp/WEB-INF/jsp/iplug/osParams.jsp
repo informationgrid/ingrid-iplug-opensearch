@@ -1,9 +1,10 @@
-<%@ include file="/WEB-INF/jsp/base/include.jsp" %>
+<%@ include file="/WEB-INF/jsp/base/include.jsp" %><%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <%@page import="de.ingrid.admin.security.IngridPrincipal"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de">
 <head>
-<title>Portal U Administration</title>
+<title><fmt:message key="OpensearchConfig.main.title"/></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
@@ -36,12 +37,12 @@
 <body onLoad="setListener()">
     <div id="header">
         <img src="../images/base/logo.gif" width="168" height="60" alt="Portal U" />
-        <h1>Konfiguration</h1>
+        <h1><fmt:message key="OpensearchConfig.main.configuration"/></h1>
         <%
           java.security.Principal  principal = request.getUserPrincipal();
           if(principal != null && !(principal instanceof IngridPrincipal.SuperAdmin)) {
         %>
-            <div id="language"><a href="<%=request.getContextPath()%>/base/auth/logout.html">Logout</a></div>
+            <div id="language"><a href="<%=request.getContextPath()%>/base/auth/logout.html"><fmt:message key="OpensearchConfig.main.logout"/></a></div>
         <%
           }
         %>
@@ -105,18 +106,9 @@
                             <form:checkbox path="rankSupport" id="ranking" />
                             <br />
                             Unterstützt die Opensearch Schnittstelle ein Ranking der Suchergebnisse? (Wenn aktiviert, 
-                            werden die Ergebnisse in die Hauptergbnisliste des Portals aufgenommen.)
+                            werden die Ergebnisse in die Hauptergebnisliste des Portals aufgenommen.)
                         </td>
                     </tr>
-                    <!--<tr>
-                        <td class="leftCol">Zeige auch in Nebenergebnisliste:</td>
-                        <td>
-                            <form:checkbox path="showAlsoAsUnranked" id="showAsUnranked" />
-                            <br />
-                            Wenn die Ergebnisse auch in der Liste der nicht gerankten Resultate auftauchen soll, so
-                            aktivieren Sie diese Checkbox.
-                        </td>
-                    </tr>-->
                     <tr>
                         <td class="leftCol">Adapt. Ranking (Mult.):</td>
                         <td>

@@ -23,7 +23,7 @@
         >Opensearch Parameter</li>
     </c:when>
     <c:when test="${active != 'osParams'}">
-        <li><a href="../iplug/osParams.html">Opensearch Parameter</a></li>
+        <li><a href="../iplug-pages/osParams.html">Opensearch Parameter</a></li>
     </c:when>
     <c:otherwise>
         <li class="active">Opensearch Parameter</li>
