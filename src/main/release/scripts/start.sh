@@ -17,7 +17,7 @@ THIS_DIR=`dirname "$THIS"`
 INGRID_HOME=`cd "$THIS_DIR" ; pwd`
 PID=$INGRID_HOME/ingrid.pid
 
-INGRID_OPTS="-Djetty.port=8082 -Dindexing=false"
+INGRID_OPTS="-Djetty.port=@SERVER_PORT@ -Dindexing=false -Djetty.home=./jetty"
 if [ -f $INGRID_HOME/conf/plugDescription.xml ]; then
 	for tag in IPLUG_ADMIN_GUI_PORT
 	do
@@ -28,7 +28,7 @@ if [ -f $INGRID_HOME/conf/plugDescription.xml ]; then
   if [ ${P_ARRAY[0]} = $'\r' ]; then
     P_ARRAY=( ${P_ARRAY[1]} )
   fi
-  INGRID_OPTS="-Dindexing=false -Djetty.port="${P_ARRAY[0]}
+  INGRID_OPTS="-Dindexing=false -Djetty.home=./jetty -Djetty.port="${P_ARRAY[0]}
 fi
 
 # functions
@@ -103,27 +103,8 @@ startIplug()
     echo "run with heapsize $JAVA_HEAP_MAX"
   fi
 
-  # CLASSPATH initially contains $INGRID_CONF_DIR, or defaults to $INGRID_HOME/conf
-  CLASSPATH=${INGRID_CONF_DIR:=$INGRID_HOME/conf}
-  CLASSPATH=${CLASSPATH}:$JAVA_HOME/lib/tools.jar
-  CLASSPATH=${CLASSPATH}:${INGRID_HOME}
-  
-  # so that filenames w/ spaces are handled correctly in loops below
-  IFS=
-  # add libs to CLASSPATH
-  for f in $INGRID_HOME/lib/*.jar; do
-    CLASSPATH=${CLASSPATH}:$f;
-  done
-  # restore ordinary behaviour
-  unset IFS
-  
-  # cygwin path translation
-  if expr `uname` : 'CYGWIN*' > /dev/null; then
-    CLASSPATH=`cygpath -p -w "$CLASSPATH"`
-  fi
-
   # run it
-  exec nohup "$JAVA" $INGRID_HEAPSIZE $INGRID_OPTS -jar start.jar > console.log &
+  exec nohup "$JAVA" $INGRID_HEAPSIZE $INGRID_OPTS -jar jetty/start.jar > console.log &
   
   echo "jetty ($INGRID_HOME) started."
   echo $! > $PID

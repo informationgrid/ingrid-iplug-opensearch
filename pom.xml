@@ -31,6 +31,15 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       http://harrison.its-technidata.de/archiva/repository/ingrid-all</url>
     </repository>
   </repositories>
+  <!-- <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>2.5.6</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>-->
   <!-- ==================== DEPENDENCIES ==================== -->
   <dependencies>
     <dependency>
@@ -134,15 +143,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
+          <archiveClasses>false</archiveClasses>
           <archive>
             <manifestEntries>
-              <!--
-                                one of these: IPLUG_SE, IPLUG_DSC,
-                                IPLUG_SNS, IPLUG_TAMINO, IPLUG_FPN,
-                                IPLUG_G2K, IPLUG_CSW, IPLUG_CSW_DSC,
-                                IPLUG_OPENSEARCH, OTHER see
-                                ingrid-utils:de.ingrid.utils.metadata.IPlugType
-                            -->
+              <!-- see ingrid-utils:de.ingrid.utils.metadata.IPlugType -->
               <iPlug-Type>IPLUG_OPENSEARCH</iPlug-Type>
             </manifestEntries>
           </archive>
@@ -280,6 +284,19 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                     </goals>
                 </execution>        
             </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+                <archive>
+                    <manifestEntries>
+                      <!-- see ingrid-utils:de.ingrid.utils.metadata.IPlugType-->
+                      <iPlug-Type>OPENSEARCH</iPlug-Type>
+                    </manifestEntries>
+                </archive>
+            </configuration>
         </plugin>
     </plugins>
   </build>

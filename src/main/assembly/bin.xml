@@ -28,7 +28,7 @@
     </fileSet>
     <fileSet>
       <directory>target/jetty-6.1.14</directory>
-      <outputDirectory>${project.artifactId}-${project.version}/</outputDirectory>
+      <outputDirectory>${project.artifactId}-${project.version}/jetty</outputDirectory>
       <excludes>
         <exclude>**/webapps/ROOT/WEB-INF/jetty-web.xml</exclude>
       </excludes>
@@ -45,7 +45,7 @@
   <files>
     <file>
       <source>src/main/release/jetty/jetty-web.xml</source>
-      <outputDirectory>${project.artifactId}-${project.version}/webapps/ROOT/WEB-INF</outputDirectory>
+      <outputDirectory>${project.artifactId}-${project.version}/jetty/webapps/ROOT/WEB-INF</outputDirectory>
       <filtered>true</filtered>
     </file>
   </files>

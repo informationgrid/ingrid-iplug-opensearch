@@ -5,6 +5,7 @@
 	<!-- set global properties for this build -->
 	<property name="iPlugName" 			value="${project.artifactId}-${project.version}"/>
 	<property name="xml-communication" 	value="${installDir}/conf/communication.xml"/>
+    <property name="start-script"       value="${installDir}/start.sh"/>
 	
 	<target name="extract" description="Extract all files to the installation directory.">
 		<unzip src="${antinstaller.jar}" dest="${installDir}">
@@ -18,12 +19,14 @@
 		</move>
 		
 		<mkdir dir="${installDir}/logs"/>
+        
+        <replace file="${start-script}" token="@SERVER_PORT@" value="${localServerPort}"/>
     
-    <condition property="copy.plugDescription">
-      <not>
-        <equals arg1="${plugDescription}" arg2="noPlugDescription"/>
-      </not>
-    </condition>
+        <condition property="copy.plugDescription">
+          <not>
+            <equals arg1="${plugDescription}" arg2="noPlugDescription"/>
+          </not>
+        </condition>
 	</target>
   
 	<target name="startIPlug">

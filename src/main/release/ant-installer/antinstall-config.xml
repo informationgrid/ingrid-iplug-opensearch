@@ -23,6 +23,15 @@
       <comment displayText="" explanatoryText="Wenn dies ein Update ist, dann können die Einstellungen der vorherigen Installation verwendet werden. Dazu muss sich die Datei 'ant.install.properties' im gleichen Verzeichnis wie der Installer befinden. Es empfiehlt sich daher, die Updates immer vom gleichen Verzeichnis auszuführen."/>
 	</page>
 
+    <page
+            type        ="input"
+            name        ="componentOptions"
+            displayText ="Einstellungen fuer das iPlug-OpenSearch">
+            
+            <comment displayText="" explanatoryText="Lokaler Port, unter dem die Administrationsoberfläche des Opensearch-iPlugs erreichbar sein soll."/>           
+            <text property="localServerPort" displayText="Port für Adminoberfläche:" defaultValue="9667"/>
+    </page>
+
 	<!--  type="input" shows a list of editable options for the installer -->
 	<page
 			type		="input"
