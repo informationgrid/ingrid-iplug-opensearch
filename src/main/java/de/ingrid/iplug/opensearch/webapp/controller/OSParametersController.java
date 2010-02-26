@@ -13,6 +13,7 @@ import de.ingrid.admin.command.PlugdescriptionCommandObject;
 import de.ingrid.admin.controller.AbstractController;
 import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
 import de.ingrid.iplug.opensearch.webapp.validation.OSValidator;
+import de.ingrid.utils.PlugDescription;
 import de.ingrid.utils.query.IngridQuery;
 
 @Controller
@@ -85,6 +86,11 @@ public class OSParametersController extends AbstractController {
     		pdCommandObject.putBoolean("useDescriptor", false);
     		pdCommandObject.put("serviceUrl", commandObject.getOpensearchUrl());
     	}
+    	
+    	// add necessary fields so iBus actually will query us
+    	// remove field first to prevent multiple equal entries
+    	pdCommandObject.removeFromList(PlugDescription.FIELDS, "incl_meta");
+    	pdCommandObject.addField("incl_meta");
     	
     	// add datatype opensearch to PD
     	pdCommandObject.addDataType("opensearch");

@@ -12,7 +12,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <groupId>de.ingrid</groupId>
   <artifactId>ingrid-iplug-opensearch</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
   <name>ingrid-iplug-opensearch:war</name>
   <scm>
     <connection>
@@ -31,15 +31,21 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
       http://harrison.its-technidata.de/archiva/repository/ingrid-all</url>
     </repository>
   </repositories>
-  <!-- <dependencyManagement>
+  <!-- needed for newer libs than they are in base-pom -->
+  <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-context</artifactId>
-        <version>2.5.6</version>
-      </dependency>
+          <groupId>de.ingrid</groupId>
+          <artifactId>ingrid-communication</artifactId>
+          <version>1.2.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+          <groupId>de.ingrid</groupId>
+          <artifactId>ingrid-ibus-client</artifactId>
+          <version>1.2.3-SNAPSHOT</version>
+        </dependency>
     </dependencies>
-  </dependencyManagement>-->
+  </dependencyManagement>
   <!-- ==================== DEPENDENCIES ==================== -->
   <dependencies>
     <dependency>
@@ -73,6 +79,18 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
         </exclusion>
       </exclusions>
     </dependency>
+    <!-- The two following dependencies are needed for Jetty 6.1.14 -->
+    <dependency>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty</artifactId>
+        <version>6.1.14</version>
+    </dependency>
+    <dependency>
+    <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jsp-2.1</artifactId>
+      <version>6.1.14</version>
+    </dependency>
+    <!-- End of Jetty - Dependencies -->
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-communication</artifactId>
@@ -138,6 +156,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
         <inherited>false</inherited>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-4</version>
+        <configuration>
+            <archive>
+              <manifestEntries>
+              <ingridComponentType>IPLUG_OPENSEARCH</ingridComponentType>
+            </manifestEntries>
+            </archive>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -213,12 +242,31 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
 	        </connectors>
 	        <scanIntervalSeconds>0</scanIntervalSeconds>
 	    </configuration>
+<!--      <dependencies>
+        <dependency>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+          <version>1.1</version>
+          <type>jar</type>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-jcl</artifactId>
+          <version>1.0.1</version>
+          <type>jar</type>
+        </dependency>
+        <dependency>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+          <version>1.2.13</version>
+          <type>jar</type>
+        </dependency>
+       </dependencies>-->
 	   </plugin>
-      <plugin>
+      <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
-                <!-- unzip jetty -->
                 <execution>
                     <id>unzip-jetty</id>
                     <phase>process-resources</phase>
@@ -284,7 +332,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                     </goals>
                 </execution>        
             </executions>
-        </plugin>
+        </plugin>-->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
@@ -293,7 +341,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                 <archive>
                     <manifestEntries>
                       <!-- see ingrid-utils:de.ingrid.utils.metadata.IPlugType-->
-                      <iPlug-Type>OPENSEARCH</iPlug-Type>
+                      <iPlug-Type>IPLUG_OPENSEARCH</iPlug-Type>
                     </manifestEntries>
                 </archive>
             </configuration>

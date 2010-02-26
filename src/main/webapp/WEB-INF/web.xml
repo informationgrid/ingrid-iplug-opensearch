@@ -86,6 +86,11 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     </error-page>
     
     <error-page>
+        <error-code>404</error-code>
+        <location>/base/welcome.html</location>
+    </error-page>
+    
+    <error-page>
        <exception-type>org.springframework.web.HttpSessionRequiredException</exception-type>
        <location>/</location>
     </error-page>
