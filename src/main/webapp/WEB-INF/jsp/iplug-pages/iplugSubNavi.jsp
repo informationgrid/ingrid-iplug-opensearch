@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/jsp/base/include.jsp" %>
 <c:choose>
-    <c:when test="${plugdescriptionClickable == 'false'}">
+    <c:when test="${plugdescriptionExists == 'false'}">
         <li
         <c:if test="${active == 'extras'}">
             class="active"
@@ -15,7 +15,7 @@
     </c:otherwise>
 </c:choose>
 <c:choose>
-    <c:when test="${plugdescriptionClickable == 'false'}">
+    <c:when test="${plugdescriptionExists == 'false'}">
         <li
         <c:if test="${active == 'osParams'}">
             class="active"

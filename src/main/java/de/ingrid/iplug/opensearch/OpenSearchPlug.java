@@ -169,7 +169,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		
 		try {
 			OSQueryBuilder queryBuilder = new OSQueryBuilder();
-			OSQuery osQuery = queryBuilder.createQuery(query, (start/length)+1, length);
+			OSQuery osQuery = queryBuilder.createQuery(query, start, length);
 			
 			OSCommunication comm = new OSCommunication();
 			url = OSRequest.getOSQueryString(osQuery, osDescriptor);

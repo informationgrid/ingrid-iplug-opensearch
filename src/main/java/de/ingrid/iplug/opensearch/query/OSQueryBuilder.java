@@ -9,6 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.ingrid.utils.IngridQueryTools;
+import de.ingrid.utils.query.FieldQuery;
 import de.ingrid.utils.query.IngridQuery;
 import de.ingrid.utils.query.TermQuery;
 
@@ -46,9 +47,9 @@ public class OSQueryBuilder {
 		
 		osQuery.put(OSQuery.OS_COUNT, String.valueOf(length));
 		
-		osQuery.put(OSQuery.OS_START_INDEX, "1");//getStartIndex());
+		osQuery.put(OSQuery.OS_START_INDEX, String.valueOf(start));
 		
-		osQuery.put(OSQuery.OS_START_PAGE, String.valueOf(start));
+		osQuery.put(OSQuery.OS_START_PAGE, String.valueOf((start/length)+1));
 				
 		osQuery.put(OSQuery.OS_LANGUAGE, getLanguage(ingridQuery));
 		
@@ -99,6 +100,14 @@ public class OSQueryBuilder {
 		for (TermQuery term : ingridTerms) {
 			terms += term.getContent() + " ";
 		}
+		// also include fields in search-term of OS-Query
+		/*
+		for (FieldQuery field : ingridQuery.getFields()) {
+		    if (fieldNotExcluded(field)) {
+		        terms += field.getContent() + " ";
+		    }
+        }
+        */
 		try {
 			return URLEncoder.encode(terms.trim(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -107,4 +116,13 @@ public class OSQueryBuilder {
 		}
 		return null;
 	}
+
+    private boolean fieldNotExcluded(FieldQuery field) {
+        String fieldName = field.getFieldName();
+        if (fieldName.equals("incl_meta"))
+            return false;
+        
+        // return true if field must not be excluded
+        return true;
+    }
 }
