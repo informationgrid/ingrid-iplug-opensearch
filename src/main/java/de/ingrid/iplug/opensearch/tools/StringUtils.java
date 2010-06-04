@@ -1,5 +1,10 @@
 package de.ingrid.iplug.opensearch.tools;
 
+/**
+ * This class offers useful functions working with String-objects.
+ * @author André Wallat
+ *
+ */
 public class StringUtils {
 	/**
 	 * Checks if a text string contains a parameter, which also might be optional. 
@@ -14,6 +19,14 @@ public class StringUtils {
 		return false;
 	}
 	
+	/**
+	 * This function is used to replace a parameter in the style of an 
+	 * Opensearch-template-URL.
+	 * @param text
+	 * @param parameter
+	 * @param insert
+	 * @return
+	 */
 	public static String replaceParameter(String text, String parameter, String insert) {
 		if (insert == null) {
 			return text;
@@ -25,6 +38,12 @@ public class StringUtils {
 		
 	}
 
+	/**
+	 * Remove all parameter from a template-URL where no replacement 
+	 * was offered.
+	 * @param query
+	 * @return
+	 */
 	public static String removeUnusedParameter(String query) {
 		// this pattern represents:
 		// [in front or middle      ] [at the end of the query]

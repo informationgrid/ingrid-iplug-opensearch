@@ -4,8 +4,10 @@
 
 package de.ingrid.iplug.opensearch;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,9 +36,11 @@ import de.ingrid.utils.processor.IPreProcessor;
 import de.ingrid.utils.query.IngridQuery;
 
 /**
- * iPlug for connecting CSW services to Ingrid 1.0
- * 
- * @author rschaefer
+ * This iPlug connects to the iBus and offers requests to a defined Opensearch-
+ * Interface. Its results will be converted into a format that the portal can
+ * understand.
+ * @author André Wallat
+ *
  */
 @Service
 public class OpenSearchPlug extends HeartBeatPlug {
@@ -143,7 +147,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	
 
 	/**
-	 * This method is called by the iBus to invoke a CSW search. If no hits can
+	 * This method is called by the iBus to invoke an Opensearch search. If no hits can
 	 * be found, an empty <code>IngridHits</code> object will be returned.
 	 * 
 	 * @param query
@@ -197,8 +201,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 
 	/**
 	 * Return all metadata information for a given hit.
-	 * The hit object needs to have a document id for which the informations are requested
-	 * from the CSW server.
+	 * This is not supported by Opensearch!
 	 * 
 	 * @param hit
 	 * @return a record object for a given hit.
@@ -252,4 +255,37 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	public void setConverterFactory(ConverterFactory converterFactory) {
 		this.converterFactory = converterFactory;
 	}
+	
+	/**
+	 * This method creates a readable String out of an InputStream. This is
+	 * only used for testing purpose!
+	 * @param is
+	 * @return
+	 * @throws IOException
+	 */
+	public String convertStreamToString(InputStream is) throws IOException {
+        /*
+         * To convert the InputStream to String we use the BufferedReader.readLine()
+         * method. We iterate until the BufferedReader return null which means
+         * there's no more data to read. Each line will appended to a StringBuilder
+         * and returned as String.
+         */
+        if (is != null) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+            } finally {
+                is.close();
+            }
+            return sb.toString();
+        } else {        
+            return "";
+        }
+    }
+
 }

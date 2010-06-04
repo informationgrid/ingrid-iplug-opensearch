@@ -18,9 +18,25 @@ import org.xml.sax.SAXException;
 
 import de.ingrid.iplug.opensearch.communication.OSCommunication;
 
+/**
+ * This class takes care of receiving the Opensearch-Descriptor
+ * @author André Wallat
+ *
+ */
 public class OSDescriptorBuilder {
 	private static Log log = LogFactory.getLog(OSDescriptorBuilder.class);
 	
+	/**
+	 * Create a descriptor object that holds all the information necessary. If
+	 * a descriptor was given, the OS-Interface is requested. If not then the
+	 * template-url (according to Opensearch-standard) provided will be used
+	 * along with the type 'application/rss+xml'.
+	 * 
+	 * @param serviceUrl
+	 * @param isDescriptor
+	 * @return
+	 * @throws Exception
+	 */
 	public OSDescriptor createDescriptor(String serviceUrl, boolean isDescriptor) throws Exception {
 		if (isDescriptor) {
 			return receiveDescriptor(serviceUrl);
@@ -31,6 +47,13 @@ public class OSDescriptorBuilder {
 		}
 	}
 	
+	/**
+	 * Request the descriptorAddress and return an OSDescriptor object.
+	 * 
+	 * @param descriptorAddress
+	 * @return
+	 * @throws Exception
+	 */
 	public OSDescriptor receiveDescriptor(String descriptorAddress) throws Exception {
 		OSCommunication comm = new OSCommunication();
 		OSDescriptor osDesciptor = new OSDescriptor();
@@ -64,6 +87,13 @@ public class OSDescriptorBuilder {
 		return osDesciptor;
 	}
 	
+	/**
+	 * Check for a certain type inside a document.
+	 * 
+	 * @param nodeList
+	 * @param type
+	 * @return
+	 */
 	private boolean nodeListContainsType(NodeList nodeList, String type) {
 		
 		for (int i=0; i<nodeList.getLength(); i++) {
@@ -74,6 +104,11 @@ public class OSDescriptorBuilder {
 		return false;
 	}
 	
+	/**
+	 * Print all the types offered in this document.
+	 * @param nodeList
+	 * @return
+	 */
 	private String printTypes(NodeList nodeList) {
 		String result = "";
 		for (int i=0; i<nodeList.getLength(); i++) {

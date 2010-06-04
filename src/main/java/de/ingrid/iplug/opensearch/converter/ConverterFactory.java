@@ -9,6 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import de.ingrid.iplug.opensearch.query.OSDescriptor;
 
+/**
+ * A factory returning an individual converter for the output format.
+ * 
+ * @author André Wallat
+ *
+ */
 public class ConverterFactory {
 	private static Log log = LogFactory.getLog(ConverterFactory.class);
 	
@@ -21,7 +27,14 @@ public class ConverterFactory {
 	// injected by Spring
 	private Map<String, String> converterMap;
 
-	
+	/**
+	 * According to the descriptor and the strategy, which conversion should be
+	 * prefered, a certain converter is returned.
+	 * 
+	 * @param descriptor is the descriptor returned from the OS-interface
+	 * @return a converter if supported
+	 * @throws Exception if no converter is available that is listed in the descriptor
+	 */
 	public IngridConverter getConverter(OSDescriptor descriptor) throws Exception {
 		List<String> strategies = opensearchRequestStrategy.getStrategy();
 		for (String type : strategies) {
@@ -40,23 +53,44 @@ public class ConverterFactory {
 		throw new Exception();
 	}
 	
+	/**
+	 * Get the strategies which converter should be prefered over the other.
+	 * @return
+	 */
 	public OpensearchRequestStrategy getOpensearchRequestStrategy() {
 		return opensearchRequestStrategy;
 	}
 
+	/**
+	 * Set the strategies which converter should be prefered over the other.
+	 * @param opensearchRequestStrategy
+	 */
 	public void setOpensearchRequestStrategy(
 			OpensearchRequestStrategy opensearchRequestStrategy) {
 		this.opensearchRequestStrategy = opensearchRequestStrategy;
 	}
 	
+	/**
+	 * Get the map which holds a converter for each strategy (like rss, atom, ...).
+	 * @return
+	 */
 	public Map<String, String> getConverterMap() {
 		return converterMap;
 	}
 
+	/**
+	 * Set the map which holds a converter for each strategy.
+	 * @param converterMap
+	 */
 	public void setConverterMap(Map<String, String> converterMap) {
 		this.converterMap = converterMap;
 	}
 	
+	/**
+	 * Set the modifier who influences the ranking, before it is returned
+	 * to the requesting client.
+	 * @param rankingModifier
+	 */
 	@Autowired
 	public void setRankingModifier(RankingModifier rankingModifier) {
 		this.rankingModifier = rankingModifier;

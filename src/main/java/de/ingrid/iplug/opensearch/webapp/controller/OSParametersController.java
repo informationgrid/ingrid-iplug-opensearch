@@ -16,6 +16,11 @@ import de.ingrid.iplug.opensearch.webapp.validation.OSValidator;
 import de.ingrid.utils.PlugDescription;
 import de.ingrid.utils.query.IngridQuery;
 
+/**
+ * Control the page of Opensearch-specific parameters of the webapp.
+ * @author André Wallat
+ *
+ */
 @Controller
 @SessionAttributes("plugDescription")
 public class OSParametersController extends AbstractController {

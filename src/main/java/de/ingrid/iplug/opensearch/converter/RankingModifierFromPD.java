@@ -7,9 +7,12 @@ import de.ingrid.utils.IConfigurable;
 import de.ingrid.utils.PlugDescription;
 
 /**
- * This class is used to normalize a score received from search results.
+ * This class is used to normalize a score received from search results. The values
+ * for the manipulation are received from a provided PlugDescription with the keys
+ * 'rankingMul' and 'rankingAdd'.
+ * 
  * normalizedScore = multiplier*score + additional
- * @author Andre
+ * @author André Wallat
  *
  */
 public class RankingModifierFromPD implements RankingModifier, IConfigurable {
@@ -62,6 +65,11 @@ public class RankingModifierFromPD implements RankingModifier, IConfigurable {
 	 * The configure method will always be called when PlugDescription
 	 * has changed. This happens to all classes that implement the IConfigurable
 	 * Interface. 
+	 * 
+	 * Here the values for adding and multiplying is received from the 
+	 * PlugDescription.
+	 * 
+	 * @param plugDescription holds the values used for the manipulation
 	 */
 	@Override
 	public void configure(PlugDescription plugDescription) {

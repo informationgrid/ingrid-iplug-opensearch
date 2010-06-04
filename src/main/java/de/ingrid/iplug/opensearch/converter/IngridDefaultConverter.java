@@ -42,21 +42,35 @@ public abstract class IngridDefaultConverter implements IngridConverter{
             }
 		}
 	}
-	
+
+	/**
+	 * Process the result from an OS-Interface and return the converted IngridHits.
+	 * This must be implemented with a concrete class!
+     *
+	 */
 	@Override
-	// this must be implemented with a concrete class!
 	public abstract IngridHits processResult(String plugId, InputStream result);
 	
 	public void setRankingModifier(RankingModifier normalizer) {
 		this.rankingModifier = normalizer;
 	}
 	
+	/**
+	 * Set the score of an IngridHit and normalize it with the set RankingModifier.
+	 * @param hit
+	 * @param score
+	 */
 	public void setScore(IngridHit hit, float score) {
 		if (score != 0.0f) {
 			hit.setScore(normalizeRanking(score));
 		}
 	}
 	
+	/**
+	 * This function normalizes the ranking according to the rankingModifier.
+	 * @param score
+	 * @return
+	 */
 	private float normalizeRanking(float score) {
 		float normalizedScore = 0.0f;
 		
@@ -70,6 +84,10 @@ public abstract class IngridDefaultConverter implements IngridConverter{
 		return normalizedScore;
 	}
 	
+	/**
+	 * Return a IngridHitDetail by using the temporary docId, which was
+	 * created during the last fetch of the results.
+	 */
 	public IngridHitDetail getHitDetailFromCache(int docId) {
 		Element element = cache.get(docId);
 		if (element != null) {

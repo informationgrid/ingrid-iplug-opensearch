@@ -13,7 +13,12 @@ import de.ingrid.utils.query.FieldQuery;
 import de.ingrid.utils.query.IngridQuery;
 import de.ingrid.utils.query.TermQuery;
 
-
+/**
+ * This class helps to create an Opensearch-Query from an IngridQuery. All
+ * parameters are transformed into the Opensearch-syntax.
+ * @author André Wallat
+ *
+ */
 public class OSQueryBuilder {
 	/* The logging object
 	 */
@@ -39,6 +44,9 @@ public class OSQueryBuilder {
 		}
 	}*/
 
+	/**
+	 * Create an OS-Query out of an IngridQuery.
+	 */
 	public OSQuery createQuery(IngridQuery ingridQuery, int start, int length) {
 		OSQuery osQuery = new OSQuery();
 		
@@ -62,6 +70,11 @@ public class OSQueryBuilder {
 		return osQuery;
 	}
 
+	/**
+	 * Create a bounding box parameter.
+	 * @param ingridQuery
+	 * @return
+	 */
 	private String getBoundingBox(IngridQuery ingridQuery) {
 		String bbox = "";
 		IngridQueryTools qTools = new IngridQueryTools();
@@ -78,22 +91,42 @@ public class OSQueryBuilder {
 		return bbox;
 	}
 
+	/**
+	 * Create the output encoding parameter.
+	 * @param ingridQuery
+	 * @return
+	 */
 	private String getOutputEncoding(IngridQuery ingridQuery) {
 		// not supported yet
 		return null;
 	}
 
+	/**
+	 * Create the input encoding parameter.
+	 * @param ingridQuery
+	 * @return
+	 */
 	private String getInputEncoding(IngridQuery ingridQuery) {
 	    // not supported yet
 		return null;
 	}
 
+	/**
+	 * Create the language parameter.
+	 * @param ingridQuery
+	 * @return
+	 */
 	private String getLanguage(IngridQuery ingridQuery) {
 		
 	    // not supported yet
 		return null;
 	}
 
+	/**
+	 * Create the language parameter.
+	 * @param ingridQuery
+	 * @return
+	 */
 	private String getSearchTerms(IngridQuery ingridQuery) {
 		String terms = "";
 		TermQuery[] ingridTerms = ingridQuery.getTerms();
@@ -117,6 +150,12 @@ public class OSQueryBuilder {
 		return null;
 	}
 
+	/**
+	 * Check if a field inside the IngridQuery is not excluded and shall be
+	 * used inside an OS-Query.
+	 * @param field
+	 * @return
+	 */
     private boolean fieldNotExcluded(FieldQuery field) {
         String fieldName = field.getFieldName();
         if (fieldName.equals("incl_meta"))

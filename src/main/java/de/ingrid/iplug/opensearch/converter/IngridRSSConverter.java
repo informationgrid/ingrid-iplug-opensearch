@@ -1,9 +1,7 @@
 package de.ingrid.iplug.opensearch.converter;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,13 +18,18 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import de.ingrid.utils.IngridHit;
 import de.ingrid.utils.IngridHitDetail;
 import de.ingrid.utils.IngridHits;
 
+/**
+ * This class converts the response of an OpenSearch-Interface which is
+ * an RSS-Stream, into the IngridHits format.
+ * @author André Wallat
+ *
+ */
 public class IngridRSSConverter extends IngridDefaultConverter {
 	/**
 	 * The logging object
@@ -38,6 +41,9 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 	// for results not having an InGrid-DocumentId
 	private static int customDocId = 0;
 	
+	/* (non-Javadoc)
+     * @see de.ingrid.iplug.opensearch.converter.IngridDefaultConverter#processResult(String, InputStream)
+     */
 	@Override
 	public IngridHits processResult(String plugId, InputStream result) {
 		IngridHits hits = null;
@@ -75,6 +81,14 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 		return hits;
 	}
 
+	/**
+	 * Return the hits coming from the response of an OS-Interface.
+	 * @param doc is the converted response into a document structure 
+	 * @param plugId
+	 * @param totalResults
+	 * @return
+	 * @throws XPathExpressionException
+	 */
 	private IngridHit[] getHits(Document doc, String plugId, int totalResults) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		NodeList nodes = (NodeList) xpath.evaluate("/rss/channel/item", doc, XPathConstants.NODESET);
@@ -97,6 +111,13 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 		return hits;
 	}
 
+	/**
+	 *  Set an IngridHitDetail with data that is needed by default.
+	 *  
+	 * @param hit
+	 * @param item
+	 * @throws XPathExpressionException
+	 */
 	private void setIngridHitDetail(IngridHit hit, Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		
@@ -162,6 +183,14 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 		return 0.0f;
 	}
 
+	/**
+	 * Calculate a document id so that it can be identified later when looking 
+	 * for the detail.
+	 * 
+	 * @param item
+	 * @return
+	 * @throws XPathExpressionException
+	 */
 	private int getDocumentId(Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("docid", item, XPathConstants.NODE);
@@ -172,29 +201,63 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 		}
 	}
 
+	/**
+	 * Get the description of the entry.
+	 * 
+	 * @param item
+	 * @return
+	 * @throws XPathExpressionException
+	 */
 	private Object getAbstract(Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("description", item, XPathConstants.NODE);
 		return node.getTextContent();
 	}
 
+	/**
+	 * Get the link of the entry.
+	 * 
+	 * @param item
+	 * @return
+	 * @throws XPathExpressionException
+	 */
 	private Object getLink(Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("link", item, XPathConstants.NODE);
 		return node.getTextContent();
 	}
 
+	/**
+	 * Get the title of the entry.
+	 * 
+	 * @param item
+	 * @return
+	 * @throws XPathExpressionException
+	 */
 	private Object getTitle(Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("title", item, XPathConstants.NODE);
 		return node.getTextContent();
 	}
 
+	/**
+	 * Is the entry ranked?
+	 * 
+	 * @param doc
+	 * @return
+	 */
 	private boolean getIsRanked(Document doc) {
 		// TODO: !!!
 		return true;
 	}
 
+	/**
+	 * Get the total number of hits.
+	 * 
+	 * @param doc
+	 * @return
+	 * @throws XPathExpressionException
+	 */
 	private int getTotalResults(Document doc) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("/rss/channel/totalResults", doc, XPathConstants.NODE);
@@ -205,6 +268,15 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 		}
 	}
 
+	/**
+	 * Create a parseable DOM-document of the InputStream, which should be XML/HTML.
+	 *  
+	 * @param result
+	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
 	private Document getDocumentFromStream(InputStream result)
 			throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

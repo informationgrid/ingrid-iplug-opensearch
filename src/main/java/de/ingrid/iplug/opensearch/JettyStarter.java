@@ -5,7 +5,11 @@ import org.apache.commons.logging.LogFactory;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-
+/**
+ * This class starts a Jetty server where the webapp will be executed.
+ * @author André Wallat
+ *
+ */
 public class JettyStarter {
     private static final Log log = LogFactory.getLog(JettyStarter.class);
     
