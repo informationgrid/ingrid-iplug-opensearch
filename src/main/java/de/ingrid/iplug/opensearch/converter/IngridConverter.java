@@ -11,7 +11,7 @@ import de.ingrid.utils.IngridHits;
  *
  */
 public interface IngridConverter {
-	public IngridHits processResult(String plugId, InputStream result);
+	public IngridHits processResult(String plugId, InputStream result, String groupedBy);
 	
 	public void setRankingModifier(RankingModifier normalizer);
 	

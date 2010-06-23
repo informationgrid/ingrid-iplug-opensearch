@@ -1,9 +1,9 @@
 package de.ingrid.iplug.opensearch.query;
 
 import java.util.HashMap;
+import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import de.ingrid.iplug.opensearch.model.OSMapping;
 
 /**
  * This class holds all parameters needed and understood by an Opensearch-
@@ -15,10 +15,6 @@ public class OSQuery extends HashMap<String,String> {
 
     private static final long serialVersionUID = 7633577508030661464L;
 
-    /* The logging object
-	 */
-	private static Log log = LogFactory.getLog(OSQuery.class);
-	
 	// official OpenSearch parameters for a query
 	// the search terms
 	public static final String OS_SEARCH_TERMS 		= "searchTerms";
@@ -44,7 +40,19 @@ public class OSQuery extends HashMap<String,String> {
 	// extended OpenSearch parameters
 	// the bounding box
 	public static final String OS_GEO_BBOX			= "geo:box";
+
+	// 
+    private List<OSMapping> mapping;
 		
 	public OSQuery() {}
+
+	// set the mapping of special Ingrid fields to OS parameters
+    public void setMapping(List<OSMapping> mapping) {
+        this.mapping = mapping;
+    }
+    
+    public List<OSMapping> getMapping() {
+        return mapping;
+    }
 	
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.ingrid.iplug.opensearch.model.OSMapping;
 import de.ingrid.utils.IngridQueryTools;
 import de.ingrid.utils.query.FieldQuery;
 import de.ingrid.utils.query.IngridQuery;
@@ -46,12 +47,16 @@ public class OSQueryBuilder {
 
 	/**
 	 * Create an OS-Query out of an IngridQuery.
+	 * @param mapping is the mapping of Ingrid-fields to special opensearch parameters
 	 */
-	public OSQuery createQuery(IngridQuery ingridQuery, int start, int length) {
+	public OSQuery createQuery(IngridQuery ingridQuery, int start, int length, List<OSMapping> mapping) {
 		OSQuery osQuery = new OSQuery();
 		
 		// this is a must have parameter
-		osQuery.put(OSQuery.OS_SEARCH_TERMS, getSearchTerms(ingridQuery));
+		// fields will only be added to the search terms if they were configured this way
+		// otherwise they will be added as extra parameters to the requesting Url
+		String searchTerms = getSearchTerms(ingridQuery);
+		osQuery.put(OSQuery.OS_SEARCH_TERMS, OSRequest.addMappedParameters(searchTerms, ingridQuery, mapping, false));
 		
 		osQuery.put(OSQuery.OS_COUNT, String.valueOf(length));
 		
@@ -67,10 +72,14 @@ public class OSQueryBuilder {
 		
 		osQuery.put(OSQuery.OS_GEO_BBOX, getBoundingBox(ingridQuery));
 		
+		osQuery.setMapping(mapping);
+		
 		return osQuery;
 	}
 
-	/**
+	
+
+    /**
 	 * Create a bounding box parameter.
 	 * @param ingridQuery
 	 * @return

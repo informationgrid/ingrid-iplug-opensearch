@@ -34,7 +34,6 @@ public class OSParametersController extends AbstractController {
 	@RequestMapping(value = {"/iplug-pages/welcome.html", "/iplug-pages/osParams.html"}, method = RequestMethod.GET)
     public String getParameters(final ModelMap modelMap,
     		@ModelAttribute("plugDescription") final PlugdescriptionCommandObject commandObject) {
-		System.out.println("In OSController");
 		OpensearchConfig osConfig = new OpensearchConfig();
 		
 		// put values from plugdescription into object being used by the web-form
@@ -58,7 +57,7 @@ public class OSParametersController extends AbstractController {
     	// put values into plugdescription
     	mapParamsToPD(commandObject, pdCommandObject);
     	
-    	return redirect(AdminViews.SAVE + ".html");
+    	return redirect(AdminViews.OS_MAPPING + ".html");
     }
 	
 	

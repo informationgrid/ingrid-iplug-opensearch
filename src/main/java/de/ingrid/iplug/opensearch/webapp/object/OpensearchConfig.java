@@ -19,6 +19,8 @@ public class OpensearchConfig implements Externalizable {
 	
 	private String _osDescriptor;
 	
+	private boolean _mappingSupport = false;
+	
 	
 	public String getOpensearchUrl() {
 		return _opensearchUrl;
@@ -106,4 +108,12 @@ public class OpensearchConfig implements Externalizable {
 		System.out.println("opensearchUrl: " + _opensearchUrl);
 		System.out.println("opensearchDescriptorUrl: " + _opensearchDescriptorUrl);
 	}
+
+    public void setMappingSupport(boolean mappingSupport) {
+        this._mappingSupport = mappingSupport;
+    }
+
+    public boolean getMappingSupport() {
+        return _mappingSupport;
+    }
 }

@@ -22,13 +22,11 @@
     
     function checkRanking(obj) {
         if (obj.checked == true) {
-            //document.getElementById("showAsUnranked").disabled = false;
-            document.getElementById("rankMultiplier").disabled = false;
-            document.getElementById("rankAddition").disabled = false;
+            document.getElementById("rankMul").style.display = "";
+            document.getElementById("rankAdd").style.display = "";
         } else {
-            //document.getElementById("showAsUnranked").disabled = true;
-            document.getElementById("rankMultiplier").disabled = true;
-            document.getElementById("rankAddition").disabled = true;
+            document.getElementById("rankMul").style.display = "none";
+            document.getElementById("rankAdd").style.display = "none";
         }
     }
 </script>
@@ -109,7 +107,7 @@
                             werden die Ergebnisse in die Hauptergebnisliste des Portals aufgenommen.)
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="rankMul">
                         <td class="leftCol">Adapt. Ranking (Mult.):</td>
                         <td>
                             <form:input path="rankMultiplier" id="rankMultiplier" />
@@ -118,7 +116,7 @@
                             Bitte geben Sie hier den Faktor an, mit dem der ranking score multipliziert werden soll.
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="rankAdd">
                         <td class="leftCol">Adapt. Ranking (Add.):</td>
                         <td>
                             <form:input path="rankAddition" id="rankAddition" />

@@ -1,11 +1,17 @@
 package de.ingrid.iplug.opensearch.query;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.ingrid.iplug.opensearch.model.OSMapping;
+import de.ingrid.iplug.opensearch.tools.QueryUtils;
 import de.ingrid.iplug.opensearch.tools.StringUtils;
+import de.ingrid.utils.query.IngridQuery;
 
 /**
  * This class creates an URL for an Opensearch-Interface with all the parameters
@@ -26,7 +32,7 @@ public class OSRequest {
 	 * @param osDescriptor
 	 * @return
 	 */
-	public static String getOSQueryString(OSQuery osQuery, OSDescriptor osDescriptor) {
+	public static String getOSQueryString(OSQuery osQuery, IngridQuery ingridQuery, OSDescriptor osDescriptor) {
 		String mergedResult 	= osDescriptor.getUrl();
 		Set<String> paramKeys 	= osQuery.keySet();
 		
@@ -38,8 +44,61 @@ public class OSRequest {
 		mergedResult = StringUtils.replaceParameter(mergedResult, "ingridsearch:georss", "1");
 		mergedResult = StringUtils.replaceParameter(mergedResult, "ingridsearch:xml", "1");
 		
-		String finalQueryString = StringUtils.removeUnusedParameter(mergedResult);
+		mergedResult = StringUtils.removeUnusedParameter(mergedResult);
+		
+		// add mapped parameters like domain, partner and provider
+		String finalQueryString = addMappedParameters(mergedResult, ingridQuery, osQuery.getMapping(), true);
+		
 		log.debug("OpenSearch Query: " + finalQueryString);
 		return finalQueryString;
 	}
+
+    public static String addMappedParameters(String term, IngridQuery ingridQuery,
+            List<OSMapping> mapping, boolean asParam) {
+
+        String connector = "+";
+        if (asParam)
+            connector = "&";
+        
+        String parameter = "";
+        
+        for (OSMapping map : mapping) {
+            // if mapping is active and shall be used INSIDE the query
+            if (map.isActive() && (map.isAsParam() == asParam)) {
+                switch (map.getType()) {
+                case DOMAIN:
+                    String site = QueryUtils.getFieldValue("site", ingridQuery);
+                    if (site != null)
+                        parameter += map.getMapping() + ":" + site + connector;
+                    break;
+                case PARTNER:
+                    String[] partner = ingridQuery.getPositivePartner();
+                    if (partner != null && partner.length > 0)
+                        parameter += map.getMapping() + ":" + partner[0] + connector;
+                    break;
+                case PROVIDER:
+                    String[] provider = ingridQuery.getPositivePartner();
+                    if (provider != null && provider.length > 0)
+                        parameter += map.getMapping() + ":" + provider[0] + connector;
+                    break;
+
+                default:
+                    // not supported ... shouldn't happen
+                    log.error("Mapping-Type "+map.getType()+" not supported!");
+                    break;
+                }
+            }
+        }
+        
+        try {
+            if (!parameter.isEmpty()) {            
+                term += connector + URLEncoder.encode(parameter.trim(), "UTF-8");
+            }
+        } catch (UnsupportedEncodingException e) {
+            log.error("Could not encode parameters: " + parameter);
+            e.printStackTrace();
+        }
+        return term;
+    }
+    
 }

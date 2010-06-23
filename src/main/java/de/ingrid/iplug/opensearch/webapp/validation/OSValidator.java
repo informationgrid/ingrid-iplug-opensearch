@@ -11,7 +11,6 @@ import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
 public class OSValidator extends AbstractValidator<OpensearchConfig> {
 
 	public final Errors validateOSParams(final BindingResult errors) {
-		System.out.println("Validate OSParams");
 		rejectIfNull(errors, "osDescriptor");
 		String useDescriptor = getString(errors, "osDescriptor");
 		if (useDescriptor != null && useDescriptor.equals("descriptor")) {
@@ -24,7 +23,6 @@ public class OSValidator extends AbstractValidator<OpensearchConfig> {
 			rejectIfEmptyOrWhitespace(errors, "rankMultiplier");
 			rejectIfEmptyOrWhitespace(errors, "rankAddition");
 		}
-        System.out.println("Validated");
         return errors;
     }
 }

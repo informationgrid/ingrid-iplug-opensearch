@@ -45,7 +45,7 @@ public class IngridRSSConverterTest extends TestCase {
             
             OSCommunication comm = new OSCommunication();
             InputStream result = comm.sendRequest("http://harrison.its-technidata.de:80/opensearchserver/query?q=Wasser&p=0&h=10&georss=1&format=rss");
-            ingridConverter.processResult("bla", result);
+            ingridConverter.processResult("bla", result, null);
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

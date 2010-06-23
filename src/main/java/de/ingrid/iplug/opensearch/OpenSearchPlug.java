@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,11 +21,13 @@ import de.ingrid.iplug.PlugDescriptionFieldFilters;
 import de.ingrid.iplug.opensearch.communication.OSCommunication;
 import de.ingrid.iplug.opensearch.converter.ConverterFactory;
 import de.ingrid.iplug.opensearch.converter.IngridConverter;
+import de.ingrid.iplug.opensearch.model.OSMapping;
 import de.ingrid.iplug.opensearch.query.OSDescriptor;
 import de.ingrid.iplug.opensearch.query.OSDescriptorBuilder;
 import de.ingrid.iplug.opensearch.query.OSQuery;
 import de.ingrid.iplug.opensearch.query.OSQueryBuilder;
 import de.ingrid.iplug.opensearch.query.OSRequest;
+import de.ingrid.iplug.opensearch.tools.QueryUtils;
 import de.ingrid.utils.IngridHit;
 import de.ingrid.utils.IngridHitDetail;
 import de.ingrid.utils.IngridHits;
@@ -83,6 +86,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	
 	private ConverterFactory converterFactory;
 
+    private List<OSMapping> mapping;
+
 	@Autowired
 	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters, 
 			IMetadataInjector[] injector,
@@ -101,7 +106,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	 * @throws IOException 
 	 * @see de.ingrid.iplug.IPlug#configure(PlugDescription)
 	 */
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public final void configure(final PlugDescription plugDescription) {
 		super.configure(plugDescription);
 		log.info("Configuring OpenSearch-iPlug...");		
@@ -119,6 +125,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			this.fWorkingDir = fPlugDesc.getWorkinDirectory().getCanonicalPath();
 			this.fUseDescriptor  = (boolean) fPlugDesc.getBoolean("useDescriptor");
 			this.fServiceURL = (String) fPlugDesc.get("serviceUrl");
+			
+			mapping = (List<OSMapping>) fPlugDesc.get("mapping");
 			
 			// TODO Disconnect iPlug from iBus if configuration wasn't succesfull
 			// Throw Exception for disconnect iPlug
@@ -172,13 +180,17 @@ public class OpenSearchPlug extends HeartBeatPlug {
         }
 		
 		try {
+		    // check if possibly fields are supported by this iPlug
+		    if (!allFieldsSupported(query))
+		        return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
+		    
 			OSQueryBuilder queryBuilder = new OSQueryBuilder();
-			OSQuery osQuery = queryBuilder.createQuery(query, start, length);
+			OSQuery osQuery = queryBuilder.createQuery(query, start, length, mapping);
 			
 			OSCommunication comm = new OSCommunication();
-			url = OSRequest.getOSQueryString(osQuery, osDescriptor);
+			url = OSRequest.getOSQueryString(osQuery, query, osDescriptor);
 			result = comm.sendRequest(url);
-			hits = ingridConverter.processResult(fPlugID, result);
+			hits = ingridConverter.processResult(fPlugID, result, query.getGrouped());
 			
 			// set the ranking received from the plugdescription
 			if (hits != null)
@@ -200,6 +212,39 @@ public class OpenSearchPlug extends HeartBeatPlug {
 
 
 	/**
+	 * Checks for all not supported parameters, if it is in the query. So far the fields
+	 * partner, provider and site(domain) are checked.
+	 * 
+	 * @param query
+	 * @return true if all fields in query are supported 
+	 */
+	@SuppressWarnings("unchecked")
+    private boolean allFieldsSupported(IngridQuery query) {
+	    for (OSMapping map : (List<OSMapping>) fPlugDesc.get("mapping")) {
+	        if (!map.isActive()) {
+	            switch (map.getType()) {
+                case PROVIDER:
+                    if (query.getPositiveProvider() == null || query.getPositiveProvider().length > 0)
+                        return false;
+                    break;
+                case PARTNER:
+                    if (query.getPositivePartner() == null || query.getPositivePartner().length > 0)
+                        return false;
+                    break;
+                case DOMAIN:
+                    if (QueryUtils.getFieldValue("site", query) != null)
+                        return false;
+                    break;
+                default:
+                    break;
+                }
+	        }
+	    }
+        return true;
+    }
+	
+
+    /**
 	 * Return all metadata information for a given hit.
 	 * This is not supported by Opensearch!
 	 * 

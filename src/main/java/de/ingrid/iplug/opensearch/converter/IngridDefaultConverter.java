@@ -49,7 +49,7 @@ public abstract class IngridDefaultConverter implements IngridConverter{
      *
 	 */
 	@Override
-	public abstract IngridHits processResult(String plugId, InputStream result);
+	public abstract IngridHits processResult(String plugId, InputStream result, String groupedBy);
 	
 	public void setRankingModifier(RankingModifier normalizer) {
 		this.rankingModifier = normalizer;
