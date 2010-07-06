@@ -226,12 +226,17 @@ public class OpenSearchPlug extends HeartBeatPlug {
     private boolean allFieldsSupported(IngridQuery query) {
 	    // mapping might not be set in PlugDescription! 
 	    if (fPlugDesc.get("mapping") == null)
-	        return true;
+	        return false;
+	    
+	    if (fPlugDesc.get("mappingSupport") == null)
+	        return false;
+	    
+	    boolean mappingSupported = fPlugDesc.getBoolean("mappingSupport");
 	    
 	    for (OSMapping map : (List<OSMapping>) fPlugDesc.get("mapping")) {
 	        // if mapping is not supported then check if query contains any of
 	        // the fields
-	        if (!map.isActive()) {
+	        if (!mappingSupported || !map.isActive()) {
 	            switch (map.getType()) {
                 case PROVIDER:
                     // see case PARTNER!
