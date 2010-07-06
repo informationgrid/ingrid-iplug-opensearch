@@ -40,7 +40,7 @@
           java.security.Principal  principal = request.getUserPrincipal();
           if(principal != null && !(principal instanceof IngridPrincipal.SuperAdmin)) {
         %>
-            <div id="language"><a href="<%=request.getContextPath()%>/base/auth/logout.html"><fmt:message key="OpensearchConfig.main.logout"/></a></div>
+            <div id="language"><a href="../base/auth/logout.html"><fmt:message key="OpensearchConfig.main.logout"/></a></div>
         <%
           }
         %>

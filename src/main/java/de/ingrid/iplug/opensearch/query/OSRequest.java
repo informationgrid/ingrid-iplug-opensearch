@@ -56,9 +56,12 @@ public class OSRequest {
     public static String addMappedParameters(String term, IngridQuery ingridQuery,
             List<OSMapping> mapping, boolean asParam) {
 
-        String connector = "+";
-        if (asParam)
-            connector = "&";
+        String connector  = "+";
+        String definition = ":";
+        if (asParam) {
+            connector  = "&";
+            definition = "=";
+        }
         
         String parameter = "";
         
@@ -69,17 +72,17 @@ public class OSRequest {
                 case DOMAIN:
                     String site = QueryUtils.getFieldValue("site", ingridQuery);
                     if (site != null)
-                        parameter += map.getMapping() + ":" + site + connector;
+                        parameter += map.getMapping() + definition + site + connector;
                     break;
                 case PARTNER:
                     String[] partner = ingridQuery.getPositivePartner();
                     if (partner != null && partner.length > 0)
-                        parameter += map.getMapping() + ":" + partner[0] + connector;
+                        parameter += map.getMapping() + definition + partner[0] + connector;
                     break;
                 case PROVIDER:
-                    String[] provider = ingridQuery.getPositivePartner();
+                    String[] provider = ingridQuery.getPositiveProvider();
                     if (provider != null && provider.length > 0)
-                        parameter += map.getMapping() + ":" + provider[0] + connector;
+                        parameter += map.getMapping() + definition + provider[0] + connector;
                     break;
 
                 default:
@@ -90,13 +93,8 @@ public class OSRequest {
             }
         }
         
-        try {
-            if (!parameter.isEmpty()) {            
-                term += connector + URLEncoder.encode(parameter.trim(), "UTF-8");
-            }
-        } catch (UnsupportedEncodingException e) {
-            log.error("Could not encode parameters: " + parameter);
-            e.printStackTrace();
+        if (!parameter.isEmpty()) {            
+            term += connector + parameter.trim();
         }
         return term;
     }

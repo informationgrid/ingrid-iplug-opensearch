@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -128,6 +129,9 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			
 			mapping = (List<OSMapping>) fPlugDesc.get("mapping");
 			
+			if (mapping == null)
+			    mapping = new ArrayList<OSMapping>();
+			
 			// TODO Disconnect iPlug from iBus if configuration wasn't succesfull
 			// Throw Exception for disconnect iPlug
 			// Write logging information...
@@ -220,15 +224,25 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	 */
 	@SuppressWarnings("unchecked")
     private boolean allFieldsSupported(IngridQuery query) {
+	    // mapping might not be set in PlugDescription! 
+	    if (fPlugDesc.get("mapping") == null)
+	        return true;
+	    
 	    for (OSMapping map : (List<OSMapping>) fPlugDesc.get("mapping")) {
+	        // if mapping is not supported then check if query contains any of
+	        // the fields
 	        if (!map.isActive()) {
 	            switch (map.getType()) {
                 case PROVIDER:
-                    if (query.getPositiveProvider() == null || query.getPositiveProvider().length > 0)
+                    // see case PARTNER!
+                    if (query.getPositiveProvider() != null && query.getPositiveProvider().length > 0)
                         return false;
                     break;
                 case PARTNER:
-                    if (query.getPositivePartner() == null || query.getPositivePartner().length > 0)
+                    // if no partner filtering is supported then this iPlug
+                    // will return no results, since different partner can occur
+                    // in the results from the opensearch interface
+                    if (query.getPositivePartner() != null && query.getPositivePartner().length > 0 )
                         return false;
                     break;
                 case DOMAIN:

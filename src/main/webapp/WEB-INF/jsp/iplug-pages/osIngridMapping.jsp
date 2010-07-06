@@ -40,7 +40,7 @@
           java.security.Principal  principal = request.getUserPrincipal();
           if(principal != null && !(principal instanceof IngridPrincipal.SuperAdmin)) {
         %>
-            <div id="language"><a href="<%=request.getContextPath()%>/base/auth/logout.html"><fmt:message key="OpensearchConfig.main.logout"/></a></div>
+            <div id="language"><a href="../base/auth/logout.html"><fmt:message key="OpensearchConfig.main.logout"/></a></div>
         <%
           }
         %>
@@ -53,12 +53,12 @@
     <div id="contentBox" class="contentMiddle">
     	<h1 id="head">Opensearch Mapping</h1>
         <div class="controls">
-            <a href="../base/extras.html">Zurück</a>
+            <a href="../iplug-pages/osParams.html">Zurück</a>
             <a href="../base/welcome.html">Abbrechen</a>
             <a href="#" onclick="document.getElementById('mapConfig').submit();">Weiter</a>
         </div>
         <div class="controls cBottom">
-            <a href="../base/extras.html">Zurück</a>
+            <a href="../iplug-pages/osParams.html">Zurück</a>
             <a href="../base/welcome.html">Abbrechen</a>
             <a href="#" onclick="document.getElementById('mapConfig').submit();">Weiter</a>
         </div>
@@ -89,17 +89,26 @@
     				</thead>
     				<tr>
     					<td><form:checkbox path="forDomain" id="forDomain" label="Domain" /></td>
-    					<td><form:input path="mapDomain" /></td>
+    					<td>
+    						<form:input path="mapDomain" />
+    						<form:errors path="mapDomain" cssClass="error" element="div" />
+    					</td>
     					<td><form:checkbox path="domainAsParam" id="domainAsParam" /></td>
     				</tr>
     				<tr>
     					<td><form:checkbox path="forProvider" id="forProvider" label="Anbieter" /></td>
-    					<td><form:input path="mapProvider" /></td>
+    					<td>
+    						<form:input path="mapProvider" />
+    						<form:errors path="mapProvider" cssClass="error" element="div" />
+    					</td>
     					<td><form:checkbox path="providerAsParam" id="providerAsParam" /></td>
     				</tr>
     				<tr>
     					<td><form:checkbox path="forPartner" id="forPartner" label="Partner" /></td>
-    					<td><form:input path="mapPartner" /></td>
+    					<td>
+    						<form:input path="mapPartner" />
+    						<form:errors path="mapPartner" cssClass="error" element="div" />
+    					</td>
     					<td><form:checkbox path="partnerAsParam" id="partnerAsParam" /></td>
     				</tr>
     				<tr>

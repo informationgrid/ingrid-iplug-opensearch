@@ -2,6 +2,7 @@ package de.ingrid.iplug.opensearch.webapp.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,8 @@ import de.ingrid.admin.controller.AbstractController;
 import de.ingrid.iplug.opensearch.model.OSMapping;
 import de.ingrid.iplug.opensearch.model.OSMapping.IngridFieldType;
 import de.ingrid.iplug.opensearch.webapp.object.MappingConfig;
+import de.ingrid.iplug.opensearch.webapp.validation.OSMappingValidator;
+import de.ingrid.utils.PlugDescription;
 
 /**
  * Control the page of Opensearch-specific parameters of the webapp.
@@ -24,6 +27,13 @@ import de.ingrid.iplug.opensearch.webapp.object.MappingConfig;
 @Controller
 @SessionAttributes("plugDescription")
 public class OSMappingController extends AbstractController {
+    
+    private OSMappingValidator _validator;
+
+    @Autowired
+    public OSMappingController(OSMappingValidator validator) {
+        _validator = validator;
+    }
     
     @RequestMapping(value = {"/iplug-pages/osIngridMapping.html"}, method = RequestMethod.GET)
     public String getMapping(final ModelMap modelMap,
@@ -45,8 +55,17 @@ public class OSMappingController extends AbstractController {
             final BindingResult errors,
             @ModelAttribute("plugDescription") final PlugdescriptionCommandObject pdCommandObject) {
         
+        if (_validator.validateOSMapping(errors).hasErrors()) {
+            return AdminViews.OS_MAPPING;
+        }
+        
         if (commandObject.isUseMapping())
             mapConfigToPD(commandObject, pdCommandObject);
+        else {
+            pdCommandObject.putBoolean("mappingSupport", commandObject.isUseMapping());
+            pdCommandObject.put("domainGroupingSupport", false);
+            pdCommandObject.removeFromList(PlugDescription.FIELDS, "site");
+        }
         
         return AdminViews.SAVE;
     }
@@ -65,10 +84,15 @@ public class OSMappingController extends AbstractController {
         mapping.setAsParam(commandObject.isDomainAsParam());        
         pdCommandObject.addToList("mapping", mapping);
         
-        if (commandObject.isForDomain())
+        if (commandObject.isForDomain()) {
             pdCommandObject.put("domainGroupingSupport", true);
-        else
+            // remove and add site-field
+            pdCommandObject.removeFromList(PlugDescription.FIELDS, "site");
+            pdCommandObject.addField("site");
+        } else {
             pdCommandObject.put("domainGroupingSupport", false);
+            pdCommandObject.removeFromList(PlugDescription.FIELDS, "site");
+        }
         
         mapping = new OSMapping();
         mapping.setType(IngridFieldType.PROVIDER);

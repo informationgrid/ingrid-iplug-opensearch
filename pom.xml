@@ -111,12 +111,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>0.1-SNAPSHOT</version>
+      <version>1.1.0-SNAPSHOT</version>
       <classifier>res</classifier>
       <type>zip</type>
     </dependency>
@@ -214,32 +214,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
             </goals>
             <configuration>
               <source>ant.unzip(src:
-              "${settings.localRepository}/de/ingrid/ingrid-base-webapp/0.1-SNAPSHOT/ingrid-base-webapp-0.1-SNAPSHOT-res.zip",
+              "${settings.localRepository}/de/ingrid/ingrid-base-webapp/1.1.0-SNAPSHOT/ingrid-base-webapp-1.1.0-SNAPSHOT-res.zip",
               dest: "target/base-webapp")</source>
             </configuration>
           </execution>
         </executions>
       </plugin>
-	  <!-- <plugin>
-	    <groupId>org.mortbay.jetty</groupId>
-	    <artifactId>maven-jetty-plugin</artifactId>
-	    <version>6.1.14</version>
-	    <configuration>
-	       
-	        <contextPath>/</contextPath>
-	        <classesDirectory>target/classes</classesDirectory>
-	        <scanTargets>
-	            <file>target/classes</file>
-	        </scanTargets>
-	        <connectors>
-	            <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-	                <port>8088</port>
-	                <maxIdleTime>60000</maxIdleTime>
-	            </connector>
-	        </connectors>
-	        <scanIntervalSeconds>0</scanIntervalSeconds>
-	    </configuration>
-	   </plugin>-->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-jar-plugin</artifactId>
@@ -249,6 +229,17 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
                     <manifestEntries>
                       <!-- see ingrid-utils:de.ingrid.utils.metadata.IPlugType-->
                       <iPlug-Type>IPLUG_OPENSEARCH</iPlug-Type>
+                    </manifestEntries>
+                </archive>
+            </configuration>
+        </plugin>
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.2-beta-4</version>
+            <configuration>
+                <archive>
+                    <manifestEntries>
+                        <ingridComponentType>IPLUG_OPENSEARCH</ingridComponentType>
                     </manifestEntries>
                 </archive>
             </configuration>
