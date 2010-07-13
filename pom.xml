@@ -6,7 +6,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
   <parent>
     <groupId>de.ingrid</groupId>
     <artifactId>ingrid-releases-pom</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.1.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.ingrid</groupId>
@@ -21,44 +21,24 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-iplug-opensearch/trunk</developerConnection>
   </scm>
   <repositories>
-    <!--
-            Repo of parent pom needed, parent pom may not be installed locally yet
-       -->
+    <!-- Repo of parent pom needed, parent pom may not be installed locally yet -->
     <repository>
-      <id>de.ingrid.m2</id>
-      <name>Maven2 Repo InGrid</name>
-      <url>
-      http://harrison.its-technidata.de/archiva/repository/ingrid-all</url>
+      <id>de.ingrid.all</id>
+      <name>Maven Repo InGrid</name>
+      <url>http://harrison.its-technidata.de/archiva/repository/ingrid-all</url>
     </repository>
   </repositories>
-  <!-- needed for newer libs than they are in base-pom -->
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-          <groupId>de.ingrid</groupId>
-          <artifactId>ingrid-communication</artifactId>
-          <version>1.2.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-          <groupId>de.ingrid</groupId>
-          <artifactId>ingrid-ibus-client</artifactId>
-          <version>1.2.3-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-  </dependencyManagement>
-  <!-- ==================== DEPENDENCIES ==================== -->
   <dependencies>
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-iplug</artifactId>
-      <version>1.3-SNAPSHOT</version>
       <exclusions>
         <exclusion>
           <groupId>ant</groupId>
           <artifactId>ant</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>quartz</groupId>
+          <groupId>opensymphony</groupId>
           <artifactId>quartz</artifactId>
         </exclusion>
         <exclusion>
@@ -79,64 +59,37 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
         </exclusion>
       </exclusions>
     </dependency>
-    <!-- The two following dependencies are needed for Jetty 6.1.14 -->
     <dependency>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>jetty</artifactId>
-        <version>6.1.14</version>
+      <groupId>de.ingrid</groupId>
+      <artifactId>ingrid-base-webapp</artifactId>
     </dependency>
     <dependency>
-    <groupId>org.mortbay.jetty</groupId>
+      <groupId>de.ingrid</groupId>
+      <artifactId>ingrid-base-webapp</artifactId>
+      <classifier>res</classifier>
+      <type>zip</type>
+    </dependency>
+<!-- The two following dependencies are needed for Jetty -->
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
       <artifactId>jsp-2.1</artifactId>
-      <version>6.1.14</version>
     </dependency>
-    <!-- End of Jetty - Dependencies -->
-    <dependency>
-      <groupId>de.ingrid</groupId>
-      <artifactId>ingrid-communication</artifactId>
-      <version>1.2.2-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>de.ingrid</groupId>
-      <artifactId>ingrid-utils</artifactId>
-    </dependency>
+<!-- End of Jetty - Dependencies -->
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
     </dependency>
     <dependency>
-      <groupId>net.sf.ehcache</groupId>
-      <artifactId>ehcache</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>de.ingrid</groupId>
-      <artifactId>ingrid-base-webapp</artifactId>
-      <version>1.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>de.ingrid</groupId>
-      <artifactId>ingrid-base-webapp</artifactId>
-      <version>1.1.0-SNAPSHOT</version>
-      <classifier>res</classifier>
-      <type>zip</type>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>de.ingrid</groupId>
-      <artifactId>ingrid-ibus-client</artifactId>
-      <version>1.2.3-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-fileupload</groupId>
-      <artifactId>commons-fileupload</artifactId>
-      <version>1.2.1</version>
     </dependency>
   </dependencies>
   <build>
@@ -144,22 +97,51 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/*Test.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>unpack-base-webapp</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+				  <groupId>de.ingrid</groupId>
+				  <artifactId>ingrid-base-webapp</artifactId>
+				  <classifier>res</classifier>
+				  <type>zip</type>
+                  <outputDirectory>${project.build.directory}/base-webapp</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <inherited>false</inherited>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <inherited>false</inherited>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-jar-plugin</artifactId>
+         <configuration>
+           <archive>
+             <manifestEntries>
+               <!-- see ingrid-utils:de.ingrid.utils.metadata.IPlugType-->
+               <iPlug-Type>IPLUG_OPENSEARCH</iPlug-Type>
+             </manifestEntries>
+           </archive>
+         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2-beta-4</version>
         <configuration>
             <archive>
               <manifestEntries>
@@ -186,64 +168,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/ma
           </webResources>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>wagon-maven-plugin</artifactId>
-        <configuration>
-          <fromDir>NOT_EXISITING_DIRECTORY</fromDir>
-          <url>/dev/null</url>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <includes>
-            <include>**/*Test.java</include>
-          </includes>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.groovy.maven</groupId>
-        <artifactId>gmaven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              <source>ant.unzip(src:
-              "${settings.localRepository}/de/ingrid/ingrid-base-webapp/1.1.0-SNAPSHOT/ingrid-base-webapp-1.1.0-SNAPSHOT-res.zip",
-              dest: "target/base-webapp")</source>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>2.2</version>
-            <configuration>
-                <archive>
-                    <manifestEntries>
-                      <!-- see ingrid-utils:de.ingrid.utils.metadata.IPlugType-->
-                      <iPlug-Type>IPLUG_OPENSEARCH</iPlug-Type>
-                    </manifestEntries>
-                </archive>
-            </configuration>
-        </plugin>
-        <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.2-beta-4</version>
-            <configuration>
-                <archive>
-                    <manifestEntries>
-                        <ingridComponentType>IPLUG_OPENSEARCH</ingridComponentType>
-                    </manifestEntries>
-                </archive>
-            </configuration>
-        </plugin>
     </plugins>
   </build>
 </project>
