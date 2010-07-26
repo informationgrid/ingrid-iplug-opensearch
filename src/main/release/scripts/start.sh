@@ -9,6 +9,8 @@
 #
 #   INGRID_OPTS      addtional java runtime options
 #
+#	INGRID_USER 	 starting user, default ist "ingrid"
+#
 
 THIS="$0"
 
@@ -120,6 +122,11 @@ startIplug()
   done
   # restore ordinary behaviour
   unset IFS
+  
+  # cygwin path translation
+  if expr `uname` : 'CYGWIN*' > /dev/null; then
+    CLASSPATH=`cygpath -p -w "$CLASSPATH"`
+  fi
 
   # run it
   export CLASSPATH="$CLASSPATH"
