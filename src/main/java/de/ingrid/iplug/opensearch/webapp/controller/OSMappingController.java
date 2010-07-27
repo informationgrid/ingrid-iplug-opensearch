@@ -59,13 +59,7 @@ public class OSMappingController extends AbstractController {
             return AdminViews.OS_MAPPING;
         }
         
-        if (commandObject.isUseMapping())
-            mapConfigToPD(commandObject, pdCommandObject);
-        else {
-            pdCommandObject.putBoolean("mappingSupport", commandObject.isUseMapping());
-            pdCommandObject.put("domainGroupingSupport", false);
-            pdCommandObject.removeFromList(PlugDescription.FIELDS, "site");
-        }
+        mapConfigToPD(commandObject, pdCommandObject);
         
         return AdminViews.SAVE;
     }
@@ -84,7 +78,7 @@ public class OSMappingController extends AbstractController {
         mapping.setAsParam(commandObject.isDomainAsParam());        
         pdCommandObject.addToList("mapping", mapping);
         
-        if (commandObject.isForDomain()) {
+        if (commandObject.isForDomain() && commandObject.isUseMapping()) {
             pdCommandObject.put("domainGroupingSupport", true);
             // remove and add site-field
             pdCommandObject.removeFromList(PlugDescription.FIELDS, "site");
