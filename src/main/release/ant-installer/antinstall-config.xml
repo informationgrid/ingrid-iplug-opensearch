@@ -49,6 +49,7 @@
 			type		="progress"
 			name		="progress"
 			displayText	="Installationsfortschritt"
-			showTargets	="true">
+			showTargets	="true"
+			target		="startIPlug">
 	</page>
 </installer>
