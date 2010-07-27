@@ -185,8 +185,10 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		
 		try {
 		    // check if possibly fields are supported by this iPlug
-		    if (!allFieldsSupported(query))
+		    if (!allFieldsSupported(query)) {
+		        log.warn("Not all fields of this query are supported! Returning zero hits! (query: "+query.toString()+")");
 		        return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
+		    }
 		    
 			OSQueryBuilder queryBuilder = new OSQueryBuilder();
 			OSQuery osQuery = queryBuilder.createQuery(query, start, length, mapping);
@@ -225,11 +227,11 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	@SuppressWarnings("unchecked")
     private boolean allFieldsSupported(IngridQuery query) {
 	    // mapping might not be set in PlugDescription! 
-	    if (fPlugDesc.get("mapping") == null)
+	    if (fPlugDesc.get("mapping") == null || fPlugDesc.get("mappingSupport") == null) {
+	        log.error("Missing mapping-information in PlugDescription!" +
+	        		" PlugDescription wasn't written completely!");
 	        return false;
-	    
-	    if (fPlugDesc.get("mappingSupport") == null)
-	        return false;
+	    }
 	    
 	    boolean mappingSupported = fPlugDesc.getBoolean("mappingSupport");
 	    
