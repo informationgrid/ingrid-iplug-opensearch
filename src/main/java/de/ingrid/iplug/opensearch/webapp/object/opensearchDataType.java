@@ -9,6 +9,7 @@ public class opensearchDataType extends AbstractDataType {
 
     public opensearchDataType() {
         super("opensearch");
+        setForceActive(true);
     }
 
 }
