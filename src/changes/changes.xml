@@ -5,6 +5,12 @@
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
+    <release version="3.0.1" date="2011-07-04" description="Add-Ons + Bugfixes for InGrid 3.0">
+      <action type="update" issue="INGRID-1940">
+        Introduced new field "metainfo" in query for various control info to be handled by iBus / iPlugs. 
+      </action>
+    </release>
+
 	  <release version="3.0.0" date="2011-05-06" description="InGrid Release3.0.0">
       <action type="fix" dev="wemove">
         Minor fixes during administration.
