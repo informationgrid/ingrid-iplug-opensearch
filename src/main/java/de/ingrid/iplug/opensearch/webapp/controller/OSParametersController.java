@@ -15,6 +15,8 @@ import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
 import de.ingrid.iplug.opensearch.webapp.validation.OSValidator;
 import de.ingrid.utils.PlugDescription;
 import de.ingrid.utils.query.IngridQuery;
+import de.ingrid.utils.tool.PlugDescriptionUtil;
+import de.ingrid.utils.tool.QueryUtil;
 
 /**
  * Control the page of Opensearch-specific parameters of the webapp.
@@ -93,9 +95,13 @@ public class OSParametersController extends AbstractController {
     	
     	// add necessary fields so iBus actually will query us
     	// remove field first to prevent multiple equal entries
-    	pdCommandObject.removeFromList(PlugDescription.FIELDS, "incl_meta");
-    	pdCommandObject.addField("incl_meta");
+    	// add field indicating query of SNS metadata, no impact on query
+    	PlugDescriptionUtil.addFieldToPlugDescription(pdCommandObject, "incl_meta");
     	
+    	// we also can process metainfo field ! so indicate this !
+    	// add "metainfo" field, so plug won't be filtered when field is part of query !
+    	PlugDescriptionUtil.addFieldToPlugDescription(pdCommandObject, QueryUtil.FIELDNAME_METAINFO);
+
     	// add datatype opensearch to PD
     	pdCommandObject.addDataType("opensearch");
 	}

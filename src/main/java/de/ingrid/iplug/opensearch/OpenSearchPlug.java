@@ -38,6 +38,7 @@ import de.ingrid.utils.metadata.IMetadataInjector;
 import de.ingrid.utils.processor.IPostProcessor;
 import de.ingrid.utils.processor.IPreProcessor;
 import de.ingrid.utils.query.IngridQuery;
+import de.ingrid.utils.tool.QueryUtil;
 
 /**
  * This iPlug connects to the iBus and offers requests to a defined Opensearch-
@@ -182,7 +183,22 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		if (log.isDebugEnabled()) {
 		    log.debug("Incoming query: " + query.toString() + ", start=" + start + ", length=" + length);
         }
-		
+
+		// HANDLE METAINFO !!! e.g. add "reject search" metainfo etc.
+        preProcess(query);
+
+        // check if query is rejected and return 0 hits instead of search within the iplug
+        if (query.isRejected()) {
+            return new IngridHits(fPlugID, 0, new IngridHit[] {}, fIsRanked);
+        }
+        
+    	// remove "meta" field from query so search works !
+    	QueryUtil.removeFieldFromQuery(query, QueryUtil.FIELDNAME_METAINFO);
+
+		if (log.isDebugEnabled()) {
+		    log.debug("After preprocessing -> query: " + query.toString() + ", start=" + start + ", length=" + length);
+        }
+
 		try {
 		    // check if possibly fields are supported by this iPlug
 		    if (!allFieldsSupported(query)) {
