@@ -5,7 +5,7 @@
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
-    <release version="3.0.1.1" date="2011-08-??" description="Bugfix Release for InGrid 3.0.1">
+    <release version="3.0.1.1" date="2011-08-03" description="Bugfix Release for InGrid 3.0.1">
       <action type="fix" issue="INGRID-1940">
         Fixed "metainfo" functionality for "deny"/"allow".
       </action>
