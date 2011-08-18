@@ -1,6 +1,7 @@
 package de.ingrid.iplug.opensearch.converter;
 
 import java.io.InputStream;
+import java.util.List;
 
 import de.ingrid.utils.IngridHitDetail;
 import de.ingrid.utils.IngridHits;
@@ -13,7 +14,7 @@ import de.ingrid.utils.IngridHits;
 public interface IngridConverter {
 	public IngridHits processResult(String plugId, InputStream result, String groupedBy);
 	
-	public void setRankingModifier(RankingModifier normalizer);
+	public void setRankingModifiers(List<RankingModifier> normalizers);
 	
 	public IngridHitDetail getHitDetailFromCache(int docId);
 }

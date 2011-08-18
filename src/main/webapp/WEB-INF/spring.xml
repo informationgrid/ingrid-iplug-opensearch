@@ -7,7 +7,11 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 
   <bean id="opensearchConverterFactory" class="de.ingrid.iplug.opensearch.converter.ConverterFactory">
     <property name="opensearchRequestStrategy" ref="opensearchRequestStrategy" />
-    <property name="rankingModifier" ref="rankingModifierPD" />
+    <property name="rankingModifiers">
+      <list>
+        <ref bean="rankingModifierPD" />
+      </list>
+    </property>
     <!-- PD will be used correctly by autowireing configure-method -->
     <property name="converterMap">
       <map>

@@ -1,6 +1,7 @@
 package de.ingrid.iplug.opensearch.converter;
 
 import java.io.InputStream;
+import java.util.List;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -24,7 +25,7 @@ import de.ingrid.utils.IngridHits;
 public abstract class IngridDefaultConverter implements IngridConverter{
 	private static Log log = LogFactory.getLog(IngridDefaultConverter.class);
 	
-	private RankingModifier rankingModifier;
+	private List<RankingModifier> rankingModifiers;
 	
 	protected Cache cache;
 	
@@ -51,37 +52,39 @@ public abstract class IngridDefaultConverter implements IngridConverter{
 	@Override
 	public abstract IngridHits processResult(String plugId, InputStream result, String groupedBy);
 	
-	public void setRankingModifier(RankingModifier normalizer) {
-		this.rankingModifier = normalizer;
+	public void setRankingModifiers(List<RankingModifier> normalizers) {
+		this.rankingModifiers = normalizers;
 	}
 	
 	/**
-	 * Set the score of an IngridHit and normalize it with the set RankingModifier.
-	 * @param hit
-	 * @param score
+	 * Normalize the scores of the hits by injected modifiers !
+	 * @param hits original result with unnormalized scores !
 	 */
-	public void setScore(IngridHit hit, float score) {
-		if (score != 0.0f) {
-			hit.setScore(normalizeRanking(score));
+	public void normalizeRanking(IngridHit[] hits) {
+		// first initialize all modifiers with original results, so they can extract infos needed !
+		for (RankingModifier rankingModifier : rankingModifiers) {
+			rankingModifier.initialize(hits);
 		}
-	}
-	
-	/**
-	 * This function normalizes the ranking according to the rankingModifier.
-	 * @param score
-	 * @return
-	 */
-	private float normalizeRanking(float score) {
-		float normalizedScore = 0.0f;
-		
-		if (rankingModifier == null) {
-			log.warn("RankingModifier is not initialized");
-			return score;
+
+		// then normalize
+		for (IngridHit hit : hits) {
+			float score = hit.getScore();
+			if (log.isDebugEnabled()) {
+				log.debug("hit original score: " + score);
+			}
+
+			for (RankingModifier rankingModifier : rankingModifiers) {
+				score = rankingModifier.normalizeRanking(score);
+				if (log.isDebugEnabled()) {
+					log.debug("normalized score with " + rankingModifier + " -> " + score);
+				}
+			}
+
+			if (log.isDebugEnabled()) {
+				log.debug("hit set normalized score: " + score);
+			}
+			hit.setScore(score);
 		}
-		
-		normalizedScore = rankingModifier.getMultiplier()*score + rankingModifier.getAdditional();
-		
-		return normalizedScore;
 	}
 	
 	/**

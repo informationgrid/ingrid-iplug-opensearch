@@ -4,12 +4,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.ingrid.utils.IConfigurable;
+import de.ingrid.utils.IngridHit;
 import de.ingrid.utils.PlugDescription;
 
 /**
- * This class is used to normalize a score received from search results. The values
- * for the manipulation are received from a provided PlugDescription with the keys
- * 'rankingMul' and 'rankingAdd'.
+ * This class is used to normalize a score received from search results.
+ * It has to be two values, one for multiplying the score and one for adding
+ * a value.
+ * The values for the manipulation are received from a provided PlugDescription
+ * with the keys 'rankingMul' and 'rankingAdd'.
  * 
  * normalizedScore = multiplier*score + additional
  * @author André Wallat
@@ -31,36 +34,32 @@ public class RankingModifierFromPD implements RankingModifier, IConfigurable {
 		this.multiplier = 1;
 		this.additional = 0;
 	}
-	
-	public float getMultiplier() {
+
+	@Override
+	public void initialize(IngridHit[] originalResult) {
+		// NOT NEEDED because our normalization is independent from other hits !
+	}
+
+	private float getMultiplier() {
 		return multiplier;
 	}
 
-	public void setMultiplier(float multiplier) {
-		this.multiplier = multiplier;
-	}
-	
-	public void setMultiplier(String multiplier) {
+	private void setMultiplier(String multiplier) {
 		if (multiplier != null) {
 			this.multiplier = Float.parseFloat(multiplier);
 		}
 	}
-
-	public float getAdditional() {
-		
+	
+	private float getAdditional() {
 		return additional;
 	}
 
-	public void setAdditional(float additional) {
-		this.additional = additional;
-	}
-	
-	public void setAdditional(String additional) {
+	private void setAdditional(String additional) {
 		if (additional != null) {
 			this.additional = Float.parseFloat(additional);
 		}
 	}
-	
+
 	/**
 	 * The configure method will always be called when PlugDescription
 	 * has changed. This happens to all classes that implement the IConfigurable
@@ -79,5 +78,18 @@ public class RankingModifierFromPD implements RankingModifier, IConfigurable {
 			setAdditional((String)plugDescription.get("rankingAdd"));
 		}
 		log.info("RankingModifier was correctly configured from PlugDescription!");
+	}
+
+	/**
+	 * This function normalizes the ranking according to the rankingModifier.
+	 * @param score
+	 * @return
+	 */
+	public float normalizeRanking(float score) {
+		float normalizedScore = 0.0f;
+		
+		normalizedScore = getMultiplier()*score + getAdditional();
+		
+		return normalizedScore;
 	}
 }

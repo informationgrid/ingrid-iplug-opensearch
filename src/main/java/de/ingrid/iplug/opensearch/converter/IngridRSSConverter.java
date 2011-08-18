@@ -105,14 +105,17 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 			hit.put("url", getLink(node));
 			hit.put("abstract", getAbstract(node));
 			hit.put("no_of_hits", String.valueOf(totalResults));
-			
-			setScore(hit, getScore(node));
-			
+			hit.setScore(getScore(node));
+
 			// ingrid specific data
 			setIngridHitDetail(hit, node, groupedBy);
 			
 			hits[i] = hit;
 		}
+		
+		// now we have all original hits, let's manipulate the score
+		normalizeRanking(hits);
+
 		return hits;
 	}
 
