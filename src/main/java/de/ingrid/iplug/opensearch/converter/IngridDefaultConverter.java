@@ -61,29 +61,22 @@ public abstract class IngridDefaultConverter implements IngridConverter{
 	 * @param hits original result with unnormalized scores !
 	 */
 	public void normalizeRanking(IngridHit[] hits) {
-		// first initialize all modifiers with original results, so they can extract infos needed !
+		// process all modifiers !
 		for (RankingModifier rankingModifier : rankingModifiers) {
+
+			// first initialize modifier with current results (maybe already modified score), so they can extract infos needed !
 			rankingModifier.initialize(hits);
-		}
 
-		// then normalize
-		for (IngridHit hit : hits) {
-			float score = hit.getScore();
-			if (log.isDebugEnabled()) {
-				log.debug("hit original score: " + score);
-			}
+			// then normalize
+			for (IngridHit hit : hits) {
+				float score = rankingModifier.getNormalizedRanking(hit);
+				hit.setScore(score);
 
-			for (RankingModifier rankingModifier : rankingModifiers) {
-				score = rankingModifier.normalizeRanking(score);
 				if (log.isDebugEnabled()) {
 					log.debug("normalized score with " + rankingModifier + " -> " + score);
 				}
 			}
 
-			if (log.isDebugEnabled()) {
-				log.debug("hit set normalized score: " + score);
-			}
-			hit.setScore(score);
 		}
 	}
 	

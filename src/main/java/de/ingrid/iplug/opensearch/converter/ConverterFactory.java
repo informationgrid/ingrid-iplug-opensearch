@@ -1,5 +1,6 @@
 package de.ingrid.iplug.opensearch.converter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,13 @@ public class ConverterFactory {
 
 	// injected by Spring
 	private Map<String, String> converterMap;
+
+	/**
+	 * Standard initialisation: No ranking modification
+	 */
+	public ConverterFactory() {
+		rankingModifiers = new ArrayList<RankingModifier>();
+	}
 
 	/**
 	 * According to the descriptor and the strategy, which conversion should be

@@ -1,7 +1,5 @@
 package de.ingrid.iplug.opensearch.query;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +32,7 @@ public class OSRequest {
 	 */
 	public static String getOSQueryString(OSQuery osQuery, IngridQuery ingridQuery, OSDescriptor osDescriptor) {
 		String mergedResult 	= osDescriptor.getUrl();
+		log.debug("OpenSearch Query before merging params: " + mergedResult);
 		Set<String> paramKeys 	= osQuery.keySet();
 		
 		for (String param : paramKeys) {

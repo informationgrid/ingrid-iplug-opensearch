@@ -16,9 +16,10 @@ public interface RankingModifier {
 	void initialize(IngridHit[] originalResult);
 
 	/**
-	 * This function normalizes the ranking (score)
-	 * @param score old score
-	 * @return new score
+	 * This function computes and returns the new score !
+	 * NOTICE: does NOT set the new score in the hit !
+	 * @param hit hit delivering former score
+	 * @return new score after processing of this modifier (NOT set in hit yet !)
 	 */
-	float normalizeRanking(float score);
+	float getNormalizedRanking(IngridHit hit);
 }

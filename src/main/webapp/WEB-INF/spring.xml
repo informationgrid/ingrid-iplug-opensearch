@@ -10,6 +10,10 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
     <property name="rankingModifiers">
       <list>
         <ref bean="rankingModifierPD" />
+        
+        <!-- SWITCH ON IF NEEDED (BW), NOTICE: OLD MODIFICATION STILL ACTIVATED, SWITCH OFF rankingModifierPD ? -->
+        <!-- ref bean="rankingModifierLinear" /-->
+
       </list>
     </property>
     <!-- PD will be used correctly by autowireing configure-method -->
@@ -38,4 +42,81 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
   <!-- <constructor-arg value="conf/plugDescription.xml"/>-->
   <!-- </bean>-->
   <!--<bean id="rankingModifierOther" class="de.ingrid.iplug.opensearch.converter.RankingModifierOther"/>-->
+
+  <bean id="rankingModifierLinear" class="de.ingrid.iplug.opensearch.converter.RankingModifierLinear">
+    <property name="configMap">
+      <map key-type="java.lang.Float">
+        <!-- GSA-Score -->
+        <entry key="10">
+          <list value-type="java.lang.Float">
+            <!-- Median (Max) -->
+            <value>1</value>
+            <!-- Minimum -->
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="9">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="8">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="7">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="6">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="5">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="4">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="3">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="2">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="1">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="0">
+          <list value-type="java.lang.Float">
+            <value>1</value>
+            <value>0</value>
+          </list>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
 </beans>

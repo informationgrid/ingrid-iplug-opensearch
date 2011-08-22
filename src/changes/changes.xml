@@ -5,6 +5,12 @@
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
+    <release version="3.?" date="2011-??-??" description="?">
+      <action type="add" issue="INGRID-1975">
+        Added new pluggable ranking modification (linear modification of scores for BW).
+      </action>
+    </release>
+
     <release version="3.0.1.1" date="2011-08-03" description="Bugfix Release for InGrid 3.0.1">
       <action type="fix" issue="INGRID-1940">
         Fixed "metainfo" functionality for "deny"/"allow".

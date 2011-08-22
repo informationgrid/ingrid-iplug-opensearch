@@ -80,16 +80,8 @@ public class RankingModifierFromPD implements RankingModifier, IConfigurable {
 		log.info("RankingModifier was correctly configured from PlugDescription!");
 	}
 
-	/**
-	 * This function normalizes the ranking according to the rankingModifier.
-	 * @param score
-	 * @return
-	 */
-	public float normalizeRanking(float score) {
-		float normalizedScore = 0.0f;
-		
-		normalizedScore = getMultiplier()*score + getAdditional();
-		
-		return normalizedScore;
+	@Override
+	public float getNormalizedRanking(IngridHit hit) {
+		return getMultiplier() * hit.getScore() + getAdditional();
 	}
 }
