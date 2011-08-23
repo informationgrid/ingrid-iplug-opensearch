@@ -125,6 +125,11 @@
                             Bitte geben Sie hier den Faktor an, mit dem der ranking score addiert werden soll.
                         </td>
                     </tr>
+                    <tr>
+                        <td colspan="2">
+                            Weitere Möglichkeiten zur Manipulation des ranking score bestehen in der Aktivierung zusätzlicher RankingModifier in der Datei ./webapp/WEB-INF/spring.xml
+                        </td>
+                    </tr>
                 </table>
             </form:form>
         </div>

@@ -9,14 +9,22 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
     <property name="opensearchRequestStrategy" ref="opensearchRequestStrategy" />
     <property name="rankingModifiers">
       <list>
+
+        <!-- RANKING MODIFICATION: Multiple ranking modifiers possible. Manipulated score will be passed to next modifier !  -->
+
+        <!-- DEFAULT RANKING MODIFIER: manipulates ranking score via multiplication and addition set in admin gui -->
         <ref bean="rankingModifierPD" />
         
+        <!-- RANKING MODIFIER for linear modification of ranking score. Configuration see "rankingModifierLinear" below. -->
         <!-- SWITCH ON IF NEEDED (BW), NOTICE: OLD MODIFICATION STILL ACTIVATED, SWITCH OFF rankingModifierPD ? -->
-        <!-- ref bean="rankingModifierLinear" /-->
+<!--
+        <ref bean="rankingModifierLinear" />
+-->
 
       </list>
     </property>
-    <!-- PD will be used correctly by autowireing configure-method -->
+
+    <!-- PD will be used correctly by autowiring configure-method -->
     <property name="converterMap">
       <map>
         <!-- the mapping defines the class that is responsible to convert a certain type -->
@@ -37,12 +45,11 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
       </list>
     </property>
   </bean>
-  
-  <bean id="rankingModifierPD" class="de.ingrid.iplug.opensearch.converter.RankingModifierFromPD" />
-  <!-- <constructor-arg value="conf/plugDescription.xml"/>-->
-  <!-- </bean>-->
-  <!--<bean id="rankingModifierOther" class="de.ingrid.iplug.opensearch.converter.RankingModifierOther"/>-->
 
+  <!-- DEFAULT RANKING MODIFIER: manipulates ranking score via multiplication and addition set in admin gui -->
+  <bean id="rankingModifierPD" class="de.ingrid.iplug.opensearch.converter.RankingModifierFromPD" />
+
+  <!-- RANKING MODIFIER for linear modification of ranking score. Pass config values below. -->
   <bean id="rankingModifierLinear" class="de.ingrid.iplug.opensearch.converter.RankingModifierLinear">
     <property name="configMap">
       <map key-type="java.lang.Float">
