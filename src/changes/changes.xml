@@ -5,7 +5,7 @@
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
-    <release version="3.?" date="2011-??-??" description="?">
+    <release version="3.0.2-SNAPSHOT" date="2011-??-??" description="Add-Ons for InGrid 3.0.1">
       <action type="add" issue="INGRID-1975">
         Added new pluggable ranking modification (linear modification of scores for BW).
       </action>
