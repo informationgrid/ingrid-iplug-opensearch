@@ -9,16 +9,17 @@ import de.ingrid.utils.IngridHit;
  */
 public interface RankingModifier {
 
-	/** Pass the full result of the query already processed as IngridHit[] BUT NOT NORMALIZED YET !
-	 * So the RankingModifier can analyze the original result if needed for normalization !
-	 * @param originalResult the result of the OpenSearch query already processed as IngridHit[]
+	/** Pass the result of the query already processed by former ranking modifiers.
+	 * So the RankingModifier can analyze the current state if needed for normalization !
+	 * @param inHits the result of the OpenSearch query already processed by former ranking modifiers
+	 * 		(or original result if no former modifiers)
 	 */
-	void initialize(IngridHit[] originalResult);
+	void initialize(IngridHit[] inHits);
 
 	/**
 	 * This function computes and returns the new score !
 	 * NOTICE: does NOT set the new score in the hit !
-	 * @param hit hit delivering former score
+	 * @param hit hit delivering original score or score as it was processed by former ranking modifiers
 	 * @return new score after processing of this modifier (NOT set in hit yet !)
 	 */
 	float getNormalizedRanking(IngridHit hit);

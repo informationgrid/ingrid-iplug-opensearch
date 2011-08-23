@@ -76,7 +76,6 @@ public abstract class IngridDefaultConverter implements IngridConverter{
 					log.debug("normalized score with " + rankingModifier + " -> " + score);
 				}
 			}
-
 		}
 	}
 	

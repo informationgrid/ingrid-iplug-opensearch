@@ -16,27 +16,24 @@ import de.ingrid.utils.PlugDescription;
  * 
  * normalizedScore = multiplier*score + additional
  * @author André Wallat
- *
  */
 public class RankingModifierFromPD implements RankingModifier, IConfigurable {
 	private static Log log = LogFactory.getLog(RankingModifierFromPD.class);
 	
-	// value for multiplying the score
+	/** value for multiplying the score */
 	private float multiplier;
 	
-	// value for adding to the score
+	/** value for adding to the score */
 	private float additional;
 	
-	/**
-	 * The standard initialisation will not alter the score at all.
-	 */
+	/** The standard initialisation will not alter the score at all. */
 	public RankingModifierFromPD() {
 		this.multiplier = 1;
 		this.additional = 0;
 	}
 
 	@Override
-	public void initialize(IngridHit[] originalResult) {
+	public void initialize(IngridHit[] inHits) {
 		// NOT NEEDED because our normalization is independent from other hits !
 	}
 

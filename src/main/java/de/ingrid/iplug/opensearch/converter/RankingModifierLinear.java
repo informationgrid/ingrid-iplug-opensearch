@@ -14,8 +14,8 @@ import de.ingrid.utils.IngridHit;
  * This class is used to normalize a score received from search results.
  * 
  * Formel:
- * G=GSA-Score
- * I=Ingrid-Score
+ * G=FORMER Score (GSA-Score)
+ * I=NEW Score (Ingrid-Score)
  * p=Position des Scores innerhalb der Scores mit der selben Höhe. Wert: 0 ... (n-1)
  * n=Anzahl der Scores mit der selben Höhe
  * 
@@ -40,9 +40,7 @@ public class RankingModifierLinear implements RankingModifier {
 	 */
 	private Map<Float, List<IngridHit>> hitsWithSameScoreLists;
 	
-	/**
-	 * Standard initialisation: empty trafo ...
-	 */
+	/** Standard initialisation: empty trafo ... */
 	public RankingModifierLinear() {
 		configMap = new HashMap<Float, List<Float>>();
 		configMinScore = null;
@@ -68,7 +66,7 @@ public class RankingModifierLinear implements RankingModifier {
 		}
 	}
 
-	/** Set the trafo map determining how old score is transformed.
+	/** Set the trafo map determining how score is transformed.
 	 * @param configMap
 	 */
 	public void setConfigMap(Map<Float, List<Float>> configMap) {
@@ -76,18 +74,18 @@ public class RankingModifierLinear implements RankingModifier {
 			this.configMap = configMap;
 		}
 
-		// remember min and max values of original score
-		for (Float origSore : configMap.keySet()) {
-			if (configMinScore == null || configMinScore > origSore) {
-				configMinScore = origSore;
+		// remember min and max values of config scores
+		for (Float configScore : configMap.keySet()) {
+			if (configMinScore == null || configMinScore > configScore) {
+				configMinScore = configScore;
 			}			
-			if (configMaxScore == null || configMaxScore < origSore) {
-				configMaxScore = origSore;
+			if (configMaxScore == null || configMaxScore < configScore) {
+				configMaxScore = configScore;
 			}			
 		}
 		
 		if (log.isDebugEnabled()) {
-			log.debug("orig Score MIN: " + configMinScore + ", MAX:" + configMaxScore);
+			log.debug("config Score MIN: " + configMinScore + ", MAX:" + configMaxScore);
 		}
 	}
 
@@ -108,7 +106,7 @@ public class RankingModifierLinear implements RankingModifier {
 			configMaxOfScore = configMaxMinOfScore.get(0);
 			configMinOfScore = configMaxMinOfScore.get(1);
 		} else {
-			log.warn("NO MAX/MIN set for score: " + scoreInRange + ", WE USE 1.0/0.0");
+			log.warn("NO config MAX/MIN set for score: " + scoreInRange + ", WE USE 1.0/0.0");
 		}
 		
 		// compute new score
@@ -116,7 +114,7 @@ public class RankingModifierLinear implements RankingModifier {
 
 		if (log.isDebugEnabled()) {
 			log.debug("score of Hit: " + hit.getScore());
-			log.debug("score of Hit mapped to config Range: " + scoreInRange);
+			log.debug("score of Hit mapped to config score range: " + scoreInRange);
 			log.debug("score MEDIAN from config: " + configMaxOfScore);
 			log.debug("score MIN from config: " + configMinOfScore);
 			log.debug("list of hits same score, numHitsInList: " + numHitsInList);
