@@ -59,66 +59,66 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
             <!-- Median (Max) -->
             <value>1</value>
             <!-- Minimum -->
-            <value>0</value>
+            <value>0.9</value>
           </list>
         </entry>
         <entry key="9">
           <list value-type="java.lang.Float">
-            <value>1</value>
-            <value>0</value>
+            <value>0.9</value>
+            <value>0.8</value>
           </list>
         </entry>
         <entry key="8">
           <list value-type="java.lang.Float">
-            <value>1</value>
-            <value>0</value>
+            <value>0.8</value>
+            <value>0.7</value>
           </list>
         </entry>
         <entry key="7">
           <list value-type="java.lang.Float">
-            <value>1</value>
-            <value>0</value>
+            <value>0.7</value>
+            <value>0.6</value>
           </list>
         </entry>
         <entry key="6">
           <list value-type="java.lang.Float">
-            <value>1</value>
-            <value>0</value>
+            <value>0.6</value>
+            <value>0.5</value>
           </list>
         </entry>
         <entry key="5">
           <list value-type="java.lang.Float">
-            <value>1</value>
-            <value>0</value>
+            <value>0.5</value>
+            <value>0.4</value>
           </list>
         </entry>
         <entry key="4">
           <list value-type="java.lang.Float">
-            <value>1</value>
-            <value>0</value>
+            <value>0.4</value>
+            <value>0.3</value>
           </list>
         </entry>
         <entry key="3">
           <list value-type="java.lang.Float">
-            <value>1</value>
-            <value>0</value>
+            <value>0.3</value>
+            <value>0.2</value>
           </list>
         </entry>
         <entry key="2">
           <list value-type="java.lang.Float">
-            <value>1</value>
-            <value>0</value>
+            <value>0.2</value>
+            <value>0.1</value>
           </list>
         </entry>
         <entry key="1">
           <list value-type="java.lang.Float">
-            <value>1</value>
+            <value>0.1</value>
             <value>0</value>
           </list>
         </entry>
         <entry key="0">
           <list value-type="java.lang.Float">
-            <value>1</value>
+            <value>0</value>
             <value>0</value>
           </list>
         </entry>
