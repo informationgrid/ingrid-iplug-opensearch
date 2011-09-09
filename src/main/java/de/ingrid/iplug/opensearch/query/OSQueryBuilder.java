@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import de.ingrid.iplug.opensearch.model.OSMapping;
 import de.ingrid.utils.IngridQueryTools;
@@ -24,6 +25,10 @@ public class OSQueryBuilder {
 	/* The logging object
 	 */
 	private static Log log = LogFactory.getLog(OSQueryBuilder.class);
+	
+	// injected by Spring
+	@Autowired
+	private OSQueryTermMapper termMapper;
 	
 	//which parameter were offered by the descriptor 
 	List<String> templateParameter = new ArrayList<String>();
@@ -139,8 +144,11 @@ public class OSQueryBuilder {
 	private String getSearchTerms(IngridQuery ingridQuery) {
 		String terms = "";
 		TermQuery[] ingridTerms = ingridQuery.getTerms();
+		int pos = 1;
 		for (TermQuery term : ingridTerms) {
-			terms += term.getContent() + " ";
+			//terms += term.getContent() + " ";
+			terms += termMapper.map(term, pos) + " ";
+			pos += 1;
 		}
 		// also include fields in search-term of OS-Query
 		/*
@@ -173,4 +181,11 @@ public class OSQueryBuilder {
         // return true if field must not be excluded
         return true;
     }
+
+   
+    @Autowired
+    public void setTermMapper(OSQueryTermMapper termMapper) {
+        this.termMapper = termMapper;
+    }
+
 }

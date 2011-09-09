@@ -86,11 +86,15 @@ public class OpenSearchPlug extends HeartBeatPlug {
 
 	private boolean fUseDescriptor = true;
 	
+	// injected by Spring!
 	private ConverterFactory converterFactory;
 
     private List<OSMapping> mapping;
 
-	@Autowired
+    // injected by Spring!
+    private OSQueryBuilder queryBuilder;
+
+    @Autowired
 	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters, 
 			IMetadataInjector[] injector,
 			IPreProcessor[] preProcessors,
@@ -206,7 +210,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		        return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
 		    }
 		    
-			OSQueryBuilder queryBuilder = new OSQueryBuilder();
 			OSQuery osQuery = queryBuilder.createQuery(query, start, length, mapping);
 			
 			OSCommunication comm = new OSCommunication();
@@ -368,6 +371,11 @@ public class OpenSearchPlug extends HeartBeatPlug {
         } else {        
             return "";
         }
+    }
+	
+	@Autowired
+    public void setQueryBuilder(OSQueryBuilder queryBuilder) {
+        this.queryBuilder = queryBuilder;
     }
 
 }

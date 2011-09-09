@@ -18,6 +18,7 @@ import de.ingrid.iplug.opensearch.model.OSMapping.IngridFieldType;
 import de.ingrid.iplug.opensearch.webapp.object.MappingConfig;
 import de.ingrid.iplug.opensearch.webapp.validation.OSMappingValidator;
 import de.ingrid.utils.PlugDescription;
+import de.ingrid.utils.tool.PlugDescriptionUtil;
 
 /**
  * Control the page of Opensearch-specific parameters of the webapp.
@@ -94,6 +95,12 @@ public class OSMappingController extends AbstractController {
         mapping.setMapping(commandObject.getMapProvider());
         mapping.setAsParam(commandObject.isProviderAsParam());        
         pdCommandObject.addToList("mapping", mapping);
+        if (commandObject.isForProvider() && commandObject.isUseMapping()) {
+            PlugDescriptionUtil.addFieldToPlugDescription(pdCommandObject, "provider");
+        } else {
+            pdCommandObject.removeFromList(PlugDescription.FIELDS, "provider");
+        }
+        
         
         mapping = new OSMapping();
         mapping.setType(IngridFieldType.PARTNER);
@@ -101,6 +108,11 @@ public class OSMappingController extends AbstractController {
         mapping.setMapping(commandObject.getMapPartner());
         mapping.setAsParam(commandObject.isPartnerAsParam());        
         pdCommandObject.addToList("mapping", mapping);
+        if (commandObject.isForPartner() && commandObject.isUseMapping()) {
+            PlugDescriptionUtil.addFieldToPlugDescription(pdCommandObject, "partner");
+        } else {
+            pdCommandObject.removeFromList(PlugDescription.FIELDS, "partner");
+        }
     }
 
     @SuppressWarnings("unchecked")

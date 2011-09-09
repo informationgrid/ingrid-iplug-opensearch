@@ -48,6 +48,20 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
 
   <!-- DEFAULT RANKING MODIFIER: manipulates ranking score via multiplication and addition set in admin gui -->
   <bean id="rankingModifierPD" class="de.ingrid.iplug.opensearch.converter.RankingModifierFromPD" />
+  
+  <bean id="osQueryBuilder" class="de.ingrid.iplug.opensearch.query.OSQueryBuilder" />
+  
+  <!--  -->
+  <bean id="termMapper" class="de.ingrid.iplug.opensearch.query.OSQueryTermMapper" >
+    <property name="mapping">
+      <map>
+        <!--  -->
+        <entry key="AND" value="" />
+        <entry key="OR"  value="OR" />
+        <entry key="NOT" value="-" />
+      </map>
+    </property>
+  </bean>
 
   <!-- RANKING MODIFIER for linear modification of ranking score. Pass config values below. -->
   <bean id="rankingModifierLinear" class="de.ingrid.iplug.opensearch.converter.RankingModifierLinear">
