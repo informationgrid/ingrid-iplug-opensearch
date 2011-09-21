@@ -66,7 +66,7 @@ public class OSParametersController extends AbstractController {
     private void mapParamsToPD(OpensearchConfig commandObject,
 			PlugdescriptionCommandObject pdCommandObject) {
     	
-        boolean isOff  = pdCommandObject.containsRankingType("off");
+        boolean isOff  = pdCommandObject.getBoolean("forceAddRankingOff");
         boolean isDate = pdCommandObject.containsRankingType("date");
         
         // write Ranking-information after list got emptied

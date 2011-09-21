@@ -5,6 +5,11 @@
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
+    <release version="3.1.0.1" date="" description="Bugfix Release InGrid 3.1">
+      <action type="fix" issue="INGRID-2010">
+        Fixed inconsistency of setting of ranking parameter.
+      </action>
+    </release>
     <release version="3.1.0" date="2011-09-15" description="Release InGrid 3.1">
       <action type="add" issue="INGRID-1975">
         Added new pluggable ranking modification (linear modification of scores for BW).
