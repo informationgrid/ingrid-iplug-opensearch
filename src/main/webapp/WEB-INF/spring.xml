@@ -57,7 +57,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
       <map>
         <!--  -->
         <entry key="AND" value="" />
-        <entry key="OR"  value="OR" />
+        <entry key="OR"  value="OR " />
         <entry key="NOT" value="-" />
       </map>
     </property>

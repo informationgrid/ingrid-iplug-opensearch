@@ -23,7 +23,7 @@ public class OSQueryTermMapper {
     public String map(TermQuery term, int pos) {
         String mappedTerm = "";
         if (term.get("constructorValuesAsString").toString().startsWith("false")) {
-            mappedTerm += mapping.get(OR) + " ";
+            mappedTerm += mapping.get(OR);
         } else if (term.isProhibited()) {
             mappedTerm += mapping.get(NOT);
         } else if (pos > 1){
