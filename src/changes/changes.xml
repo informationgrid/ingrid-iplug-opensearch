@@ -5,6 +5,11 @@
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
+    <release version="3.2.0-SNAPSHOT" date="" description="Release InGrid 3.2">
+      <action type="fix" issue="">
+        Make boolean operator handling more consistent. Trailing spaces must be set in spring configuration to be able to support "-" and "NOT " equaly.
+      </action>
+    </release>
     <release version="3.1.0.1" date="" description="Bugfix Release InGrid 3.1">
       <action type="fix" issue="INGRID-2010">
         Fixed inconsistency of setting of ranking parameter.
