@@ -53,4 +53,37 @@
 		<property name="maxUploadSize" value="1000000"/> 
 	</bean> 
     
+   <!--
+        Wraps one ore more lucene index reader. The wrapper is injected via
+        XMLconfiguredIndexWrapper into IngridIndexSearcher constructor, so it
+        can be updated in the configure phase.
+    -->
+    <bean id="indexWrapper" class="de.ingrid.search.utils.LuceneIndexReaderWrapper">
+        <qualifier value="XMLconfiguredIndexWrapper" />
+    </bean>
+
+    <!--
+        Wraps a plugdescription object. The wrapper implements IConfigurable
+        and will be updated every time the configure phase takes place (i.e.
+        after changing the iplug configuration).
+    -->
+    <bean id="plugDescriptionWrapper"
+        class="de.ingrid.search.utils.ConfigurablePlugDescriptionWrapper" />
+
+
+    <bean id="facetManager" class="de.ingrid.search.utils.facet.FacetManager">
+        <property name="indexReaderWrapper">
+            <ref bean="indexWrapper" />
+        </property>
+        <property name="queryParsers">
+            <ref bean="de.ingrid.admin.search.QueryParsers" />
+        </property>
+        <property name="facetCounters">
+            <list>
+            </list>
+        </property>
+    </bean>
+    
+    
+    
 </beans>
