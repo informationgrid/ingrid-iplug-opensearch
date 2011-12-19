@@ -7,6 +7,9 @@
   <body>
     <release version="3.2.0-SNAPSHOT" date="" description="Release InGrid 3.2">
       <action type="fix" issue="">
+        Fix bug with iplug, if a opensearch response item has no description tag.
+      </action>
+      <action type="fix" issue="">
         Make boolean operator handling more consistent. Trailing spaces must be set in spring configuration to be able to support "-" and "NOT " equaly.
       </action>
       <action type="update" dev="wemove" issue="INGRID-1885">

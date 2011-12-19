@@ -261,7 +261,11 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 	private Object getAbstract(Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("description", item, XPathConstants.NODE);
-		return node.getTextContent();
+		if (node != null) {
+		    return node.getTextContent();
+		} else {
+		    return "";
+		}
 	}
 
 	/**
@@ -274,7 +278,11 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 	private Object getLink(Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("link", item, XPathConstants.NODE);
-		return node.getTextContent();
+        if (node != null) {
+            return node.getTextContent();
+        } else {
+            return "";
+        }
 	}
 
 	/**
@@ -287,7 +295,11 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 	private Object getTitle(Node item) throws XPathExpressionException {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		Node node = (Node) xpath.evaluate("title", item, XPathConstants.NODE);
-		return node.getTextContent();
+        if (node != null) {
+            return node.getTextContent();
+        } else {
+            return "";
+        }
 	}
 
 	/**

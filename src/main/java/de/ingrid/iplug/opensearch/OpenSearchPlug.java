@@ -226,10 +226,9 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			return hits;
 		} catch (Exception se) {
 			if (result == null) {
-				log.error("Could not receive answer from: " + url);
+				log.error("Could not receive answer from: " + url, se);
 			} else {
-				log.warn("An error has occured! Returning no hits! Exception is: " + se.getMessage());
-				se.printStackTrace();
+				log.warn("An error has occured! Returning no hits!", se);
 			}
 			return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
 		}
