@@ -29,6 +29,8 @@ import de.ingrid.iplug.opensearch.query.OSQuery;
 import de.ingrid.iplug.opensearch.query.OSQueryBuilder;
 import de.ingrid.iplug.opensearch.query.OSRequest;
 import de.ingrid.iplug.opensearch.tools.QueryUtils;
+import de.ingrid.search.utils.facet.FacetManager;
+import de.ingrid.search.utils.facet.IFacetManager;
 import de.ingrid.utils.IngridHit;
 import de.ingrid.utils.IngridHitDetail;
 import de.ingrid.utils.IngridHits;
@@ -93,6 +95,10 @@ public class OpenSearchPlug extends HeartBeatPlug {
 
     // injected by Spring!
     private OSQueryBuilder queryBuilder;
+    
+    @Autowired
+    private IFacetManager facetManager;
+    
 
     @Autowired
 	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters, 
@@ -151,6 +157,10 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			log.info("OpenSearch-Descriptor received");
 			
 			ingridConverter = converterFactory.getConverter(osDescriptor);
+			
+            if (facetManager != null) {
+                facetManager.initialize();
+            }
 			
 			log.info("iPlug initialized; waiting for incoming queries.");
 		} catch (IOException e) {
@@ -223,6 +233,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			
 			comm.releaseConnection();
 		
+	        facetManager.addFacets(hits, query);
+			
 			return hits;
 		} catch (Exception se) {
 			if (result == null) {
@@ -377,4 +389,9 @@ public class OpenSearchPlug extends HeartBeatPlug {
         this.queryBuilder = queryBuilder;
     }
 
+    public void setFacetManager(FacetManager facetManager) {
+        this.facetManager = facetManager;
+    }
+	
+	
 }
