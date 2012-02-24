@@ -143,21 +143,18 @@ public class OSQueryBuilder {
 	 */
 	private String getSearchTerms(IngridQuery ingridQuery) {
 		String terms = "";
-		TermQuery[] ingridTerms = ingridQuery.getTerms();
-		int pos = 1;
-		for (TermQuery term : ingridTerms) {
-			//terms += term.getContent() + " ";
-			terms += termMapper.map(term, pos) + " ";
-			pos += 1;
+		IngridQuery[] allClauses = ingridQuery.getAllClauses();
+		
+		for (int i=allClauses.length-1; i>=0; i--) {
+	        IngridQuery q = allClauses[i];
+	        TermQuery[] ingridTerms = q.getTerms();
+	        int pos = 1;
+	        for (TermQuery term : ingridTerms) {
+	            terms += termMapper.map(term, pos, q) + " ";
+	            pos += 1;
+	        }
 		}
-		// also include fields in search-term of OS-Query
-		/*
-		for (FieldQuery field : ingridQuery.getFields()) {
-		    if (fieldNotExcluded(field)) {
-		        terms += field.getContent() + " ";
-		    }
-        }
-        */
+		
 		try {
 			return URLEncoder.encode(terms.trim(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {

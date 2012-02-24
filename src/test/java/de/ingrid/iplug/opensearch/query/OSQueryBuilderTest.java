@@ -63,6 +63,12 @@ public class OSQueryBuilderTest {
         assertEquals("baum+OR+wald+-wasser", makeOSQueryFromQuery("baum OR wald -wasser").get(OSQuery.OS_SEARCH_TERMS));
     }
     
+    @Test
+    public void createQueryNestedBoolean() {
+        assertEquals("baum+wald+-wasser", makeOSQueryFromQuery("baum (wald -wasser)").get(OSQuery.OS_SEARCH_TERMS));
+        assertEquals("baum+OR+wald+-wasser", makeOSQueryFromQuery("baum OR (wald -wasser)").get(OSQuery.OS_SEARCH_TERMS));
+        assertEquals("baum+-wald+wasser", makeOSQueryFromQuery("baum NOT (wald -wasser)").get(OSQuery.OS_SEARCH_TERMS));
+    }
     
 
     private final OSQuery makeOSQueryFromQuery(String searchTerms) {
