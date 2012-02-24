@@ -7,6 +7,9 @@
   <body>
     <release version="3.2.0-SNAPSHOT" date="" description="Release InGrid 3.2">
       <action type="add" issue="">
+        Take also terms of boolean sub queries into account.
+      </action>
+      <action type="add" issue="">
         Add facet capabilities, see springapp-servlet.xml for details (see plugDescriptionFacetCounter). This feature must be configured.
       </action>
       <action type="fix" issue="">
