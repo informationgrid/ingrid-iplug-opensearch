@@ -12,6 +12,9 @@
       <action type="add" issue="">
         Add facet capabilities, see springapp-servlet.xml for details (see plugDescriptionFacetCounter). This feature must be configured.
       </action>
+      <action type="fix" dev="wemove">
+        Fix problem in start script. Heap memory settings were not set correctly.
+      </action>
       <action type="fix" issue="">
         Fix bug with iplug, if a opensearch response item has no description tag.
       </action>
