@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <bean id="opensearchConverterFactory" class="de.ingrid.iplug.opensearch.converter.ConverterFactory">
+    <property name="opensearchRequestStrategy" ref="opensearchRequestStrategy" />
+    <property name="rankingModifiers">
+      <list>
+
+        <!-- RANKING MODIFICATION: Multiple ranking modifiers possible. Manipulated score will be passed to next modifier !  -->
+
+        <!-- DEFAULT RANKING MODIFIER: manipulates ranking score via multiplication and addition set in admin gui -->
+        <ref bean="rankingModifierPD" />
+        
+        <!-- RANKING MODIFIER for linear modification of ranking score. Configuration see "rankingModifierLinear" below. -->
+        <!-- SWITCH ON IF NEEDED (BW), NOTICE: OLD MODIFICATION STILL ACTIVATED, SWITCH OFF rankingModifierPD ? -->
+<!--
+        <ref bean="rankingModifierLinear" /> 
+-->
+
+      </list>
+    </property>
+
+    <!-- PD will be used correctly by autowiring configure-method -->
+    <property name="converterMap">
+      <map>
+        <!-- the mapping defines the class that is responsible to convert a certain type -->
+        <entry key="application/rss+xml" value="de.ingrid.iplug.opensearch.converter.IngridRSSConverter" />
+        <!--<entry key="application/atom+xml" value="de.ingrid.iplug.opensearch.converter.IngridAtomConverter"/>-->
+        <!--<entry key="text/html"            value="de.ingrid.iplug.opensearch.converter.IngridHTMLConverter"/>-->
+      </map>
+    </property>
+  </bean>
+  
+  <bean id="opensearchRequestStrategy" class="de.ingrid.iplug.opensearch.converter.OpensearchRequestStrategy">
+    <property name="strategy">
+      <list>
+        <!-- the order defines the priority of the converter that will be used -->
+        <value>application/rss+xml</value>
+        <!--<value>application/atom+xml</value>-->
+        <!--<value>text/html</value>-->
+      </list>
+    </property>
+  </bean>
+
+  <!-- DEFAULT RANKING MODIFIER: manipulates ranking score via multiplication and addition set in admin gui -->
+  <bean id="rankingModifierPD" class="de.ingrid.iplug.opensearch.converter.RankingModifierFromPD" />
+  
+  <bean id="osQueryBuilder" class="de.ingrid.iplug.opensearch.query.OSQueryBuilder" />
+  
+  <!--  -->
+  <bean id="termMapper" class="de.ingrid.iplug.opensearch.query.OSQueryTermMapper" >
+    <property name="mapping">
+      <map>
+        <!--  -->
+        <entry key="AND" value="" />
+        <entry key="OR"  value="OR " />
+        <entry key="NOT" value="-" />
+      </map>
+    </property>
+  </bean>
+
+  <!-- RANKING MODIFIER for linear modification of ranking score. Pass config values below. -->
+  <bean id="rankingModifierLinear" class="de.ingrid.iplug.opensearch.converter.RankingModifierLinear">
+    <property name="configMap">
+      <map key-type="java.lang.Float">
+        <!-- GSA-Score -->
+        <entry key="10">
+          <list value-type="java.lang.Float">
+            <!-- Median (Max) -->
+            <value>1</value>
+            <!-- Minimum -->
+            <value>0.9</value>
+          </list>
+        </entry>
+        <entry key="9">
+          <list value-type="java.lang.Float">
+            <value>0.9</value>
+            <value>0.8</value>
+          </list>
+        </entry>
+        <entry key="8">
+          <list value-type="java.lang.Float">
+            <value>0.8</value>
+            <value>0.7</value>
+          </list>
+        </entry>
+        <entry key="7">
+          <list value-type="java.lang.Float">
+            <value>0.7</value>
+            <value>0.6</value>
+          </list>
+        </entry>
+        <entry key="6">
+          <list value-type="java.lang.Float">
+            <value>0.6</value>
+            <value>0.5</value>
+          </list>
+        </entry>
+        <entry key="5">
+          <list value-type="java.lang.Float">
+            <value>0.5</value>
+            <value>0.4</value>
+          </list>
+        </entry>
+        <entry key="4">
+          <list value-type="java.lang.Float">
+            <value>0.4</value>
+            <value>0.3</value>
+          </list>
+        </entry>
+        <entry key="3">
+          <list value-type="java.lang.Float">
+            <value>0.3</value>
+            <value>0.2</value>
+          </list>
+        </entry>
+        <entry key="2">
+          <list value-type="java.lang.Float">
+            <value>0.2</value>
+            <value>0.1</value>
+          </list>
+        </entry>
+        <entry key="1">
+          <list value-type="java.lang.Float">
+            <value>0.1</value>
+            <value>0</value>
+          </list>
+        </entry>
+        <entry key="0">
+          <list value-type="java.lang.Float">
+            <value>0</value>
+            <value>0</value>
+          </list>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+</beans>
