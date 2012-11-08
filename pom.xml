@@ -13,9 +13,9 @@
   <name>ingrid-iplug-opensearch:war</name>
   <scm>
     <connection>
-    scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-iplug-opensearch/trunk</connection>
+    scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-iplug-opensearch/branches/ingrid-iplug-opensearch-3.2.x</connection>
     <developerConnection>
-    scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-iplug-opensearch/trunk</developerConnection>
+    scm:svn:https://harrison.its-technidata.de:444/svn/ingrid/ingrid-iplug-opensearch/branches/ingrid-iplug-opensearch-3.2.x</developerConnection>
   </scm>
   <repositories>
     <!-- Repo of parent pom needed, parent pom may not be installed locally yet -->
