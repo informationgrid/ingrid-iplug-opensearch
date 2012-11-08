@@ -6,6 +6,9 @@
   </properties>
   <body>
   	<release version="3.3.0" date="2013-01-??" description="Release InGrid 3.3">
+      <action type="add" dev="wemove" issue="INGRID-2156">
+        Connect to iBus even if the iBus was started after the iPlug.
+      </action>
       <action type="add" dev="wemove" issue="INGRID-2150">
         Add java parameter "-Dfile.encoding=UTF8" to start script.
       </action>
