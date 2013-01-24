@@ -113,13 +113,19 @@
     				</tr>
     				<tr>
     					<td colspan="3">
-    						<br />
-    						Wird das Mapping aktiviert, dann wird das entsprechende Feld auf einen hier
-    						angegebenen neuen Feldnamen gemappt. Steht in der IngridQuery also "partner:bw",
-    						dann wird dies zu "&lt;gemapptes Feld von Partner&gt;:bw". Wird die Checkbox "als Parameter
-    						hinzufügen" ausgewählt, dann wird das gemappte Feld inkl. Wert als Parameter an
-    						die Opensearch-Query angehängt. Ansonsten wird dieser innerhalb des Suchbegriffs
-    						aufgenommen.
+    						<ul>
+                                <li>Wird das Mapping aktiviert, dann wird das entsprechende Feld auf einen hier
+                                angegebenen neuen Feldnamen gemappt. Steht in der IngridQuery also "partner:bw",
+                                dann wird dies zu "&lt;gemapptes Feld von Partner&gt;:bw".</li>
+                                <li>Wird die Checkbox "als Parameter hinzufügen" ausgewählt, dann wird das gemappte 
+                                Feld inkl. Wert als Parameter an die Opensearch-Query angehängt. Ansonsten wird 
+                                dieser innerhalb des Suchbegriffs aufgenommen.</li>
+                                <li>Wird im Feld "zu mappen auf" die Zeichenfolge '[]' eingetragen, so wird 
+                                der entsprechende Parametername weggelassen und der Wert dieses Parameters 
+                                als Bestandteil des Suchbegriffs übertragen. Eine InGridQuery 
+                                "site:www.uba.de bodenzustand" wird also zu "www.uba.de bodenzustand" umgeformt.</li>
+                            </ul>
+    						 
     					</td>
     				</tr>
     			</table>

@@ -65,23 +65,36 @@ public class OSRequest {
         String parameter = "";
         
         for (OSMapping map : mapping) {
+            String mappedParam = map.getMapping();
             // if mapping is active and shall be used INSIDE the query
             if (map.isActive() && (map.isAsParam() == asParam)) {
                 switch (map.getType()) {
                 case DOMAIN:
                     String site = QueryUtils.getFieldValue("site", ingridQuery);
-                    if (site != null)
-                        parameter += map.getMapping() + definition + site + connector;
+                    if (site != null) {
+                        if ("[]".equals(mappedParam))
+                            parameter += site + connector;
+                        else
+                            parameter += mappedParam + definition + site + connector;
+                    }
                     break;
                 case PARTNER:
                     String[] partner = ingridQuery.getPositivePartner();
-                    if (partner != null && partner.length > 0)
-                        parameter += map.getMapping() + definition + partner[0] + connector;
+                    if (partner != null && partner.length > 0) {
+                        if ("[]".equals(mappedParam))
+                            parameter += partner[0] + connector;
+                        else
+                            parameter += mappedParam + definition + partner[0] + connector;
+                    }
                     break;
                 case PROVIDER:
                     String[] provider = ingridQuery.getPositiveProvider();
-                    if (provider != null && provider.length > 0)
-                        parameter += map.getMapping() + definition + provider[0] + connector;
+                    if (provider != null && provider.length > 0) {
+                        if ("[]".equals(mappedParam))
+                            parameter += provider[0] + connector;
+                        else
+                            parameter += mappedParam + definition + provider[0] + connector;
+                    }
                     break;
 
                 default:
@@ -93,7 +106,7 @@ public class OSRequest {
         }
         
         if (!parameter.isEmpty()) {            
-            term += connector + parameter.trim();
+            term += connector + parameter.substring(0, parameter.length()-connector.length());
         }
         return term;
     }
