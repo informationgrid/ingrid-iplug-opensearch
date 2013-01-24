@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import de.ingrid.iplug.opensearch.model.OSMapping;
+import de.ingrid.iplug.opensearch.model.OSMapping.IngridFieldType;
 import de.ingrid.utils.query.IngridQuery;
 import de.ingrid.utils.queryparser.ParseException;
 import de.ingrid.utils.queryparser.QueryStringParser;
@@ -69,9 +70,39 @@ public class OSQueryBuilderTest {
         assertEquals("baum+OR+wald+-wasser", makeOSQueryFromQuery("baum OR (wald -wasser)").get(OSQuery.OS_SEARCH_TERMS));
         assertEquals("baum+-wald+wasser", makeOSQueryFromQuery("baum NOT (wald -wasser)").get(OSQuery.OS_SEARCH_TERMS));
     }
-    
+
+    @Test
+    public void createQueryMapped() {
+        List<OSMapping> mapping = new ArrayList<OSMapping>();
+        OSMapping siteMap     = new OSMapping();siteMap.setActive(true);siteMap.setType(IngridFieldType.DOMAIN);siteMap.setMapping("mySite");
+        OSMapping partnerMap  = new OSMapping();partnerMap.setActive(true);partnerMap.setType(IngridFieldType.PARTNER);partnerMap.setMapping("myPartner");
+        OSMapping providerMap = new OSMapping();providerMap.setActive(true);providerMap.setType(IngridFieldType.PROVIDER);providerMap.setMapping("myProvider");
+        mapping.add(siteMap);
+        mapping.add(partnerMap);
+        mapping.add(providerMap);
+        
+        assertEquals("wasser", makeOSQueryFromQuery("wasser site:www.wemove.com").get(OSQuery.OS_SEARCH_TERMS));
+        assertEquals("wasser+mySite:www.wemove.com", makeOSQueryFromQuery("wasser site:www.wemove.com", mapping).get(OSQuery.OS_SEARCH_TERMS));
+        
+        assertEquals("wasser", makeOSQueryFromQuery("wasser partner:bb").get(OSQuery.OS_SEARCH_TERMS));
+        assertEquals("wasser+myPartner:bb", makeOSQueryFromQuery("wasser partner:bb", mapping).get(OSQuery.OS_SEARCH_TERMS));
+        
+        assertEquals("wasser", makeOSQueryFromQuery("wasser provider:you").get(OSQuery.OS_SEARCH_TERMS));
+        assertEquals("wasser+myProvider:you", makeOSQueryFromQuery("wasser provider:you", mapping).get(OSQuery.OS_SEARCH_TERMS));
+        
+        siteMap.setMapping("[]");
+        partnerMap.setMapping("[]");
+        providerMap.setMapping("[]");        
+        assertEquals("wasser+www.wemove.com", makeOSQueryFromQuery("wasser site:www.wemove.com", mapping).get(OSQuery.OS_SEARCH_TERMS));
+        assertEquals("wasser+bb", makeOSQueryFromQuery("wasser partner:bb", mapping).get(OSQuery.OS_SEARCH_TERMS));
+        assertEquals("wasser+you", makeOSQueryFromQuery("wasser provider:you", mapping).get(OSQuery.OS_SEARCH_TERMS));
+    }
 
     private final OSQuery makeOSQueryFromQuery(String searchTerms) {
+        return makeOSQueryFromQuery(searchTerms, null);
+    }
+    
+    private final OSQuery makeOSQueryFromQuery(String searchTerms, List<OSMapping> mapping) {
         IngridQuery query = null;
         try {
             query = QueryStringParser.parse(searchTerms);
@@ -79,7 +110,8 @@ public class OSQueryBuilderTest {
             e.printStackTrace();
         }
         
-        List<OSMapping> mapping = new ArrayList<OSMapping>();
+        if (mapping == null)
+            mapping = new ArrayList<OSMapping>();
         
         //OSQueryBuilder qb = new OSQueryBuilder();
         //qb.setTermMapper(termMapper);

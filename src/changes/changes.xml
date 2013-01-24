@@ -6,7 +6,12 @@
   </properties>
   <body>
   	<release version="3.3.0-SNAPSHOT" date="2013-01-??" description="Release InGrid 3.3">
-      <action type="add" dev="wemove" issue="INGRID-2156">
+      <action type="add" dev="wemove" issue="INGRID-2189">
+        If Mapping is active and the mapped parameter is set to '[]' then this parameter will not be mapped
+        but only the value is used. 
+      </action>
+      <action type="fix" dev="wemove" issue="INGRID-2156">
+        Fix problem when heartbeats were not sent anymore.
       </action>
       <action type="add" dev="wemove" issue="INGRID-2150">
         Add java parameter "-Dfile.encoding=UTF8" to start script.
