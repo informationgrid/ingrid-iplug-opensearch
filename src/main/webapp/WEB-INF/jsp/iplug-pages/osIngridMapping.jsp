@@ -120,9 +120,9 @@
                                 <li>Wird die Checkbox "als Parameter hinzufügen" ausgewählt, dann wird das gemappte 
                                 Feld inkl. Wert als Parameter an die Opensearch-Query angehängt. Ansonsten wird 
                                 dieser innerhalb des Suchbegriffs aufgenommen.</li>
-                                <li>Wird im Feld "zu mappen auf" die Zeichenfolge '[]' eingetragen, so wird 
-                                der entsprechende Parametername weggelassen und der Wert dieses Parameters 
-                                als Bestandteil des Suchbegriffs übertragen. Eine InGridQuery 
+                                <li>Wird im Feld "zu mappen auf" die Zeichenfolge '[]' (eckige-Klammer-auf eckige-Klammer-zu) 
+                                eingetragen, so wird der entsprechende Parametername weggelassen und der Wert dieses 
+                                Parameters als Bestandteil des Suchbegriffs übertragen. Eine InGridQuery 
                                 "site:www.uba.de bodenzustand" wird also zu "www.uba.de bodenzustand" umgeformt.</li>
                             </ul>
     						 
