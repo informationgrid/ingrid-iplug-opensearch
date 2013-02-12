@@ -96,6 +96,10 @@ public class OSQueryBuilderTest {
         assertEquals("wasser+www.wemove.com", makeOSQueryFromQuery("wasser site:www.wemove.com", mapping).get(OSQuery.OS_SEARCH_TERMS));
         assertEquals("wasser+bb", makeOSQueryFromQuery("wasser partner:bb", mapping).get(OSQuery.OS_SEARCH_TERMS));
         assertEquals("wasser+you", makeOSQueryFromQuery("wasser provider:you", mapping).get(OSQuery.OS_SEARCH_TERMS));
+        // inactive and other parameters should be ignored
+        partnerMap.setActive(false);
+        assertEquals("wasser", makeOSQueryFromQuery("wasser partner:bb", mapping).get(OSQuery.OS_SEARCH_TERMS));
+        assertEquals("wasser+you", makeOSQueryFromQuery("wasser dummy:ignore provider:you", mapping).get(OSQuery.OS_SEARCH_TERMS));
     }
 
     private final OSQuery makeOSQueryFromQuery(String searchTerms) {

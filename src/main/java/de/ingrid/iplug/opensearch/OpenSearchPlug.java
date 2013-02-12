@@ -215,10 +215,11 @@ public class OpenSearchPlug extends HeartBeatPlug {
 
 		try {
 		    // check if possibly fields are supported by this iPlug
-		    if (!allFieldsSupported(query)) {
+			// DISABLED! See INGRID-2214
+		    /*if (!allFieldsSupported(query)) {
 		        log.warn("Not all fields of this query are supported! Returning zero hits! (query: "+query.toString()+")");
 		        return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
-		    }
+		    }*/
 		    
 			OSQuery osQuery = queryBuilder.createQuery(query, start, length, mapping);
 			

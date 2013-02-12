@@ -22,6 +22,9 @@
       <action type="update" dev="wemove" issue="INGRID-2156">
         Connect to iBus even if the iBus was started after the iPlug.
       </action>
+      <action type="update" dev="wemove" issue="INGRID-2214">
+        Ignore not mapped parameters or those who are inactive, so that only the query term and active mapped parameters are requested.
+      </action>
     </release>
     <release version="3.2.0" date="" description="Release InGrid 3.2">
       <action type="add" issue="">
