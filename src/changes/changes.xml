@@ -5,7 +5,7 @@
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
-  	<release version="3.3.0-SNAPSHOT" date="2013-01-??" description="Release InGrid 3.3">
+  	<release version="3.3.0" date="2013-03-05" description="Release InGrid 3.3">
       <action type="add" dev="wemove" issue="INGRID-2189">
         If Mapping is active and the mapped parameter is set to '[]' then this parameter will not be mapped
         but only the value is used. 
@@ -26,6 +26,7 @@
         Ignore not mapped parameters or those who are inactive, so that only the query term and active mapped parameters are requested.
       </action>
     </release>
+
     <release version="3.2.0" date="" description="Release InGrid 3.2">
       <action type="add" issue="">
         Take also terms of boolean sub queries into account.

@@ -3,12 +3,12 @@
   <parent>
     <groupId>de.ingrid</groupId>
     <artifactId>ingrid-releases-pom</artifactId>
-    <version>3.3.0-SNAPSHOT</version>
+    <version>3.3.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.ingrid</groupId>
   <artifactId>ingrid-iplug-opensearch</artifactId>
-  <version>3.3.0-SNAPSHOT</version>
+  <version>3.3.0-RELEASE-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ingrid-iplug-opensearch:war</name>
   <scm>
