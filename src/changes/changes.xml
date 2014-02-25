@@ -5,6 +5,15 @@
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
+    <release version="3.4.0" date="2014-02-25" description="Release InGrid 3.4.0">
+	  <action type="add" dev="wemove">
+        Add class to extract soil relevant metadata from portalu data space (this is part of the project bodendaten.de)
+      </action>
+	  <action type="add" dev="wemove">
+        Add patch-update strategy to installation routine.
+      </action>
+    </release>
+
   	<release version="3.3.0" date="2013-03-05" description="Release InGrid 3.3">
       <action type="add" dev="wemove" issue="INGRID-2189">
         If Mapping is active and the mapped parameter is set to '[]' then this parameter will not be mapped
