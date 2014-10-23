@@ -16,6 +16,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tngtech.configbuilder.ConfigBuilder;
+
+import de.ingrid.admin.JettyStarter;
 import de.ingrid.iplug.HeartBeatPlug;
 import de.ingrid.iplug.IPlugdescriptionFieldFilter;
 import de.ingrid.iplug.PlugDescriptionFieldFilters;
@@ -99,7 +102,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
     @Autowired
     private IFacetManager facetManager;
     
-
+    public static Configuration conf;
+	
     @Autowired
 	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters, 
 			IMetadataInjector[] injector,
@@ -394,5 +398,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
         this.facetManager = facetManager;
     }
 	
-	
+    public static void main(String[] args) throws Exception {
+        conf = new ConfigBuilder<Configuration>(Configuration.class).withCommandLineArgs(args).build();
+        new JettyStarter( conf );
+    }
 }

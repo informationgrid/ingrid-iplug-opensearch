@@ -74,7 +74,7 @@
                     <tr>
                         <td><form:radiobutton path="osDescriptor" value="descriptor" /> Deskriptor</td>
                         <td>
-                            <form:input path="opensearchDescriptorUrl" />
+                            <div class="input full"><form:input path="opensearchDescriptorUrl" /></div>
                             <form:errors path="opensearchDescriptorUrl" cssClass="error" element="div" />
                             <br />
                             Bitte geben Sie hier die URL des Opensearch-Deskriptors an, die Sie an das InGrid System anschlieﬂen wollen.
@@ -83,7 +83,7 @@
                     <tr>
                         <td><form:radiobutton path="osDescriptor" value="url" /> Url</td>
                         <td>
-                            <form:input path="opensearchUrl" />
+                            <div class="input full"><form:input path="opensearchUrl" /></div>
                             <form:errors path="opensearchUrl" cssClass="error" element="div" />
                             <br />
                             Bitte geben Sie hier die Opensearch URL mit Platzhaltern an, die Sie an das InGrid System anschlieﬂen wollen.
@@ -110,7 +110,7 @@
                     <tr id="rankMul">
                         <td class="leftCol">Adapt. Ranking (Mult.):</td>
                         <td>
-                            <form:input path="rankMultiplier" id="rankMultiplier" />
+                            <div class="input full"><form:input path="rankMultiplier" id="rankMultiplier" /></div>
                             <form:errors path="rankMultiplier" cssClass="error" element="div" />
                             <br />
                             Bitte geben Sie hier den Faktor an, mit dem der ranking score multipliziert werden soll.
@@ -119,7 +119,7 @@
                     <tr id="rankAdd">
                         <td class="leftCol">Adapt. Ranking (Add.):</td>
                         <td>
-                            <form:input path="rankAddition" id="rankAddition" />
+                            <div class="input full"><form:input path="rankAddition" id="rankAddition" /></div>
                             <form:errors path="rankAddition" cssClass="error" element="div" />
                             <br />
                             Bitte geben Sie hier den Faktor an, mit dem der ranking score addiert werden soll.

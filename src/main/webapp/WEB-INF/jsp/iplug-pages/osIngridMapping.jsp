@@ -90,7 +90,7 @@
     				<tr>
     					<td><form:checkbox path="forDomain" id="forDomain" label="Domain" /></td>
     					<td>
-    						<form:input path="mapDomain" />
+    						<div class="input full"><form:input path="mapDomain" /></div>
     						<form:errors path="mapDomain" cssClass="error" element="div" />
     					</td>
     					<td><form:checkbox path="domainAsParam" id="domainAsParam" /></td>
@@ -98,7 +98,7 @@
     				<tr>
     					<td><form:checkbox path="forProvider" id="forProvider" label="Anbieter" /></td>
     					<td>
-    						<form:input path="mapProvider" />
+    						<div class="input full"><form:input path="mapProvider" /></div>
     						<form:errors path="mapProvider" cssClass="error" element="div" />
     					</td>
     					<td><form:checkbox path="providerAsParam" id="providerAsParam" /></td>
@@ -106,7 +106,7 @@
     				<tr>
     					<td><form:checkbox path="forPartner" id="forPartner" label="Partner" /></td>
     					<td>
-    						<form:input path="mapPartner" />
+    						<div class="input full"><form:input path="mapPartner" /></div>
     						<form:errors path="mapPartner" cssClass="error" element="div" />
     					</td>
     					<td><form:checkbox path="partnerAsParam" id="partnerAsParam" /></td>
