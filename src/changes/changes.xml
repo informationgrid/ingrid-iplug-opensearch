@@ -1,12 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  **************************************************-
+  ingrid-iplug-opensearch:war
+  ==================================================
+  Copyright (C) 2014 wemove digital solutions GmbH
+  ==================================================
+  Licensed under the EUPL, Version 1.1 or – as soon they will be
+  approved by the European Commission - subsequent versions of the
+  EUPL (the "Licence");
+
+  You may not use this work except in compliance with the Licence.
+  You may obtain a copy of the Licence at:
+
+  http://ec.europa.eu/idabc/eupl5
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the Licence is distributed on an "AS IS" basis,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the Licence for the specific language governing permissions and
+  limitations under the Licence.
+  **************************************************#
+  -->
+
 <document>
   <properties>
     <title>History Ingrid OpenSearch iPlug</title>
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
+    <release version="3.5-SNAPSHOT" date="2014-xx-xx" description="Release InGrid 3.5">
+        <action type="add" dev="wemove" issue="REDMINE-524">
+            Added license header to all source files for Open Source migration.
+        </action>
+    </release>
     <release version="3.4.0" date="2014-02-25" description="Release InGrid 3.4.0">
-	  <action type="add" dev="wemove">
+	    <action type="add" dev="wemove">
         Add class to extract soil relevant metadata from portalu data space (this is part of the project bodendaten.de)
       </action>
 	  <action type="add" dev="wemove">
@@ -17,7 +45,7 @@
   	<release version="3.3.0" date="2013-03-05" description="Release InGrid 3.3">
       <action type="add" dev="wemove" issue="INGRID-2189">
         If Mapping is active and the mapped parameter is set to '[]' then this parameter will not be mapped
-        but only the value is used. 
+        but only the value is used.
       </action>
       <action type="fix" dev="wemove" issue="INGRID-2156">
         Fix problem when heartbeats were not sent anymore.
@@ -54,7 +82,7 @@
       </action>
       <action type="update" dev="wemove" issue="INGRID-1885">
         Updated start.sh, which had an issue when being batch-invoked, deleted RSYNC which is no longer used, see https://dev.wemove.com/jira/browse/INGRID-1885
-      </action>	  
+      </action>
     </release>
     <release version="3.1.0.1" date="" description="Bugfix Release InGrid 3.1">
       <action type="fix" issue="INGRID-2010">
@@ -81,7 +109,7 @@
 
     <release version="3.0.1" date="2011-07-04" description="Add-Ons + Bugfixes for InGrid 3.0">
       <action type="update" issue="INGRID-1940">
-        Introduced new field "metainfo" in query for various control info to be handled by iBus / iPlugs. 
+        Introduced new field "metainfo" in query for various control info to be handled by iBus / iPlugs.
       </action>
     </release>
 
@@ -90,7 +118,7 @@
         Minor fixes during administration.
       </action>
     </release>
-		
+
     <release version="2.3.1" date="2011-01-25" description="Update dependencies Release">
       <action type="fix" dev="wemove">
         Fix start script for running on Ubuntu.

@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  **************************************************-
+  ingrid-iplug-opensearch:war
+  ==================================================
+  Copyright (C) 2014 wemove digital solutions GmbH
+  ==================================================
+  Licensed under the EUPL, Version 1.1 or – as soon they will be
+  approved by the European Commission - subsequent versions of the
+  EUPL (the "Licence");
+  
+  You may not use this work except in compliance with the Licence.
+  You may obtain a copy of the Licence at:
+  
+  http://ec.europa.eu/idabc/eupl5
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the Licence is distributed on an "AS IS" basis,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the Licence for the specific language governing permissions and
+  limitations under the Licence.
+  **************************************************#
+  -->
+
 <rss xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:relevance="http://a9.com/-/opensearch/extensions/relevance/1.0/" version="2.0"><channel><title>ingrid OpenSearch: wasser</title><link>http://harrison.its-technidata.de:80/opensearchserver/query?q=wasser</link><description>Search results</description><opensearch:totalResults>129</opensearch:totalResults><opensearch:startIndex>1</opensearch:startIndex><opensearch:itemsPerPage>10</opensearch:itemsPerPage><opensearch:Query role="request" searchTerms="wasser"/><item><title>Das Document Retrieval System (DRS) des Zentralen Fachdienst Wasser, Boden, Abfall, Altlasten (ZFD)</title><link>http://harrison.its-technidata.de/ingrid-portal/portal/search-detail.psml?plugid=/torwald-group:torwald-iplug-udk-db_igc_test&amp;docuuid=5A55FC96-A468-4CE5-BD4D-F39C475CFFD9</link><description>Das DRSWeb bietet als Volltextdatenbank unter einer einheitlichen benutzerfreundlichen Oberfläche schnellen und komfortablen Zugriff auf die Dokumente der ehemaligen Lose-Blatt-Sammlung des ZFD sowie weiterer Datenbestände. Diese Sammlung beinhaltet folgende 5 Handbücher: "Altlasten und Grundwasserschadensfälle" (ALG); "Recht, Organisation, Verwaltung" (ROV); "Oberirdische Gewässer, Gewässerökologie" (Wasser 2); "Abwasser" (Wasser 4) und "Industrie und Gewerbe" (Wasser 5). 
 
 In erster Linie wird das Handbuch "Recht, Organisation, Verwaltung" (ROV) mit Gesetzen, Verordnungen und allgemein gültigen Erlassen, die in der Umweltverwaltung zu beachten sind, gepflegt und laufend mit neuen Dokumenten erweitert. Eine wichtige Funktion des DRS besteht insbesondere bei den gesetzlichen  Vorschriften darin, dass nicht nur die derzeit gültige Fassung in der Datenbank gehalten wird. Auch bei allen Änderungen werden jeweils die Änderungen in den Text eingefügt, sodass für alle Zeitpunkte jeweils eine vollständige Fassung zur Verfügung steht.</description><relevance:score>0.041850243</relevance:score></item><item><title>Geogene Grundwasserbeschaffenheit</title><link>http://harrison.its-technidata.de/ingrid-portal/portal/search-detail.psml?plugid=/torwald-group:torwald-iplug-udk-db_igc_test&amp;docuuid=C2F9056B-6A3A-11D2-9A1C-006008649C7A</link><description>Die Grundwasserbeschaffenheit wird von einer größeren Anzahl von Faktoren beeinflusst, so u.a. von der Beschaffenheit von Niederschlag und Uferfiltrat, der Zusammensetzung des Kontaktgesteins, der Verweilzeit des Wassers im Untergrund, der Temperatur im Untergrund, der anthropogenen Einträge und der Mischungsprozesse. 
