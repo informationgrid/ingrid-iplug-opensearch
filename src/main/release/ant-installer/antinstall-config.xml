@@ -11,7 +11,7 @@
             defaultImageResource="/resources/makewavesdawn.png"
             minJavaVersion      ="1.6"
             version             ="1.0">
-            
+
     <!--  The target "extract" must be called first, so it is defined on the first page -->
     <page
             type        ="input"
@@ -49,9 +49,10 @@
             ifTarget    ="setInstallProperty"
             type        ="input"
             name        ="componentOptions"
-            displayText ="Einstellungen fuer das iPlug-OpenSearch">
-            
-            <comment displayText="" explanatoryText="Lokaler Port, unter dem die Administrationsoberfläche des Opensearch-iPlugs erreichbar sein soll."/>           
+            displayText ="Einstellungen fuer das iPlug-OpenSearch"
+            target      ="adminPort">
+
+            <comment displayText="" explanatoryText="Lokaler Port, unter dem die Administrationsoberfläche des Opensearch-iPlugs erreichbar sein soll."/>
             <text property="localServerPort" displayText="Port für Adminoberfläche:" defaultValue="9667"/>
     </page>
 
