@@ -33,9 +33,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import de.ingrid.admin.command.PlugdescriptionCommandObject;
 import de.ingrid.admin.controller.AbstractController;
+import de.ingrid.iplug.opensearch.Configuration;
+import de.ingrid.iplug.opensearch.OpenSearchPlug;
 import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
 import de.ingrid.iplug.opensearch.webapp.validation.OSValidator;
-import de.ingrid.utils.PlugDescription;
 import de.ingrid.utils.query.IngridQuery;
 import de.ingrid.utils.tool.PlugDescriptionUtil;
 import de.ingrid.utils.tool.QueryUtil;
@@ -91,41 +92,32 @@ public class OSParametersController extends AbstractController {
         boolean isOff  = pdCommandObject.getBoolean("forceAddRankingOff");
         boolean isDate = pdCommandObject.containsRankingType("date");
         
+        Configuration conf = OpenSearchPlug.conf;
+        
         // write Ranking-information after list got emptied
         if (pdCommandObject.getArrayList(IngridQuery.RANKED) != null )
             pdCommandObject.getArrayList(IngridQuery.RANKED).clear();
     	
     	if (commandObject.getRankSupport()) {
     		pdCommandObject.setRankinTypes(true,  isDate, isOff);
-    		pdCommandObject.put("rankingMul", commandObject.getRankMultiplier());
-            pdCommandObject.put("rankingAdd", commandObject.getRankAddition());
+    		conf.rankingMul = commandObject.getRankMultiplier();
+            conf.rankingAdd = commandObject.getRankAddition();
     	} else if (!isDate && !isOff) {
     	    // there must be at least one "true" value!
     	    pdCommandObject.setRankinTypes(false, false, true);
         } else {
-    		pdCommandObject.setRankinTypes(false, isDate, isOff);
+            pdCommandObject.setRankinTypes(false, isDate, isOff);
     	}
     	
     	// write information if Descriptor is used
     	if (commandObject.getOsDescriptor() != null && commandObject.getOsDescriptor().equals("descriptor")) { //useDescriptor.equals("descriptor")) {
-    		pdCommandObject.putBoolean("useDescriptor", true);
-    		pdCommandObject.put("serviceUrl", commandObject.getOpensearchDescriptorUrl());
+    	    conf.useDescriptor = true;
+    	    conf.serviceUrl = commandObject.getOpensearchDescriptorUrl();
     	} else {
-    		pdCommandObject.putBoolean("useDescriptor", false);
-    		pdCommandObject.put("serviceUrl", commandObject.getOpensearchUrl());
+    	    conf.useDescriptor = false;
+    	    conf.serviceUrl = commandObject.getOpensearchUrl();
     	}
     	
-    	// add necessary fields so iBus actually will query us
-    	// remove field first to prevent multiple equal entries
-    	// add field indicating query of SNS metadata, no impact on query
-    	PlugDescriptionUtil.addFieldToPlugDescription(pdCommandObject, "incl_meta");
-    	
-    	// we also can process metainfo field ! so indicate this !
-    	// add "metainfo" field, so plug won't be filtered when field is part of query !
-    	PlugDescriptionUtil.addFieldToPlugDescription(pdCommandObject, QueryUtil.FIELDNAME_METAINFO);
-
-    	// add datatype opensearch to PD
-    	pdCommandObject.addDataType("opensearch");
 	}
 
 	private void mapParamsFromPD(OpensearchConfig osConfig, PlugdescriptionCommandObject pdObject) {
