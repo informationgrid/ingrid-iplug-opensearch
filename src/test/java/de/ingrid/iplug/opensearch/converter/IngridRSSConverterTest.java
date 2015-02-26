@@ -40,7 +40,7 @@ public class IngridRSSConverterTest extends TestCase {
 	private final String XML_INPUT_FILE = "response_example2.xml";
 	
 	public final void testProcessResult() {
-		IngridRSSConverter converter = new IngridRSSConverter();
+		// IngridRSSConverter converter = new IngridRSSConverter();
 		
 		try {
 			Resource resource = new ClassPathResource(XML_INPUT_FILE);
@@ -55,7 +55,7 @@ public class IngridRSSConverterTest extends TestCase {
 	}
 
 	public final void testProcessResultLive() {
-        IngridRSSConverter converter = new IngridRSSConverter();
+        // IngridRSSConverter converter = new IngridRSSConverter();
         
         try {
 

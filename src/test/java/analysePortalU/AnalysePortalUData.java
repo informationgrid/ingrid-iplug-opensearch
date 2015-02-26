@@ -183,6 +183,7 @@ public class AnalysePortalUData {
         PrintWriter out = new PrintWriter("result.csv");
         out.write(sw.toString());
         out.close();
+        in.close();
         
         System.out.println("Done.");
     }

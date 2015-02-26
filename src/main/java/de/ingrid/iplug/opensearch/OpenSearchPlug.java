@@ -53,7 +53,6 @@ import de.ingrid.iplug.opensearch.query.OSDescriptorBuilder;
 import de.ingrid.iplug.opensearch.query.OSQuery;
 import de.ingrid.iplug.opensearch.query.OSQueryBuilder;
 import de.ingrid.iplug.opensearch.query.OSRequest;
-import de.ingrid.iplug.opensearch.tools.QueryUtils;
 import de.ingrid.search.utils.facet.FacetManager;
 import de.ingrid.search.utils.facet.IFacetManager;
 import de.ingrid.utils.IngridHit;
@@ -190,11 +189,10 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			
 			log.info("iPlug initialized; waiting for incoming queries.");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
-			log.error("Error reading PlugDescription: " + e.getMessage());
-			//e.printStackTrace();
+			log.error("Error reading PlugDescription: " + e);
+			e.printStackTrace();
 		}
 	}
 	
@@ -281,7 +279,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	 * @param query
 	 * @return true if all fields in query are supported 
 	 */
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
     private boolean allFieldsSupported(IngridQuery query) {
 	    // mapping might not be set in PlugDescription! 
 	    if (fPlugDesc.get("mapping") == null || fPlugDesc.get("mappingSupport") == null) {
@@ -319,7 +317,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	        }
 	    }
         return true;
-    }
+    }*/
 	
 
     /**

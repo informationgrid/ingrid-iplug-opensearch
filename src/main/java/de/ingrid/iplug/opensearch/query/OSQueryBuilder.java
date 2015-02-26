@@ -33,7 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import de.ingrid.iplug.opensearch.model.OSMapping;
 import de.ingrid.utils.IngridQueryTools;
-import de.ingrid.utils.query.FieldQuery;
 import de.ingrid.utils.query.IngridQuery;
 import de.ingrid.utils.query.TermQuery;
 
@@ -192,14 +191,14 @@ public class OSQueryBuilder {
 	 * @param field
 	 * @return
 	 */
-    private boolean fieldNotExcluded(FieldQuery field) {
+    /*private boolean fieldNotExcluded(FieldQuery field) {
         String fieldName = field.getFieldName();
         if (fieldName.equals("incl_meta"))
             return false;
         
         // return true if field must not be excluded
         return true;
-    }
+    }*/
 
    
     @Autowired

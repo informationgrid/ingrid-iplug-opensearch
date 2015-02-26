@@ -116,7 +116,7 @@ public class OSDescriptorBuilder {
 	 * @param type
 	 * @return
 	 */
-	private boolean nodeListContainsType(NodeList nodeList, String type) {
+	/*private boolean nodeListContainsType(NodeList nodeList, String type) {
 		
 		for (int i=0; i<nodeList.getLength(); i++) {
 			if (nodeList.item(i).getTextContent().equals(type)) {
@@ -124,18 +124,18 @@ public class OSDescriptorBuilder {
 			}
 		}
 		return false;
-	}
+	}*/
 	
 	/**
 	 * Print all the types offered in this document.
 	 * @param nodeList
 	 * @return
 	 */
-	private String printTypes(NodeList nodeList) {
+	/*private String printTypes(NodeList nodeList) {
 		String result = "";
 		for (int i=0; i<nodeList.getLength(); i++) {
 			result += nodeList.item(i).getTextContent() +"\n";
 		}
 		return result;
-	}
+	}*/
 }
