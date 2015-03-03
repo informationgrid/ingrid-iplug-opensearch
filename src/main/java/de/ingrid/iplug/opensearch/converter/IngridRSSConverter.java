@@ -37,7 +37,6 @@ import javax.xml.xpath.XPathFactory;
 
 import net.sf.ehcache.Element;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;

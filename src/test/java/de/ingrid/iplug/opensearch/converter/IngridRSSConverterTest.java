@@ -27,16 +27,12 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import de.ingrid.utils.IngridHits;
 
 public class IngridRSSConverterTest extends TestCase {
-
-    private static Log log = LogFactory.getLog(IngridRSSConverterTest.class);
 
     private final String XML_INPUT_FILE = "response_example2.xml";
     private final String XML_INPUT_FILE_EUROPEANA = "response_europeana.xml";
