@@ -22,64 +22,55 @@
  */
 package de.ingrid.iplug.opensearch.converter;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import de.ingrid.iplug.opensearch.communication.OSCommunication;
-import de.ingrid.iplug.opensearch.query.OSDescriptor;
-import de.ingrid.iplug.opensearch.query.OSDescriptorBuilder;
+import de.ingrid.utils.IngridHits;
 
 public class IngridRSSConverterTest extends TestCase {
 
-	private final String XML_INPUT_FILE = "response_example2.xml";
-	
-	public final void testProcessResult() {
-		// IngridRSSConverter converter = new IngridRSSConverter();
-		
-		try {
-			Resource resource = new ClassPathResource(XML_INPUT_FILE);
-			//converter.processResult("plugId", resource.getInputStream());
+    private static Log log = LogFactory.getLog(IngridRSSConverterTest.class);
 
-		} catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-		
-		//fail("Not yet implemented"); // TODO
-	}
+    private final String XML_INPUT_FILE = "response_example2.xml";
+    private final String XML_INPUT_FILE_EUROPEANA = "response_europeana.xml";
 
-	public final void testProcessResultLive() {
-        // IngridRSSConverter converter = new IngridRSSConverter();
-        
-        try {
+    IngridRSSConverter ingridConverter = new IngridRSSConverter();
 
-            OSDescriptorBuilder descrBuilder = new OSDescriptorBuilder();
-            OSDescriptor osDescriptor = descrBuilder.createDescriptor("http://harrison.its-technidata.de/opensearchserver/descriptor", true);
-            
-            //ConverterFactory converterFactory = new ConverterFactory();
-            IngridRSSConverter ingridConverter = new IngridRSSConverter();
-            
-            OSCommunication comm = new OSCommunication();
-            InputStream result = comm.sendRequest("http://harrison.its-technidata.de:80/opensearchserver/query?q=Wasser&p=0&h=10&georss=1&format=rss");
-            ingridConverter.processResult("bla", result, null);
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        //fail("Not yet implemented"); // TODO
+    @Override
+    protected void setUp() throws Exception {
+        List<RankingModifier> l = new ArrayList<RankingModifier>();
+        l.add(new RankingModifierFromPD());
+        ingridConverter.setRankingModifiers(l);
+        super.setUp();
     }
-	
+
+    public final void testProcessResult() {
+        try {
+            Resource resource = new ClassPathResource(XML_INPUT_FILE);
+            IngridHits hits = ingridConverter.processResult("bla", resource.getInputStream(), null);
+            assertTrue(hits.getHits().length > 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Test failed.");
+        }
+    }
+
+    public final void testProcessResultFromEuropeana() {
+        try {
+            Resource resource = new ClassPathResource(XML_INPUT_FILE_EUROPEANA);
+            IngridHits hits = ingridConverter.processResult("bla", resource.getInputStream(), null);
+            assertTrue(hits.getHits().length > 0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Test failed.");
+        }
+    }
 }

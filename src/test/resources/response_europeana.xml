@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rss xmlns:enrichment="http://www.europeana.eu/schemas/ese/enrichment/" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:europeana="http://www.europeana.eu" xmlns:georss="http://www.georss.org/georss" xmlns:fieldtrip="http://www.fieldtripper.com/fieldtrip_rss" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>Europeana Open Search</title>
+    <link>http://www.europeana.eu</link>
+    <description>Europeana Open Search results</description>
+    <opensearch:totalResults>25303</opensearch:totalResults>
+    <opensearch:startIndex>1</opensearch:startIndex>
+    <opensearch:itemsPerPage>12</opensearch:itemsPerPage>
+    <atom:link href="" rel="search" type="application/rss+xml"/>
+    <opensearch:Query role="request" searchTerms="wasser" startPage="1"/>
+    <image>
+      <title>Europeana Open Search</title>
+      <link>http://www.europeana.eu</link>
+      <url>http://www.europeana.eu/portal/sp/img/europeana-logo-en.png</url>
+    </image>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08501/E0ABE3DA28DAF4DA97242AE7ED83E5A5FFED5292.html</guid>
+      <title>Das Element Wasser</title>
+      <link>http://www.europeana.eu/portal/record/08501/E0ABE3DA28DAF4DA97242AE7ED83E5A5FFED5292.html</link>
+      <description>Castelli, Carlo Ludovico [Herstellung]; Athena</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08536/object_bam_library_bsz_volkslied_316045543_html.html</guid>
+      <title>Von dem Berg da fließt ein Wasser, Wasser, kühles Wasser, kühler Wein</title>
+      <link>http://www.europeana.eu/portal/record/08536/object_bam_library_bsz_volkslied_316045543_html.html</link>
+      <description>Athena</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08501/ADC12BEA22C43BDF002AB99BC266C2A87AC0B9E5.html</guid>
+      <title>Das Element Wasser</title>
+      <link>http://www.europeana.eu/portal/record/08501/ADC12BEA22C43BDF002AB99BC266C2A87AC0B9E5.html</link>
+      <description>Castelli, Carlo Ludovico [Herstellung]; Athena</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08603/efg_censorshipcards_01993_FAA_CEN_070637_P1_pdf.html</guid>
+      <title>Am Wasser, am Wasser...</title>
+      <link>http://www.europeana.eu/portal/record/08603/efg_censorshipcards_01993_FAA_CEN_070637_P1_pdf.html</link>
+      <description>EFG - The European Film Gateway</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/2022039/11088_de_bo133_7784.html</guid>
+      <title>Balken im Wasser</title>
+      <link>http://www.europeana.eu/portal/record/2022039/11088_de_bo133_7784.html</link>
+      <description>1957; HOPE - Heritage of the People's Europe</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08604/7B9771EC26EBFA432F85ED70F0A972E523B7CBA7.html</guid>
+      <title>Stille Wasser</title>
+      <link>http://www.europeana.eu/portal/record/08604/7B9771EC26EBFA432F85ED70F0A972E523B7CBA7.html</link>
+      <description>EFG - The European Film Gateway</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08604/AE3C15D6A6AF4595DB6D90B6C2FEA4485AA7679C.html</guid>
+      <title>Stille Wasser</title>
+      <link>http://www.europeana.eu/portal/record/08604/AE3C15D6A6AF4595DB6D90B6C2FEA4485AA7679C.html</link>
+      <description>EFG - The European Film Gateway</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08604/3A3DCD0ED2F2F9A8121EEF79DC56CC88163013D6.html</guid>
+      <title>Stille Wasser</title>
+      <link>http://www.europeana.eu/portal/record/08604/3A3DCD0ED2F2F9A8121EEF79DC56CC88163013D6.html</link>
+      <description>EFG - The European Film Gateway</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08604/A95B62D230DB6341B6F1B28D8581AD062BD7491D.html</guid>
+      <title>Stille Wasser</title>
+      <link>http://www.europeana.eu/portal/record/08604/A95B62D230DB6341B6F1B28D8581AD062BD7491D.html</link>
+      <description>EFG - The European Film Gateway</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08604/1A1B6CD44C934EAA69BBF29E803187EF913336CA.html</guid>
+      <title>Stille Wasser</title>
+      <link>http://www.europeana.eu/portal/record/08604/1A1B6CD44C934EAA69BBF29E803187EF913336CA.html</link>
+      <description>EFG - The European Film Gateway</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/2051904/data_euscreenXL_1008665.html</guid>
+      <title>Knochenjob Industrietaucher - Schweißen unter Wasser</title>
+      <link>http://www.europeana.eu/portal/record/2051904/data_euscreenXL_1008665.html</link>
+      <description>EUscreenXL</description>
+    </item>
+    <item>
+      <guid>http://www.europeana.eu/portal/record/08604/4B85381AE9B662FE408127837482C33894527648.html</guid>
+      <title>Filmplakat "Wasser für Canitoga"</title>
+      <link>http://www.europeana.eu/portal/record/08604/4B85381AE9B662FE408127837482C33894527648.html</link>
+      <description>EFG - The European Film Gateway</description>
+    </item>
+  </channel>
+</rss>
