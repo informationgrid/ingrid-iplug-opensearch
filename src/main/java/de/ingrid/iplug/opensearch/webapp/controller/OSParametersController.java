@@ -38,8 +38,6 @@ import de.ingrid.iplug.opensearch.OpenSearchPlug;
 import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
 import de.ingrid.iplug.opensearch.webapp.validation.OSValidator;
 import de.ingrid.utils.query.IngridQuery;
-import de.ingrid.utils.tool.PlugDescriptionUtil;
-import de.ingrid.utils.tool.QueryUtil;
 
 /**
  * Control the page of Opensearch-specific parameters of the webapp.
@@ -121,18 +119,19 @@ public class OSParametersController extends AbstractController {
 	}
 
 	private void mapParamsFromPD(OpensearchConfig osConfig, PlugdescriptionCommandObject pdObject) {
+	    Configuration conf = OpenSearchPlug.conf;
     	osConfig.setRankSupport(rankSupported("score", pdObject.getRankingTypes()));
 		
-		if (pdObject.containsKey("useDescriptor") && pdObject.getBoolean("useDescriptor")) {
+		if (conf.useDescriptor) {
 			osConfig.setOsDescriptor("descriptor");
-			osConfig.setOpensearchDescriptorUrl((String)pdObject.get("serviceUrl"));
-		} else if (pdObject.containsKey("useDescriptor")) {
+			osConfig.setOpensearchDescriptorUrl(conf.serviceUrl);
+		} else {
 			osConfig.setOsDescriptor("url");
-			osConfig.setOpensearchUrl((String)pdObject.get("serviceUrl"));
+			osConfig.setOpensearchUrl(conf.serviceUrl);
 		}
 		
-		osConfig.setRankAddition((String)pdObject.get("rankingAdd"));
-		osConfig.setRankMultiplier((String)pdObject.get("rankingMul"));
+		osConfig.setRankAddition(conf.rankingAdd);
+		osConfig.setRankMultiplier(conf.rankingMul);
 	}
     
 	public boolean rankSupported(String rankType, String[] types) {
