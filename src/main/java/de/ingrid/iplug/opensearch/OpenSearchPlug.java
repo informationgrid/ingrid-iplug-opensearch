@@ -87,11 +87,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	private PlugDescription fPlugDesc 	= null;
 
 	/**
-	 * Workingdirectory of the iPlug instance as absolute path
-	 */
-	private String fWorkingDir 			= ".";
-
-	/**
 	 * Does this iPlug return ranked hits?
 	 */
 	private boolean fIsRanked 			= false;
@@ -149,6 +144,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		super.configure(plugDescription);
 		log.info("Configuring OpenSearch-iPlug...");		
 		this.fPlugDesc = plugDescription;
+		Configuration conf = OpenSearchPlug.conf;
 		
 		try {
 		
@@ -159,9 +155,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			}
 				
 			this.fPlugID = fPlugDesc.getPlugId();
-			this.fWorkingDir = fPlugDesc.getWorkinDirectory().getCanonicalPath();
-			this.fUseDescriptor  = (boolean) fPlugDesc.getBoolean("useDescriptor");
-			this.fServiceURL = (String) fPlugDesc.get("serviceUrl");
+			this.fUseDescriptor  = conf.useDescriptor;
+			this.fServiceURL = conf.serviceUrl;
 			
 			mapping = (List<OSMapping>) fPlugDesc.get("mapping");
 			
@@ -173,7 +168,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			// Write logging information...
 	
 			log.info("  - Plug-ID: " + fPlugID);
-			log.info("  - Working directory: " + fWorkingDir);
 			log.info("  - SOAP-Service URL: " + fServiceURL);
 				
 			log.info("Receiving OpenSearch-Descriptor ... using one: " + fUseDescriptor);
@@ -191,7 +185,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-			log.error("Error reading PlugDescription: " + e);
+			log.error("Error reading Descriptor: " + e);
 			e.printStackTrace();
 		}
 	}
