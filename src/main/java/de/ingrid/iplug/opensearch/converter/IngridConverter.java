@@ -38,5 +38,5 @@ public interface IngridConverter {
 	
 	public void setRankingModifiers(List<RankingModifier> normalizers);
 	
-	public IngridHitDetail getHitDetailFromCache(int docId);
+	public IngridHitDetail getHitDetailFromCache(String docId);
 }

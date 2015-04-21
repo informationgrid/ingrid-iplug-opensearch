@@ -105,7 +105,7 @@ public abstract class IngridDefaultConverter implements IngridConverter{
 	 * Return a IngridHitDetail by using the temporary docId, which was
 	 * created during the last fetch of the results.
 	 */
-	public IngridHitDetail getHitDetailFromCache(int docId) {
+	public IngridHitDetail getHitDetailFromCache(String docId) {
 		Element element = cache.get(docId);
 		if (element != null) {
 			return (IngridHitDetail)element.getValue();	

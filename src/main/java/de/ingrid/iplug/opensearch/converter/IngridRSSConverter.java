@@ -35,8 +35,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import net.sf.ehcache.Element;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
@@ -48,6 +46,7 @@ import de.ingrid.utils.IngridHit;
 import de.ingrid.utils.IngridHitDetail;
 import de.ingrid.utils.IngridHits;
 import de.ingrid.utils.query.IngridQuery;
+import net.sf.ehcache.Element;
 
 /**
  * This class converts the response of an OpenSearch-Interface which is an
@@ -128,7 +127,7 @@ public class IngridRSSConverter extends IngridDefaultConverter {
         IngridHit[] hits = new IngridHit[nodes.getLength()];
 
         for (int i = 0; i < nodes.getLength(); i++) {
-            IngridHit hit = new IngridHit(plugId, 0, 0, (float) 1.0);
+            IngridHit hit = new IngridHit(plugId, "0", 0, (float) 1.0);
             Node node = nodes.item(i);
             hit.put("title", getTitle(node));
             hit.put("url", getLink(node));
@@ -270,13 +269,13 @@ public class IngridRSSConverter extends IngridDefaultConverter {
      * @return
      * @throws XPathExpressionException
      */
-    private int getDocumentId(Node item) throws XPathExpressionException {
+    private String getDocumentId(Node item) throws XPathExpressionException {
         XPath xpath = XPathFactory.newInstance().newXPath();
         Node node = (Node) xpath.evaluate("docid", item, XPathConstants.NODE);
         if (node == null) {
-            return customDocId++;
+            return String.valueOf( customDocId++ );
         } else {
-            return Integer.valueOf(node.getTextContent());
+            return node.getTextContent();
         }
     }
 

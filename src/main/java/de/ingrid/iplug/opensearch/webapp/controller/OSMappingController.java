@@ -141,7 +141,7 @@ public class OSMappingController extends AbstractController {
     private void mapConfigFromPD(MappingConfig mapConfig,
             PlugdescriptionCommandObject commandObject) {
         
-        List<OSMapping> mappings = (List<OSMapping>)commandObject.getArrayList("mapping");
+        List<OSMapping> mappings = (List<OSMapping>)(List<?>)commandObject.getArrayList("mapping");
         
         if (mappings == null) return;
         
