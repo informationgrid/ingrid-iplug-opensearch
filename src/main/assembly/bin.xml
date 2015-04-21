@@ -57,6 +57,8 @@
       <unpack>false</unpack>
       <scope>runtime</scope>
       <excludes>
+        <exclude>org.elasticsearch:elasticsearch</exclude>
+        <exclude>org.apache.lucene</exclude>
         <exclude>de.ingrid:ingrid-base-webapp:zip:res</exclude>
       </excludes>
     </dependencySet>

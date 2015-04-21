@@ -80,6 +80,12 @@
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
       <version>3.6.0-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.elasticsearch</groupId>
+          <artifactId>elasticsearch</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>de.ingrid</groupId>
