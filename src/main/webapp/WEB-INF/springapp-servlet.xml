@@ -41,9 +41,9 @@
         XMLconfiguredIndexWrapper into IngridIndexSearcher constructor, so it
         can be updated in the configure phase.
     -->
-    <bean id="indexWrapper" class="de.ingrid.search.utils.LuceneIndexReaderWrapper">
+    <!-- <bean id="indexWrapper" class="de.ingrid.search.utils.LuceneIndexReaderWrapper">
         <qualifier value="XMLconfiguredIndexWrapper" />
-    </bean>
+    </bean> -->
 
 
     <!-- Single parsers are injected explicitly (but created via annotation mechanism) -->
