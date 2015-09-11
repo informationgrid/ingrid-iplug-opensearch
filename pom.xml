@@ -3,12 +3,12 @@
   <parent>
     <groupId>de.ingrid</groupId>
     <artifactId>ingrid-releases-pom</artifactId>
-    <version>3.6.0</version>
+    <version>3.6.0.3</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.ingrid</groupId>
   <artifactId>ingrid-iplug-opensearch</artifactId>
-  <version>3.6.1-SNAPSHOT</version>
+  <version>3.6.0.3</version>
   <packaging>jar</packaging>
   <name>InGrid iPlug-Opensearch</name>
   <scm>
@@ -79,7 +79,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>3.6.0</version>
+      <version>3.6.0.3</version>
       <exclusions>
         <exclusion>
           <groupId>org.elasticsearch</groupId>
@@ -90,7 +90,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>3.6.0</version>
+      <version>3.6.0.3</version>
       <classifier>res</classifier>
       <type>zip</type>
       <exclusions>
@@ -237,6 +237,15 @@
                 <directory>target/base-webapp</directory>
             </resource>
           </webResources>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>external.atlassian.jgitflow</groupId>
+        <artifactId>jgitflow-maven-plugin</artifactId>
+        <version>1.0-m5.1</version>
+        <configuration>
+          <defaultOriginUrl>https://github.com/informationgrid/ingrid-iplug-opensearch</defaultOriginUrl>
+          <noDeploy>true</noDeploy>
         </configuration>
       </plugin>
     </plugins>
