@@ -28,6 +28,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.ingrid.iplug.opensearch.OpenSearchPlug;
 import de.ingrid.iplug.opensearch.model.OSMapping;
 import de.ingrid.iplug.opensearch.tools.QueryUtils;
 import de.ingrid.iplug.opensearch.tools.StringUtils;
@@ -77,6 +78,9 @@ public class OSRequest {
     public static String addMappedParameters(String term, IngridQuery ingridQuery,
             List<OSMapping> mapping, boolean asParam) {
 
+        // do not map if it was deactivated
+        if (!OpenSearchPlug.conf.mappingSupport) return term;
+        
         String connector  = "+";
         String definition = ":";
         if (asParam) {

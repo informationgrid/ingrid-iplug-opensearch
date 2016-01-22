@@ -22,6 +22,7 @@
  */
 package de.ingrid.iplug.opensearch.webapp.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.thoughtworks.xstream.XStream;
+
 import de.ingrid.admin.command.PlugdescriptionCommandObject;
 import de.ingrid.admin.controller.AbstractController;
+import de.ingrid.iplug.opensearch.Configuration;
+import de.ingrid.iplug.opensearch.OpenSearchPlug;
 import de.ingrid.iplug.opensearch.model.OSMapping;
 import de.ingrid.iplug.opensearch.model.OSMapping.IngridFieldType;
 import de.ingrid.iplug.opensearch.webapp.object.MappingConfig;
+import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
 import de.ingrid.iplug.opensearch.webapp.validation.OSMappingValidator;
 import de.ingrid.utils.PlugDescription;
 import de.ingrid.utils.tool.PlugDescriptionUtil;
@@ -89,25 +95,27 @@ public class OSMappingController extends AbstractController {
 
     private void mapConfigToPD(MappingConfig commandObject,
             PlugdescriptionCommandObject pdCommandObject) {
-        pdCommandObject.remove("mapping");
+        Configuration conf = OpenSearchPlug.conf;
+        XStream xstream = new XStream();
+        List<Object> osMappings = new ArrayList<Object>();
         
         // add mapping-support
-        pdCommandObject.putBoolean("mappingSupport", commandObject.isUseMapping());
+        conf.mappingSupport = commandObject.isUseMapping();
         
         OSMapping mapping = new OSMapping();
         mapping.setType(IngridFieldType.DOMAIN);
         mapping.setActive(commandObject.isForDomain());
         mapping.setMapping(commandObject.getMapDomain());
         mapping.setAsParam(commandObject.isDomainAsParam());        
-        pdCommandObject.addToList("mapping", mapping);
+        osMappings.add( mapping );
         
         if (commandObject.isForDomain() && commandObject.isUseMapping()) {
-            pdCommandObject.put("domainGroupingSupport", true);
+            conf.domainGroupingSupport = true;
             // remove and add site-field
             pdCommandObject.removeFromList(PlugDescription.FIELDS, "site");
             pdCommandObject.addField("site");
         } else {
-            pdCommandObject.put("domainGroupingSupport", false);
+            conf.domainGroupingSupport = false;
             pdCommandObject.removeFromList(PlugDescription.FIELDS, "site");
         }
         
@@ -116,7 +124,7 @@ public class OSMappingController extends AbstractController {
         mapping.setActive(commandObject.isForProvider());
         mapping.setMapping(commandObject.getMapProvider());
         mapping.setAsParam(commandObject.isProviderAsParam());        
-        pdCommandObject.addToList("mapping", mapping);
+        osMappings.add( mapping );
         if (commandObject.isForProvider() && commandObject.isUseMapping()) {
             PlugDescriptionUtil.addFieldToPlugDescription(pdCommandObject, "provider");
         } else {
@@ -129,19 +137,22 @@ public class OSMappingController extends AbstractController {
         mapping.setActive(commandObject.isForPartner());
         mapping.setMapping(commandObject.getMapPartner());
         mapping.setAsParam(commandObject.isPartnerAsParam());        
-        pdCommandObject.addToList("mapping", mapping);
+        osMappings.add( mapping );
         if (commandObject.isForPartner() && commandObject.isUseMapping()) {
             PlugDescriptionUtil.addFieldToPlugDescription(pdCommandObject, "partner");
         } else {
             pdCommandObject.removeFromList(PlugDescription.FIELDS, "partner");
         }
+        
+        conf.mapping = xstream.toXML( osMappings );
     }
 
     @SuppressWarnings("unchecked")
     private void mapConfigFromPD(MappingConfig mapConfig,
             PlugdescriptionCommandObject commandObject) {
         
-        List<OSMapping> mappings = (List<OSMapping>)(List<?>)commandObject.getArrayList("mapping");
+        XStream xstream = new XStream();
+        List<OSMapping> mappings = (List<OSMapping>)(List<?>) xstream.fromXML(OpenSearchPlug.conf.mapping);
         
         if (mappings == null) return;
         
@@ -161,8 +172,7 @@ public class OSMappingController extends AbstractController {
             }
         }
         
-        if (commandObject.containsKey("mappingSupport"))
-            mapConfig.setUseMapping(commandObject.getBoolean("mappingSupport"));
+        mapConfig.setUseMapping(OpenSearchPlug.conf.mappingSupport);
         
     }
 }
