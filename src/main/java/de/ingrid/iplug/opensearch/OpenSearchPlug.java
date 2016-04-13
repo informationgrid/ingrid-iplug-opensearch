@@ -56,6 +56,8 @@ import de.ingrid.iplug.opensearch.query.OSQueryBuilder;
 import de.ingrid.iplug.opensearch.query.OSRequest;
 import de.ingrid.search.utils.facet.FacetManager;
 import de.ingrid.search.utils.facet.IFacetManager;
+import de.ingrid.utils.IngridCall;
+import de.ingrid.utils.IngridDocument;
 import de.ingrid.utils.IngridHit;
 import de.ingrid.utils.IngridHitDetail;
 import de.ingrid.utils.IngridHits;
@@ -369,5 +371,10 @@ public class OpenSearchPlug extends HeartBeatPlug {
     public static void main(String[] args) throws Exception {
         conf = new ConfigBuilder<Configuration>(Configuration.class).withCommandLineArgs(args).build();
         new JettyStarter( conf );
+    }
+
+    @Override
+    public IngridDocument call(IngridCall targetInfo) throws Exception {
+        throw new RuntimeException( "call-function not implemented in OpenSearch-iPlug" );
     }
 }
