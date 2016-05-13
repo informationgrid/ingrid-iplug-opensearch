@@ -3,7 +3,7 @@
   <parent>
     <groupId>de.ingrid</groupId>
     <artifactId>ingrid-releases-pom</artifactId>
-    <version>3.6.2-SNAPSHOT</version>
+    <version>3.6.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ingrid-iplug-opensearch</artifactId>
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-iplug</artifactId>
-      <version>3.6.2-SNAPSHOT</version>
+      <version>3.6.2</version>
       <exclusions>
         <exclusion>
           <groupId>ant</groupId>
@@ -58,7 +58,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-utils</artifactId>
-      <version>3.6.2-SNAPSHOT</version>
+      <version>3.6.2</version>
     </dependency>
     <dependency>
       <groupId>de.ingrid</groupId>
@@ -68,7 +68,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>3.6.2-SNAPSHOT</version>
+      <version>3.6.2</version>
       <exclusions>
         <exclusion>
           <groupId>org.elasticsearch</groupId>
@@ -79,7 +79,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>3.6.2-SNAPSHOT</version>
+      <version>3.6.2</version>
       <classifier>res</classifier>
       <type>zip</type>
       <exclusions>
