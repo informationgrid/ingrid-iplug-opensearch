@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2015 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2016 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -76,17 +76,9 @@ public class Configuration implements IConfig {
     public void addPlugdescriptionValues( PlugdescriptionCommandObject pdObject ) {
     	pdObject.put( "iPlugClass", "de.ingrid.iplug.opensearch.OpenSearchPlug");
         
-        if(pdObject.get("mapping") == null){
-        	if(!mapping.equals("")){
-        		xstream = new XStream();
-            	pdObject.put("mapping", xstream.fromXML(mapping));
-        	}
-        }
-        
         pdObject.put("rankingMul", rankingMul);
         pdObject.put("rankingAdd", rankingAdd);
         pdObject.putBoolean("useDescriptor", useDescriptor);
-        pdObject.putBoolean("mappingSupport", mappingSupport);
         pdObject.putBoolean("domainGroupingSupport", domainGroupingSupport);
         pdObject.put("serviceUrl", serviceUrl);
         
@@ -110,7 +102,7 @@ public class Configuration implements IConfig {
     public void setPropertiesFromPlugdescription( Properties props, PlugdescriptionCommandObject pd ) {
     	if(pd.get("mapping") != null){
     		xstream = new XStream();
-        	props.setProperty("plugdescription.mapping", xstream.toXML(pd.get("mapping")));
+        	props.setProperty("plugdescription.mapping", mapping);
     	}
     	props.setProperty("plugdescription.rankingMul", rankingMul);
         props.setProperty("plugdescription.rankingAdd", rankingAdd);

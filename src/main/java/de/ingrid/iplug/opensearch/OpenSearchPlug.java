@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2015 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2016 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -38,6 +38,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.thoughtworks.xstream.XStream;
 import com.tngtech.configbuilder.ConfigBuilder;
 
 import de.ingrid.admin.JettyStarter;
@@ -55,6 +56,8 @@ import de.ingrid.iplug.opensearch.query.OSQueryBuilder;
 import de.ingrid.iplug.opensearch.query.OSRequest;
 import de.ingrid.search.utils.facet.FacetManager;
 import de.ingrid.search.utils.facet.IFacetManager;
+import de.ingrid.utils.IngridCall;
+import de.ingrid.utils.IngridDocument;
 import de.ingrid.utils.IngridHit;
 import de.ingrid.utils.IngridHitDetail;
 import de.ingrid.utils.IngridHits;
@@ -158,7 +161,9 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			this.fUseDescriptor  = conf.useDescriptor;
 			this.fServiceURL = conf.serviceUrl;
 			
-			mapping = (List<OSMapping>) fPlugDesc.get("mapping");
+			XStream xstream = new XStream();
+            //mapping = (List<OSMapping>) fPlugDesc.get("mapping");
+			mapping = (List<OSMapping>)(List<?>) xstream.fromXML(OpenSearchPlug.conf.mapping);
 			
 			if (mapping == null)
 			    mapping = new ArrayList<OSMapping>();
@@ -265,55 +270,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		}
 	}
 
-
-	/**
-	 * Checks for all not supported parameters, if it is in the query. So far the fields
-	 * partner, provider and site(domain) are checked.
-	 * 
-	 * @param query
-	 * @return true if all fields in query are supported 
-	 */
-/*	@SuppressWarnings("unchecked")
-    private boolean allFieldsSupported(IngridQuery query) {
-	    // mapping might not be set in PlugDescription! 
-	    if (fPlugDesc.get("mapping") == null || fPlugDesc.get("mappingSupport") == null) {
-	        log.error("Missing mapping-information in PlugDescription!" +
-	        		" PlugDescription wasn't written completely!");
-	        return false;
-	    }
-	    
-	    boolean mappingSupported = fPlugDesc.getBoolean("mappingSupport");
-	    
-	    for (OSMapping map : (List<OSMapping>) fPlugDesc.get("mapping")) {
-	        // if mapping is not supported then check if query contains any of
-	        // the fields
-	        if (!mappingSupported || !map.isActive()) {
-	            switch (map.getType()) {
-                case PROVIDER:
-                    // see case PARTNER!
-                    if (query.getPositiveProvider() != null && query.getPositiveProvider().length > 0)
-                        return false;
-                    break;
-                case PARTNER:
-                    // if no partner filtering is supported then this iPlug
-                    // will return no results, since different partner can occur
-                    // in the results from the opensearch interface
-                    if (query.getPositivePartner() != null && query.getPositivePartner().length > 0 )
-                        return false;
-                    break;
-                case DOMAIN:
-                    if (QueryUtils.getFieldValue("site", query) != null)
-                        return false;
-                    break;
-                default:
-                    break;
-                }
-	        }
-	    }
-        return true;
-    }*/
-	
-
     /**
 	 * Return all metadata information for a given hit.
 	 * This is not supported by Opensearch!
@@ -415,5 +371,10 @@ public class OpenSearchPlug extends HeartBeatPlug {
     public static void main(String[] args) throws Exception {
         conf = new ConfigBuilder<Configuration>(Configuration.class).withCommandLineArgs(args).build();
         new JettyStarter( conf );
+    }
+
+    @Override
+    public IngridDocument call(IngridCall targetInfo) throws Exception {
+        throw new RuntimeException( "call-function not implemented in OpenSearch-iPlug" );
     }
 }
