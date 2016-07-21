@@ -7,7 +7,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ingrid-iplug-opensearch</artifactId>
-  <version>3.6.2</version>
+  <version>3.6.2.2</version>
   <packaging>jar</packaging>
   <name>InGrid iPlug-Opensearch</name>
   <scm>
@@ -68,7 +68,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>3.6.2</version>
+      <version>3.6.2.1</version>
       <exclusions>
         <exclusion>
           <groupId>org.elasticsearch</groupId>
@@ -79,7 +79,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>3.6.2</version>
+      <version>3.6.2.1</version>
       <classifier>res</classifier>
       <type>zip</type>
       <exclusions>

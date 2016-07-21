@@ -87,7 +87,7 @@ public class OSParametersController extends AbstractController {
     private void mapParamsToPD(OpensearchConfig commandObject,
 			PlugdescriptionCommandObject pdCommandObject) {
     	
-        boolean isOff  = pdCommandObject.getBoolean("forceAddRankingOff");
+        boolean isOff  = pdCommandObject.containsKey("forceAddRankingOff") ? pdCommandObject.getBoolean("forceAddRankingOff") : false;
         boolean isDate = pdCommandObject.containsRankingType("date");
         
         Configuration conf = OpenSearchPlug.conf;
