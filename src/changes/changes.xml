@@ -29,6 +29,12 @@
   </properties>
   <body>
 
+    <release version="4.0.1" date="2016-01-30" description="Release 4.0.1">
+      <action type="fix" dev="wemove" issue="REDMINE-465">
+        Fixed wrong path to save data when using cygwin.
+      </action>
+    </release>
+    
     <release version="3.6.2.2" date="2016-07-21" description="Release 3.6.2.2">
       <action type="fix" dev="wemove" issue="REDMINE-390">
         Fixed error in admin gui after a new installation.
