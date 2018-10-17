@@ -14,9 +14,9 @@
     
     <!-- the application context definition for the springapp DispatcherServlet -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
-        <property name="prefix" value="/WEB-INF/jsp/"></property>
-        <property name="suffix" value=".jsp"></property>
+      <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+      <property name="prefix" value="/WEB-INF/jsp/"/>
+      <property name="suffix" value=".jsp"/>
     </bean>
 
 	<bean id="messageSource"
@@ -28,10 +28,8 @@
 			</list>
 		</property>
 		<property name="cacheSeconds" value="0" />
-		<property name="fallbackToSystemLocale" value="false"></property>
-    <property name="defaultEncoding">
-      <value>UTF-8</value>
-    </property>
+    <property name="fallbackToSystemLocale" value="false"/>
+    <property name="defaultEncoding" value="UTF-8"/>
 	</bean>
 
     <!-- XML DEFINED BEANS WITH ACCORDING QUALIFIER TO BE AUTOWIRED VIA QUALIFIER ! -->
@@ -73,9 +71,7 @@
 
     <bean id="plugDescriptionFacetCounter"
         class="de.ingrid.search.utils.facet.counter.DscPlugdescriptionFacetCounter">
-        <property name="plugDescriptionWrapper">
-            <ref bean="plugDescriptionWrapper" />
-        </property>
+        <property name="plugDescriptionWrapper" ref="plugDescriptionWrapper"/>
         <property name="facetClassDefinitions">
             <list>
             <!-- 
@@ -101,10 +97,13 @@
     </bean>
     
     <context:component-scan base-package="de.ingrid">
+        <context:exclude-filter type="regex" expression="de\.ingrid\.elasticsearch\..*"/>
         <context:exclude-filter type="regex" expression="de\.ingrid\.admin\.elasticsearch\..*"/>
-        <context:exclude-filter type="regex" expression="de\.ingrid\.admin\.service\.ElasticsearchNodeFactoryBean"/>
+        <context:exclude-filter type="regex" expression="de\.ingrid\.elasticsearch\.ElasticsearchNodeFactoryBean"/>
         <context:exclude-filter type="regex" expression="de\.ingrid\.admin\.controller\.IndexController"/>
         <context:exclude-filter type="regex" expression="de\.ingrid\.admin\.controller\.SchedulingController"/>
+        <context:exclude-filter type="regex" expression="de\.ingrid\.admin\.object\.DefaultDataType"/>
+        <context:exclude-filter type="regex" expression="de\.ingrid\.admin\.object\.BasePlug"/>
     </context:component-scan>
     
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
@@ -112,7 +111,7 @@
     </bean> 
     
     <mvc:annotation-driven/>
-    <mvc:resources mapping="/css/**" location="/css/" />
-    <mvc:resources mapping="/img/**" location="/img/" />
+    <mvc:resources mapping="/css/**" location="css" />
+    <mvc:resources mapping="/img/**" location="img" />
     
 </beans>
