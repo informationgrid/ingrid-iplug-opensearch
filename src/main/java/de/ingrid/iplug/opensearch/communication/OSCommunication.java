@@ -81,12 +81,8 @@ public class OSCommunication {
 				log.error("Response code for '" + url + "' was: " + status);
 				return null;
 			}
-		} catch (HttpException e) {
-			log.error("An HTTP-Exception occured when calling: " + url);
-			e.printStackTrace();
 		} catch (IOException e) {
-			log.error("An IO-Exception occured when calling: " + url);
-			e.printStackTrace();
+			log.error("An Exception occured when calling: " + url, e);
 		}
 		return null;		
 	}

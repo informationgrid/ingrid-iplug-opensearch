@@ -179,8 +179,7 @@ public class OSQueryBuilder {
 		try {
 			return URLEncoder.encode(terms.trim(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			log.error("Problems during encoding search terms: " + terms);
-			e.printStackTrace();
+			log.error("Problems during encoding search terms: " + terms, e);
 		}
 		return null;
 	}

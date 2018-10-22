@@ -7,11 +7,16 @@
   </formats>
   <includeBaseDirectory>false</includeBaseDirectory>
   <fileSets>
-	<fileSet>
-      <directory>src/main/release/conf</directory>
+    <fileSet>
+      <directory>src/main/resources</directory>
       <outputDirectory>${project.artifactId}-${project.version}/conf</outputDirectory>
+      <includes>
+        <include>config.properties</include>
+        <include>ingrid.auth</include>
+        <include>log4j2.xml</include>
+      </includes>
     </fileSet>
-	<fileSet>
+    <fileSet>
       <directory>src/main/release/scripts</directory>
       <outputDirectory>${project.artifactId}-${project.version}/</outputDirectory>
     </fileSet>
@@ -44,7 +49,7 @@
       <directory>target/logs</directory>
       <outputDirectory>${project.artifactId}-${project.version}/logs</outputDirectory>
     </fileSet>
-	<fileSet>
+    <fileSet>
       <directory>target/site</directory>
       <outputDirectory>${project.artifactId}-${project.version}/doc</outputDirectory>
     </fileSet>
