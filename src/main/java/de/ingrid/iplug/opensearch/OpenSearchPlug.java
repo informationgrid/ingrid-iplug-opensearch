@@ -27,7 +27,6 @@
 package de.ingrid.iplug.opensearch;
 
 import com.thoughtworks.xstream.XStream;
-import com.tngtech.configbuilder.ConfigBuilder;
 import de.ingrid.admin.JettyStarter;
 import de.ingrid.iplug.HeartBeatPlug;
 import de.ingrid.iplug.IPlugdescriptionFieldFilter;
@@ -110,7 +109,8 @@ public class OpenSearchPlug extends HeartBeatPlug {
     @Autowired
     private IFacetManager facetManager;
 
-    public static Configuration conf;
+    @Autowired
+	private Configuration opensearchConfig;
 
 	@Autowired
 	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters, 
@@ -134,8 +134,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		super.configure(plugDescription);
 		log.info("Configuring OpenSearch-iPlug...");		
 		this.fPlugDesc = plugDescription;
-		Configuration conf = OpenSearchPlug.conf;
-		
+
 		try {
 		
 			if (fPlugDesc.getRankingTypes()[0].equals("off")) {
@@ -145,12 +144,12 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			}
 				
 			this.fPlugID = fPlugDesc.getPlugId();
-			this.fUseDescriptor  = conf.useDescriptor;
-			this.fServiceURL = conf.serviceUrl;
+			this.fUseDescriptor  = opensearchConfig.useDescriptor;
+			this.fServiceURL = opensearchConfig.serviceUrl;
 			
 			XStream xstream = new XStream();
             //mapping = (List<OSMapping>) fPlugDesc.get("mapping");
-			mapping = (List<OSMapping>)(List<?>) xstream.fromXML(OpenSearchPlug.conf.mapping);
+			mapping = (List<OSMapping>)(List<?>) xstream.fromXML(opensearchConfig.mapping);
 			
 			if (mapping == null)
 			    mapping = new ArrayList<OSMapping>();
@@ -231,7 +230,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			OSQuery osQuery = queryBuilder.createQuery(query, start, length, mapping);
 			
 			OSCommunication comm = new OSCommunication();
-			url = OSRequest.getOSQueryString(osQuery, query, osDescriptor);
+			url = OSRequest.getOSQueryString(osQuery, query, osDescriptor, opensearchConfig);
 			result = comm.sendRequest(url);
 			hits = ingridConverter.processResult(fPlugID, result, query.getGrouped());
 			
@@ -353,8 +352,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
     }
 	
     public static void main(String[] args) throws Exception {
-        conf = new ConfigBuilder<Configuration>(Configuration.class).withCommandLineArgs(args).build();
-        new JettyStarter( conf );
+        new JettyStarter();
     }
 
     @Override
