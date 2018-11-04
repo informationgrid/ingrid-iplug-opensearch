@@ -352,7 +352,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
     }
 	
     public static void main(String[] args) throws Exception {
-        new JettyStarter();
+        new JettyStarter(Configuration.class);
     }
 
     @Override
