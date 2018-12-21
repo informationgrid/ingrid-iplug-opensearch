@@ -51,7 +51,9 @@ xsi:schemaLocation="http://www.springframework.org/schema/beans
   <bean id="rankingModifierPD" class="de.ingrid.iplug.opensearch.converter.RankingModifierFromPD" />
   
   <bean id="osQueryBuilder" class="de.ingrid.iplug.opensearch.query.OSQueryBuilder" />
-  
+
+  <bean id="configuration" class="de.ingrid.iplug.opensearch.Configuration" />
+
   <!--  -->
   <bean id="termMapper" class="de.ingrid.iplug.opensearch.query.OSQueryTermMapper" >
     <property name="mapping">
