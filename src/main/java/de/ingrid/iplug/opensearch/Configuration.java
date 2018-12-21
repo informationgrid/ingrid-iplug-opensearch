@@ -22,7 +22,6 @@
  */
 package de.ingrid.iplug.opensearch;
 
-import com.thoughtworks.xstream.XStream;
 import de.ingrid.admin.IConfig;
 import de.ingrid.admin.command.PlugdescriptionCommandObject;
 import de.ingrid.utils.tool.PlugDescriptionUtil;
@@ -45,20 +44,18 @@ public class Configuration implements IConfig {
     @Value("${plugdescription.domainGroupingSupport:false}")
     public boolean domainGroupingSupport;
 
-    @Value("${plugdescription.rankingMul}")
+    @Value("${plugdescription.rankingMul:}")
     public String rankingMul;
     
-    @Value("${plugdescription.rankingAdd}")
+    @Value("${plugdescription.rankingAdd:}")
     public String rankingAdd;
     
     @Value("${plugdescription.mappingSupport:false}")
     public boolean mappingSupport;
     
-    @Value("${plugdescription.serviceUrl}")
+    @Value("${plugdescription.serviceUrl:}")
     public String serviceUrl;
-    
-    private XStream xstream;
-    
+
     @Override
     public void initialize() {
     }
@@ -92,7 +89,6 @@ public class Configuration implements IConfig {
     @Override
     public void setPropertiesFromPlugdescription( Properties props, PlugdescriptionCommandObject pd ) {
     	if(pd.get("mapping") != null){
-    		xstream = new XStream();
         	props.setProperty("plugdescription.mapping", mapping);
     	}
     	props.setProperty("plugdescription.rankingMul", rankingMul);
