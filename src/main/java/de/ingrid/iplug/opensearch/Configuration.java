@@ -44,10 +44,10 @@ public class Configuration implements IConfig {
     @Value("${plugdescription.domainGroupingSupport:false}")
     public boolean domainGroupingSupport;
 
-    @Value("${plugdescription.rankingMul:}")
+    @Value("${plugdescription.rankingMul:1}")
     public String rankingMul;
     
-    @Value("${plugdescription.rankingAdd:}")
+    @Value("${plugdescription.rankingAdd:0}")
     public String rankingAdd;
     
     @Value("${plugdescription.mappingSupport:false}")
