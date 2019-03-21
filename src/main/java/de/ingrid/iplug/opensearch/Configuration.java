@@ -22,52 +22,40 @@
  */
 package de.ingrid.iplug.opensearch;
 
-import java.util.Properties;
-
-import com.thoughtworks.xstream.XStream;
-import com.tngtech.configbuilder.annotation.propertyloaderconfiguration.PropertiesFiles;
-import com.tngtech.configbuilder.annotation.propertyloaderconfiguration.PropertyLocations;
-import com.tngtech.configbuilder.annotation.valueextractor.DefaultValue;
-import com.tngtech.configbuilder.annotation.valueextractor.PropertyValue;
-
 import de.ingrid.admin.IConfig;
 import de.ingrid.admin.command.PlugdescriptionCommandObject;
 import de.ingrid.utils.tool.PlugDescriptionUtil;
 import de.ingrid.utils.tool.QueryUtil;
+import org.springframework.beans.factory.annotation.Value;
 
-@PropertiesFiles( {"config"} )
-@PropertyLocations(directories = {"conf"}, fromClassLoader = true)
+import java.util.Properties;
+
+@org.springframework.context.annotation.Configuration
 public class Configuration implements IConfig {
     
     // private static Log log = LogFactory.getLog(Configuration.class);
     
-    @PropertyValue("plugdescription.mapping")
-    @DefaultValue("")
+    @Value("${plugdescription.mapping:}")
     public String mapping;
     
-    @PropertyValue("plugdescription.useDescriptor")
-    @DefaultValue("false")
+    @Value("${plugdescription.useDescriptor:false}")
     public boolean useDescriptor;
     
-    @PropertyValue("plugdescription.domainGroupingSupport")
-    @DefaultValue("false")
+    @Value("${plugdescription.domainGroupingSupport:false}")
     public boolean domainGroupingSupport;
 
-    @PropertyValue("plugdescription.rankingMul")
+    @Value("${plugdescription.rankingMul:1}")
     public String rankingMul;
     
-    @PropertyValue("plugdescription.rankingAdd")
+    @Value("${plugdescription.rankingAdd:0}")
     public String rankingAdd;
     
-    @PropertyValue("plugdescription.mappingSupport")
-    @DefaultValue("false")
+    @Value("${plugdescription.mappingSupport:false}")
     public boolean mappingSupport;
     
-    @PropertyValue("plugdescription.serviceUrl")
+    @Value("${plugdescription.serviceUrl:}")
     public String serviceUrl;
-    
-    private XStream xstream;
-    
+
     @Override
     public void initialize() {
     }
@@ -101,7 +89,6 @@ public class Configuration implements IConfig {
     @Override
     public void setPropertiesFromPlugdescription( Properties props, PlugdescriptionCommandObject pd ) {
     	if(pd.get("mapping") != null){
-    		xstream = new XStream();
         	props.setProperty("plugdescription.mapping", mapping);
     	}
     	props.setProperty("plugdescription.rankingMul", rankingMul);

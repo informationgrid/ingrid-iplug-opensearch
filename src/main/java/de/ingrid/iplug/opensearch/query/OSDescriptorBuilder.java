@@ -95,14 +95,11 @@ public class OSDescriptorBuilder {
 				osDesciptor.setTypeAndUrl(typeList.item(i).getTextContent(), templateList.item(i).getTextContent());
 			}
 		} catch (ParserConfigurationException e) {
-			log.error("Error while parsing DescriptorFile from: " + descriptorAddress);
-			e.printStackTrace();
+			log.error("Error while parsing DescriptorFile from: " + descriptorAddress, e);
 		} catch (SAXException e) {
-			log.error("Error while parsing DescriptorFile from: " + descriptorAddress);
-			e.printStackTrace();
+			log.error("Error while parsing DescriptorFile from: " + descriptorAddress, e);
 		} catch (XPathExpressionException e) {
-			log.error("Error while parsing DescriptorFile from: " + descriptorAddress);
-			e.printStackTrace();
+			log.error("Error while parsing DescriptorFile from: " + descriptorAddress, e);
 		} finally {
 			comm.releaseConnection();
 		}

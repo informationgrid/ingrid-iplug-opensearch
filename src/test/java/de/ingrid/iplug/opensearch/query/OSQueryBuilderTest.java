@@ -22,11 +22,12 @@
  */
 package de.ingrid.iplug.opensearch.query;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import de.ingrid.iplug.opensearch.Configuration;
+import de.ingrid.iplug.opensearch.model.OSMapping;
+import de.ingrid.iplug.opensearch.model.OSMapping.IngridFieldType;
+import de.ingrid.utils.query.IngridQuery;
+import de.ingrid.utils.queryparser.ParseException;
+import de.ingrid.utils.queryparser.QueryStringParser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,13 +35,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import de.ingrid.iplug.opensearch.Configuration;
-import de.ingrid.iplug.opensearch.OpenSearchPlug;
-import de.ingrid.iplug.opensearch.model.OSMapping;
-import de.ingrid.iplug.opensearch.model.OSMapping.IngridFieldType;
-import de.ingrid.utils.query.IngridQuery;
-import de.ingrid.utils.queryparser.ParseException;
-import de.ingrid.utils.queryparser.QueryStringParser;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/spring/spring.xml"})
@@ -48,11 +46,13 @@ public class OSQueryBuilderTest {
     
     @Autowired
     private OSQueryBuilder qb;
+
+    @Autowired
+    private Configuration opensearchConfig;
     
     @Before
     public void prepare() {
-        OpenSearchPlug.conf = new Configuration();
-        OpenSearchPlug.conf.mappingSupport = false;
+        opensearchConfig.mappingSupport = false;
     }
     
     @Test
@@ -104,7 +104,7 @@ public class OSQueryBuilderTest {
 
     @Test
     public void createQueryMapped() {
-        OpenSearchPlug.conf.mappingSupport = true;
+        opensearchConfig.mappingSupport = true;
         List<OSMapping> mapping = new ArrayList<OSMapping>();
         OSMapping siteMap     = new OSMapping();siteMap.setActive(true);siteMap.setType(IngridFieldType.DOMAIN);siteMap.setMapping("mySite");
         OSMapping partnerMap  = new OSMapping();partnerMap.setActive(true);partnerMap.setType(IngridFieldType.PARTNER);partnerMap.setMapping("myPartner");
