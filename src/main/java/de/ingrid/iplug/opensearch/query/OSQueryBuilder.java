@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2019 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -22,19 +22,19 @@
  */
 package de.ingrid.iplug.opensearch.query;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import de.ingrid.iplug.opensearch.Configuration;
 import de.ingrid.iplug.opensearch.model.OSMapping;
 import de.ingrid.utils.IngridQueryTools;
 import de.ingrid.utils.query.IngridQuery;
 import de.ingrid.utils.query.TermQuery;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class helps to create an Opensearch-Query from an IngridQuery. All
@@ -50,9 +50,12 @@ public class OSQueryBuilder {
 	// injected by Spring
 	@Autowired
 	private OSQueryTermMapper termMapper;
+
+	@Autowired
+	private Configuration opensearchConfig;
 	
 	//which parameter were offered by the descriptor 
-	List<String> templateParameter = new ArrayList<String>();
+	List<String> templateParameter = new ArrayList<>();
 
 	
 	/**
@@ -82,7 +85,7 @@ public class OSQueryBuilder {
 		// fields will only be added to the search terms if they were configured this way
 		// otherwise they will be added as extra parameters to the requesting Url
 		String searchTerms = getSearchTerms(ingridQuery);
-		osQuery.put(OSQuery.OS_SEARCH_TERMS, OSRequest.addMappedParameters(searchTerms, ingridQuery, mapping, false));
+		osQuery.put(OSQuery.OS_SEARCH_TERMS, OSRequest.addMappedParameters(searchTerms, ingridQuery, mapping, false, opensearchConfig));
 		
 		osQuery.put(OSQuery.OS_COUNT, String.valueOf(length));
 		
@@ -179,28 +182,11 @@ public class OSQueryBuilder {
 		try {
 			return URLEncoder.encode(terms.trim(), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			log.error("Problems during encoding search terms: " + terms);
-			e.printStackTrace();
+			log.error("Problems during encoding search terms: " + terms, e);
 		}
 		return null;
 	}
 
-	/**
-	 * Check if a field inside the IngridQuery is not excluded and shall be
-	 * used inside an OS-Query.
-	 * @param field
-	 * @return
-	 */
-    /*private boolean fieldNotExcluded(FieldQuery field) {
-        String fieldName = field.getFieldName();
-        if (fieldName.equals("incl_meta"))
-            return false;
-        
-        // return true if field must not be excluded
-        return true;
-    }*/
-
-   
     @Autowired
     public void setTermMapper(OSQueryTermMapper termMapper) {
         this.termMapper = termMapper;

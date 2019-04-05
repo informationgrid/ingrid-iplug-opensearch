@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2019 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -22,6 +22,12 @@
  */
 package de.ingrid.iplug.opensearch.webapp.controller;
 
+import de.ingrid.admin.command.PlugdescriptionCommandObject;
+import de.ingrid.admin.controller.AbstractController;
+import de.ingrid.iplug.opensearch.Configuration;
+import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
+import de.ingrid.iplug.opensearch.webapp.validation.OSValidator;
+import de.ingrid.utils.query.IngridQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,14 +36,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
-
-import de.ingrid.admin.command.PlugdescriptionCommandObject;
-import de.ingrid.admin.controller.AbstractController;
-import de.ingrid.iplug.opensearch.Configuration;
-import de.ingrid.iplug.opensearch.OpenSearchPlug;
-import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
-import de.ingrid.iplug.opensearch.webapp.validation.OSValidator;
-import de.ingrid.utils.query.IngridQuery;
 
 /**
  * Control the page of Opensearch-specific parameters of the webapp.
@@ -48,7 +46,10 @@ import de.ingrid.utils.query.IngridQuery;
 @SessionAttributes("plugDescription")
 public class OSParametersController extends AbstractController {
 	private final OSValidator _validator;
-	
+
+	@Autowired
+	private Configuration opensearchConfig;
+
 	@Autowired
 	public OSParametersController(OSValidator validator) {
 		_validator = validator;
@@ -90,16 +91,14 @@ public class OSParametersController extends AbstractController {
         boolean isOff  = pdCommandObject.containsKey("forceAddRankingOff") ? pdCommandObject.getBoolean("forceAddRankingOff") : false;
         boolean isDate = pdCommandObject.containsRankingType("date");
         
-        Configuration conf = OpenSearchPlug.conf;
-        
         // write Ranking-information after list got emptied
         if (pdCommandObject.getArrayList(IngridQuery.RANKED) != null )
             pdCommandObject.getArrayList(IngridQuery.RANKED).clear();
     	
     	if (commandObject.getRankSupport()) {
     		pdCommandObject.setRankinTypes(true,  isDate, isOff);
-    		conf.rankingMul = commandObject.getRankMultiplier();
-            conf.rankingAdd = commandObject.getRankAddition();
+    		opensearchConfig.rankingMul = commandObject.getRankMultiplier();
+            opensearchConfig.rankingAdd = commandObject.getRankAddition();
     	} else if (!isDate && !isOff) {
     	    // there must be at least one "true" value!
     	    pdCommandObject.setRankinTypes(false, false, true);
@@ -109,29 +108,28 @@ public class OSParametersController extends AbstractController {
     	
     	// write information if Descriptor is used
     	if (commandObject.getOsDescriptor() != null && commandObject.getOsDescriptor().equals("descriptor")) { //useDescriptor.equals("descriptor")) {
-    	    conf.useDescriptor = true;
-    	    conf.serviceUrl = commandObject.getOpensearchDescriptorUrl();
+    	    opensearchConfig.useDescriptor = true;
+    	    opensearchConfig.serviceUrl = commandObject.getOpensearchDescriptorUrl();
     	} else {
-    	    conf.useDescriptor = false;
-    	    conf.serviceUrl = commandObject.getOpensearchUrl();
+    	    opensearchConfig.useDescriptor = false;
+    	    opensearchConfig.serviceUrl = commandObject.getOpensearchUrl();
     	}
     	
 	}
 
 	private void mapParamsFromPD(OpensearchConfig osConfig, PlugdescriptionCommandObject pdObject) {
-	    Configuration conf = OpenSearchPlug.conf;
     	osConfig.setRankSupport(rankSupported("score", pdObject.getRankingTypes()));
 		
-		if (conf.useDescriptor) {
+		if (opensearchConfig.useDescriptor) {
 			osConfig.setOsDescriptor("descriptor");
-			osConfig.setOpensearchDescriptorUrl(conf.serviceUrl);
+			osConfig.setOpensearchDescriptorUrl(opensearchConfig.serviceUrl);
 		} else {
 			osConfig.setOsDescriptor("url");
-			osConfig.setOpensearchUrl(conf.serviceUrl);
+			osConfig.setOpensearchUrl(opensearchConfig.serviceUrl);
 		}
 		
-		osConfig.setRankAddition(conf.rankingAdd);
-		osConfig.setRankMultiplier(conf.rankingMul);
+		osConfig.setRankAddition(opensearchConfig.rankingAdd);
+		osConfig.setRankMultiplier(opensearchConfig.rankingMul);
 	}
     
 	public boolean rankSupported(String rankType, String[] types) {

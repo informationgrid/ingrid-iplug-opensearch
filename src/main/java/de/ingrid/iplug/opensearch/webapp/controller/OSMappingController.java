@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2019 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -22,9 +22,16 @@
  */
 package de.ingrid.iplug.opensearch.webapp.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.thoughtworks.xstream.XStream;
+import de.ingrid.admin.command.PlugdescriptionCommandObject;
+import de.ingrid.admin.controller.AbstractController;
+import de.ingrid.iplug.opensearch.Configuration;
+import de.ingrid.iplug.opensearch.model.OSMapping;
+import de.ingrid.iplug.opensearch.model.OSMapping.IngridFieldType;
+import de.ingrid.iplug.opensearch.webapp.object.MappingConfig;
+import de.ingrid.iplug.opensearch.webapp.validation.OSMappingValidator;
+import de.ingrid.utils.PlugDescription;
+import de.ingrid.utils.tool.PlugDescriptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,19 +41,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.thoughtworks.xstream.XStream;
-
-import de.ingrid.admin.command.PlugdescriptionCommandObject;
-import de.ingrid.admin.controller.AbstractController;
-import de.ingrid.iplug.opensearch.Configuration;
-import de.ingrid.iplug.opensearch.OpenSearchPlug;
-import de.ingrid.iplug.opensearch.model.OSMapping;
-import de.ingrid.iplug.opensearch.model.OSMapping.IngridFieldType;
-import de.ingrid.iplug.opensearch.webapp.object.MappingConfig;
-import de.ingrid.iplug.opensearch.webapp.object.OpensearchConfig;
-import de.ingrid.iplug.opensearch.webapp.validation.OSMappingValidator;
-import de.ingrid.utils.PlugDescription;
-import de.ingrid.utils.tool.PlugDescriptionUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Control the page of Opensearch-specific parameters of the webapp.
@@ -58,6 +54,9 @@ import de.ingrid.utils.tool.PlugDescriptionUtil;
 public class OSMappingController extends AbstractController {
     
     private OSMappingValidator _validator;
+
+    @Autowired
+    private Configuration opensearchConfig;
 
     @Autowired
     public OSMappingController(OSMappingValidator validator) {
@@ -95,12 +94,11 @@ public class OSMappingController extends AbstractController {
 
     private void mapConfigToPD(MappingConfig commandObject,
             PlugdescriptionCommandObject pdCommandObject) {
-        Configuration conf = OpenSearchPlug.conf;
         XStream xstream = new XStream();
         List<Object> osMappings = new ArrayList<Object>();
         
         // add mapping-support
-        conf.mappingSupport = commandObject.isUseMapping();
+        opensearchConfig.mappingSupport = commandObject.isUseMapping();
         
         OSMapping mapping = new OSMapping();
         mapping.setType(IngridFieldType.DOMAIN);
@@ -110,12 +108,12 @@ public class OSMappingController extends AbstractController {
         osMappings.add( mapping );
         
         if (commandObject.isForDomain() && commandObject.isUseMapping()) {
-            conf.domainGroupingSupport = true;
+            opensearchConfig.domainGroupingSupport = true;
             // remove and add site-field
             pdCommandObject.removeFromList(PlugDescription.FIELDS, "site");
             pdCommandObject.addField("site");
         } else {
-            conf.domainGroupingSupport = false;
+            opensearchConfig.domainGroupingSupport = false;
             pdCommandObject.removeFromList(PlugDescription.FIELDS, "site");
         }
         
@@ -144,7 +142,7 @@ public class OSMappingController extends AbstractController {
             pdCommandObject.removeFromList(PlugDescription.FIELDS, "partner");
         }
         
-        conf.mapping = xstream.toXML( osMappings );
+        opensearchConfig.mapping = xstream.toXML( osMappings );
     }
 
     @SuppressWarnings("unchecked")
@@ -152,7 +150,7 @@ public class OSMappingController extends AbstractController {
             PlugdescriptionCommandObject commandObject) {
         
         XStream xstream = new XStream();
-        List<OSMapping> mappings = (List<OSMapping>)(List<?>) xstream.fromXML(OpenSearchPlug.conf.mapping);
+        List<OSMapping> mappings = (List<OSMapping>)(List<?>) xstream.fromXML(opensearchConfig.mapping);
         
         if (mappings == null) return;
         
@@ -172,7 +170,7 @@ public class OSMappingController extends AbstractController {
             }
         }
         
-        mapConfig.setUseMapping(OpenSearchPlug.conf.mappingSupport);
+        mapConfig.setUseMapping(opensearchConfig.mappingSupport);
         
     }
 }

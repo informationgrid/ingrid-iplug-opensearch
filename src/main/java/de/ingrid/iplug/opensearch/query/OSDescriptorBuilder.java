@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2019 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -95,14 +95,11 @@ public class OSDescriptorBuilder {
 				osDesciptor.setTypeAndUrl(typeList.item(i).getTextContent(), templateList.item(i).getTextContent());
 			}
 		} catch (ParserConfigurationException e) {
-			log.error("Error while parsing DescriptorFile from: " + descriptorAddress);
-			e.printStackTrace();
+			log.error("Error while parsing DescriptorFile from: " + descriptorAddress, e);
 		} catch (SAXException e) {
-			log.error("Error while parsing DescriptorFile from: " + descriptorAddress);
-			e.printStackTrace();
+			log.error("Error while parsing DescriptorFile from: " + descriptorAddress, e);
 		} catch (XPathExpressionException e) {
-			log.error("Error while parsing DescriptorFile from: " + descriptorAddress);
-			e.printStackTrace();
+			log.error("Error while parsing DescriptorFile from: " + descriptorAddress, e);
 		} finally {
 			comm.releaseConnection();
 		}

@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2019 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -81,12 +81,8 @@ public class OSCommunication {
 				log.error("Response code for '" + url + "' was: " + status);
 				return null;
 			}
-		} catch (HttpException e) {
-			log.error("An HTTP-Exception occured when calling: " + url);
-			e.printStackTrace();
 		} catch (IOException e) {
-			log.error("An IO-Exception occured when calling: " + url);
-			e.printStackTrace();
+			log.error("An Exception occured when calling: " + url, e);
 		}
 		return null;		
 	}

@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2019 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -26,21 +26,7 @@
 
 package de.ingrid.iplug.opensearch;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.thoughtworks.xstream.XStream;
-import com.tngtech.configbuilder.ConfigBuilder;
-
 import de.ingrid.admin.JettyStarter;
 import de.ingrid.iplug.HeartBeatPlug;
 import de.ingrid.iplug.IPlugdescriptionFieldFilter;
@@ -49,25 +35,27 @@ import de.ingrid.iplug.opensearch.communication.OSCommunication;
 import de.ingrid.iplug.opensearch.converter.ConverterFactory;
 import de.ingrid.iplug.opensearch.converter.IngridConverter;
 import de.ingrid.iplug.opensearch.model.OSMapping;
-import de.ingrid.iplug.opensearch.query.OSDescriptor;
-import de.ingrid.iplug.opensearch.query.OSDescriptorBuilder;
-import de.ingrid.iplug.opensearch.query.OSQuery;
-import de.ingrid.iplug.opensearch.query.OSQueryBuilder;
-import de.ingrid.iplug.opensearch.query.OSRequest;
+import de.ingrid.iplug.opensearch.query.*;
 import de.ingrid.search.utils.facet.FacetManager;
 import de.ingrid.search.utils.facet.IFacetManager;
-import de.ingrid.utils.IngridCall;
-import de.ingrid.utils.IngridDocument;
-import de.ingrid.utils.IngridHit;
-import de.ingrid.utils.IngridHitDetail;
-import de.ingrid.utils.IngridHits;
-import de.ingrid.utils.PlugDescription;
+import de.ingrid.utils.*;
 import de.ingrid.utils.dsc.Record;
 import de.ingrid.utils.metadata.IMetadataInjector;
 import de.ingrid.utils.processor.IPostProcessor;
 import de.ingrid.utils.processor.IPreProcessor;
 import de.ingrid.utils.query.IngridQuery;
 import de.ingrid.utils.tool.QueryUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This iPlug connects to the iBus and offers requests to a defined Opensearch-
@@ -120,14 +108,15 @@ public class OpenSearchPlug extends HeartBeatPlug {
     
     @Autowired
     private IFacetManager facetManager;
-    
-    public static Configuration conf;
-	
+
     @Autowired
+	private Configuration opensearchConfig;
+
+	@Autowired
 	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters, 
 			IMetadataInjector[] injector,
 			IPreProcessor[] preProcessors,
-			IPostProcessor[] postProcessors) throws IOException {
+			IPostProcessor[] postProcessors) {
 		super(30000, new PlugDescriptionFieldFilters(fieldFilters), injector, preProcessors, postProcessors);
 	}
 	
@@ -138,8 +127,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	 * 
 	 * @param plugDescription
 	 *            Descriptionfile for initialization
-	 * @throws IOException 
-	 * @see de.ingrid.iplug.IPlug#configure(PlugDescription)
 	 */
 	@SuppressWarnings("unchecked")
     @Override
@@ -147,8 +134,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 		super.configure(plugDescription);
 		log.info("Configuring OpenSearch-iPlug...");		
 		this.fPlugDesc = plugDescription;
-		Configuration conf = OpenSearchPlug.conf;
-		
+
 		try {
 		
 			if (fPlugDesc.getRankingTypes()[0].equals("off")) {
@@ -158,12 +144,12 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			}
 				
 			this.fPlugID = fPlugDesc.getPlugId();
-			this.fUseDescriptor  = conf.useDescriptor;
-			this.fServiceURL = conf.serviceUrl;
+			this.fUseDescriptor  = opensearchConfig.useDescriptor;
+			this.fServiceURL = opensearchConfig.serviceUrl;
 			
 			XStream xstream = new XStream();
             //mapping = (List<OSMapping>) fPlugDesc.get("mapping");
-			mapping = (List<OSMapping>)(List<?>) xstream.fromXML(OpenSearchPlug.conf.mapping);
+			mapping = (List<OSMapping>)(List<?>) xstream.fromXML(opensearchConfig.mapping);
 			
 			if (mapping == null)
 			    mapping = new ArrayList<OSMapping>();
@@ -188,10 +174,9 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			
 			log.info("iPlug initialized; waiting for incoming queries.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Error during configuration", e);
 		} catch (Exception e) {
-			log.error("Error reading Descriptor: " + e);
-			e.printStackTrace();
+			log.error("Error reading Descriptor: ", e);
 		}
 	}
 	
@@ -208,8 +193,6 @@ public class OpenSearchPlug extends HeartBeatPlug {
 	 *            Number of hits to return, beginning at <code>start</code>
 	 * @return Hits in the specified range
 	 * @throws Exception e
-	 * 
-	 * @see de.ingrid.iplug.IPlug#search(de.ingrid.utils.query.IngridQuery, int, int)
 	 */
 	public final IngridHits search(final IngridQuery query, final int start, final int length)
 	throws Exception {
@@ -247,7 +230,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			OSQuery osQuery = queryBuilder.createQuery(query, start, length, mapping);
 			
 			OSCommunication comm = new OSCommunication();
-			url = OSRequest.getOSQueryString(osQuery, query, osDescriptor);
+			url = OSRequest.getOSQueryString(osQuery, query, osDescriptor, opensearchConfig);
 			result = comm.sendRequest(url);
 			hits = ingridConverter.processResult(fPlugID, result, query.getGrouped());
 			
@@ -369,12 +352,11 @@ public class OpenSearchPlug extends HeartBeatPlug {
     }
 	
     public static void main(String[] args) throws Exception {
-        conf = new ConfigBuilder<Configuration>(Configuration.class).withCommandLineArgs(args).build();
-        new JettyStarter( conf );
+        new JettyStarter(Configuration.class);
     }
 
     @Override
-    public IngridDocument call(IngridCall targetInfo) throws Exception {
+    public IngridDocument call(IngridCall targetInfo) {
         throw new RuntimeException( "call-function not implemented in OpenSearch-iPlug" );
     }
 }

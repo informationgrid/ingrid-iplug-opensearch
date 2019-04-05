@@ -3,19 +3,23 @@
   <parent>
     <groupId>de.ingrid</groupId>
     <artifactId>ingrid-releases-pom</artifactId>
-    <version>4.2.2</version>
+    <version>5.0.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ingrid-iplug-opensearch</artifactId>
-  <version>4.5.0</version>
+  <version>5.0.0</version>
   <packaging>jar</packaging>
-  <name>InGrid iPlug-Opensearch</name>
+  <name>InGrid iPlug Opensearch</name>
   <description>This iPlug indexes documents from an opensearch interface and can be queried by the iBus.</description>
+
+  <!-- ==================== Source Code Management ==================== -->
   <scm>
     <connection>scm:git:git@github.com:informationgrid/ingrid-iplug-opensearch.git</connection>
     <developerConnection>scm:git:git@github.com:informationgrid/ingrid-iplug-opensearch.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
+
+  <!-- ==================== REPOSITORIES ==================== -->
   <repositories>
     <!-- Repo of parent pom needed, parent pom may not be installed locally yet -->
     <repository>
@@ -24,11 +28,45 @@
       <url>https://nexus.informationgrid.eu/repository/maven-public</url>
     </repository>
   </repositories>
+
+  <!-- ==================== PROPERTIES ==================== -->
+  <properties>
+    <iplug.type>IPLUG_OPENSEARCH</iplug.type>
+    <spring.version>4.3.20.RELEASE</spring.version>
+  </properties>
+
+  <!-- ==================== DEPENDENCY MANAGEMENT ==================== -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-beans</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <!-- ==================== DEPENDENCIES ==================== -->
   <dependencies>
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-iplug</artifactId>
-      <version>3.6.2</version>
+      <version>5.0.0</version>
       <exclusions>
         <exclusion>
           <groupId>ant</groupId>
@@ -51,25 +89,39 @@
           <artifactId>servlet-api</artifactId>
         </exclusion>
         <exclusion>
-            <groupId>jetty</groupId>
-            <artifactId>org.mortbay.jetty</artifactId>
+          <groupId>jetty</groupId>
+          <artifactId>org.mortbay.jetty</artifactId>
+        </exclusion>
+        <exclusion>
+          <artifactId>log4j</artifactId>
+          <groupId>log4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>spring-security-crypto</artifactId>
+          <groupId>org.springframework.security</groupId>
         </exclusion>
       </exclusions>
     </dependency>
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-utils</artifactId>
-      <version>4.0.1</version>
+      <version>5.0.0</version>
     </dependency>
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-search-utils</artifactId>
       <version>3.5.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>log4j</artifactId>
+          <groupId>log4j</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>4.5.0</version>
+      <version>5.0.0</version>
       <exclusions>
         <exclusion>
           <groupId>org.elasticsearch</groupId>
@@ -80,7 +132,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>4.5.0</version>
+      <version>5.0.0</version>
       <classifier>res</classifier>
       <type>zip</type>
       <exclusions>
@@ -123,37 +175,31 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
-      <version>1.3.1</version>
+      <version>1.3.3</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.4</version>
+      <version>4.12</version>
     </dependency>
     <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-test</artifactId>
-        <version>2.5.6</version>
-        <scope>test</scope>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>4.3.19.RELEASE</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit-dep</artifactId>
-        <version>4.4</version>
-        <scope>test</scope>
+      <groupId>junit</groupId>
+      <artifactId>junit-dep</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <!-- ==================== Build Configuration ==================== -->
   <build>
     <finalName>${artifactId}-${version}</finalName>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-eclipse-plugin</artifactId>
-        <inherited>true</inherited>
-        <configuration>
-          <useProjectReferences>false</useProjectReferences>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -163,79 +209,14 @@
           </includes>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-base-webapp</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>de.ingrid</groupId>
-                  <artifactId>ingrid-base-webapp</artifactId>
-                  <classifier>res</classifier>
-                  <type>zip</type>
-                  <outputDirectory>${project.build.directory}/base-webapp</outputDirectory>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-jar-plugin</artifactId>
-         <configuration>
-           <archive>
-             <manifestEntries>
-               <!-- see ingrid-utils:de.ingrid.utils.metadata.IPlugType-->
-               <iPlug-Type>IPLUG_OPENSEARCH</iPlug-Type>
-             </manifestEntries>
-           </archive>
-         </configuration>
-      </plugin>
+
+      <!-- Activate maven-assembly-plugin from release pom to build installer -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-            <archive>
-              <manifestEntries>
-                <ingridComponentType>IPLUG_OPENSEARCH</ingridComponentType>
-              </manifestEntries>
-            </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <configuration>
-          <archiveClasses>false</archiveClasses>
-          <archive>
-            <manifestEntries>
-              <!-- see ingrid-utils:de.ingrid.utils.metadata.IPlugType -->
-              <iPlug-Type>IPLUG_OPENSEARCH</iPlug-Type>
-            </manifestEntries>
-          </archive>
-          <webResources>
-            <resource>
-                <directory>target/base-webapp</directory>
-            </resource>
-          </webResources>
-        </configuration>
-      </plugin>
+      <!--
+        This plugin configures the git-flow for this project
+      -->
       <plugin>
         <groupId>external.atlassian.jgitflow</groupId>
         <artifactId>jgitflow-maven-plugin</artifactId>

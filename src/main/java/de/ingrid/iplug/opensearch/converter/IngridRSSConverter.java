@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2019 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -89,18 +89,10 @@ public class IngridRSSConverter extends IngridDefaultConverter {
 
             hits = new IngridHits(plugId, totalResults, hitArray, isRanked);
 
-        } catch (ParserConfigurationException e) {
-            log.error("Error while parsing the InputStream!");
-            e.printStackTrace();
-        } catch (SAXException e) {
-            log.error("Error while parsing the InputStream!");
-            e.printStackTrace();
-        } catch (IOException e) {
-            log.error("Error while parsing the InputStream!");
-            e.printStackTrace();
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            log.error("Error while parsing the InputStream!", e);
         } catch (XPathExpressionException e) {
-            log.error("Error while performing xpath.evaluate on a document!");
-            e.printStackTrace();
+            log.error("Error while performing xpath.evaluate on a document!", e);
         } finally {
             if (hits == null) {
                 hits = new IngridHits(plugId, 0, new IngridHit[0], true);

@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2019 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -22,17 +22,16 @@
  */
 package de.ingrid.iplug.opensearch.query;
 
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import de.ingrid.iplug.opensearch.OpenSearchPlug;
+import de.ingrid.iplug.opensearch.Configuration;
 import de.ingrid.iplug.opensearch.model.OSMapping;
 import de.ingrid.iplug.opensearch.tools.QueryUtils;
 import de.ingrid.iplug.opensearch.tools.StringUtils;
 import de.ingrid.utils.query.IngridQuery;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * This class creates an URL for an Opensearch-Interface with all the parameters
@@ -53,7 +52,7 @@ public class OSRequest {
 	 * @param osDescriptor
 	 * @return
 	 */
-	public static String getOSQueryString(OSQuery osQuery, IngridQuery ingridQuery, OSDescriptor osDescriptor) {
+	public static String getOSQueryString(OSQuery osQuery, IngridQuery ingridQuery, OSDescriptor osDescriptor, Configuration opensearchConfig) {
 		String mergedResult 	= osDescriptor.getUrl();
 		log.debug("OpenSearch Query before merging params: " + mergedResult);
 		Set<String> paramKeys 	= osQuery.keySet();
@@ -69,17 +68,17 @@ public class OSRequest {
 		mergedResult = StringUtils.removeUnusedParameter(mergedResult);
 		
 		// add mapped parameters like domain, partner and provider
-		String finalQueryString = addMappedParameters(mergedResult, ingridQuery, osQuery.getMapping(), true);
+		String finalQueryString = addMappedParameters(mergedResult, ingridQuery, osQuery.getMapping(), true, opensearchConfig);
 		
 		log.debug("OpenSearch Query: " + finalQueryString);
 		return finalQueryString;
 	}
 
     public static String addMappedParameters(String term, IngridQuery ingridQuery,
-            List<OSMapping> mapping, boolean asParam) {
+                                             List<OSMapping> mapping, boolean asParam, Configuration opensearchConfig) {
 
         // do not map if it was deactivated
-        if (!OpenSearchPlug.conf.mappingSupport) return term;
+        if (!opensearchConfig.mappingSupport) return term;
         
         String connector  = "+";
         String definition = ":";
