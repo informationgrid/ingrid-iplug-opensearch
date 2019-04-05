@@ -2,7 +2,7 @@
   **************************************************-
   ingrid-iplug-opensearch:war
   ==================================================
-  Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+  Copyright (C) 2014 - 2019 wemove digital solutions GmbH
   ==================================================
   Licensed under the EUPL, Version 1.1 or â€“ as soon they will be
   approved by the European Commission - subsequent versions of the
@@ -75,12 +75,12 @@
     <div id="contentBox" class="contentMiddle">
         <h1 id="head">Opensearch Parameter</h1>
         <div class="controls">
-            <a href="../base/extras.html">Zurück</a>
+            <a href="../base/extras.html">Zurï¿½ck</a>
             <a href="../base/welcome.html">Abbrechen</a>
             <a href="#" onclick="document.getElementById('osConfig').submit();">Weiter</a>
         </div>
         <div class="controls cBottom">
-            <a href="../base/extras.html">Zurück</a>
+            <a href="../base/extras.html">Zurï¿½ck</a>
             <a href="../base/welcome.html">Abbrechen</a>
             <a href="#" onclick="document.getElementById('osConfig').submit();">Weiter</a>
         </div>
@@ -99,7 +99,7 @@
                             <div class="input full"><form:input path="opensearchDescriptorUrl" /></div>
                             <form:errors path="opensearchDescriptorUrl" cssClass="error" element="div" />
                             <br />
-                            Bitte geben Sie hier die URL des Opensearch-Deskriptors an, die Sie an das InGrid System anschließen wollen.
+                            Bitte geben Sie hier die URL des Opensearch-Deskriptors an, die Sie an das InGrid System anschlieï¿½en wollen.
                         </td>
                     </tr>
                     <tr>
@@ -108,8 +108,8 @@
                             <div class="input full"><form:input path="opensearchUrl" /></div>
                             <form:errors path="opensearchUrl" cssClass="error" element="div" />
                             <br />
-                            Bitte geben Sie hier die Opensearch URL mit Platzhaltern an, die Sie an das InGrid System anschließen wollen.
-                            Verfügbare Platzhalter sind {searchTerms}, {geo:box}, {startPage}, {count}, {ingridsearch:xml},
+                            Bitte geben Sie hier die Opensearch URL mit Platzhaltern an, die Sie an das InGrid System anschlieï¿½en wollen.
+                            Verfï¿½gbare Platzhalter sind {searchTerms}, {geo:box}, {startPage}, {count}, {ingridsearch:xml},
                             {ingridsearch:georss}, {ingridsearch:ingrid}
                             <p style="color: gray;">(Beispiel: http://127.0.0.1/query?q={searchTerms}+datatype:default+ranking:score&amp;bbox={geo:box?}&amp;p={startPage?}&amp;h={count?}&amp;xml={ingridsearch:xml?}&amp;georss={ingridsearch:georss?}&amp;ingrid={ingridsearch:ingrid?}&amp;format=rss")</p>
                         </td>
@@ -121,11 +121,11 @@
                         <td colspan="2"><h3>Ranking Parameter:</h3></td>
                     </tr>
                     <tr>
-                        <td class="leftCol">Ranking Unterstützung:</td>
+                        <td class="leftCol">Ranking Unterstï¿½tzung:</td>
                         <td>
                             <form:checkbox path="rankSupport" id="ranking" />
                             <br />
-                            Unterstützt die Opensearch Schnittstelle ein Ranking der Suchergebnisse? (Wenn aktiviert, 
+                            Unterstï¿½tzt die Opensearch Schnittstelle ein Ranking der Suchergebnisse? (Wenn aktiviert, 
                             werden die Ergebnisse in die Hauptergebnisliste des Portals aufgenommen.)
                         </td>
                     </tr>
@@ -149,7 +149,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            Weitere Möglichkeiten zur Manipulation des ranking score bestehen in der Aktivierung zusätzlicher RankingModifier in der Datei ./webapp/WEB-INF/spring.xml
+                            Weitere Mï¿½glichkeiten zur Manipulation des ranking score bestehen in der Aktivierung zusï¿½tzlicher RankingModifier in der Datei ./webapp/WEB-INF/spring.xml
                         </td>
                     </tr>
                 </table>

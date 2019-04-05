@@ -2,7 +2,7 @@
   **************************************************-
   ingrid-iplug-opensearch:war
   ==================================================
-  Copyright (C) 2014 - 2018 wemove digital solutions GmbH
+  Copyright (C) 2014 - 2019 wemove digital solutions GmbH
   ==================================================
   Licensed under the EUPL, Version 1.1 or â€“ as soon they will be
   approved by the European Commission - subsequent versions of the
@@ -75,12 +75,12 @@
     <div id="contentBox" class="contentMiddle">
     	<h1 id="head">Opensearch Mapping</h1>
         <div class="controls">
-            <a href="../iplug-pages/osParams.html">Zurück</a>
+            <a href="../iplug-pages/osParams.html">Zurï¿½ck</a>
             <a href="../base/welcome.html">Abbrechen</a>
             <a href="#" onclick="document.getElementById('mapConfig').submit();">Weiter</a>
         </div>
         <div class="controls cBottom">
-            <a href="../iplug-pages/osParams.html">Zurück</a>
+            <a href="../iplug-pages/osParams.html">Zurï¿½ck</a>
             <a href="../base/welcome.html">Abbrechen</a>
             <a href="#" onclick="document.getElementById('mapConfig').submit();">Weiter</a>
         </div>
@@ -91,12 +91,12 @@
                         <td colspan="2"><h3>Eigenschaften der Quelle:</h3></td>
                     </tr>
                     <tr>
-                        <td width="180px" style="vertical-align:top;">Mapping-Unterstützung</td>
+                        <td width="180px" style="vertical-align:top;">Mapping-Unterstï¿½tzung</td>
                         <td>
                         	<form:checkbox path="useMapping" id="mapping" />
                             <br />
-                            Aktivieren Sie diese Checkbox, wenn die anzuschließende Opensearch-Schnittstelle die Gruppierung
-                            von Ergebnissen unterstützt. Es ist dann möglich nach Domäne, Partner und Anbieter zu gruppieren.
+                            Aktivieren Sie diese Checkbox, wenn die anzuschlieï¿½ende Opensearch-Schnittstelle die Gruppierung
+                            von Ergebnissen unterstï¿½tzt. Es ist dann mï¿½glich nach Domï¿½ne, Partner und Anbieter zu gruppieren.
                         </td>
                     </tr>
                 </table>
@@ -106,7 +106,7 @@
     					<tr>
     						<th width="140px" align="left">Mapping aktivieren</th>
     						<th align="left">zu mappen auf:</th>
-    						<th width="175px" align="left">als Parameter hinzufügen</th>
+    						<th width="175px" align="left">als Parameter hinzufï¿½gen</th>
     					</tr>
     				</thead>
     				<tr>
@@ -139,12 +139,12 @@
                                 <li>Wird das Mapping aktiviert, dann wird das entsprechende Feld auf einen hier
                                 angegebenen neuen Feldnamen gemappt. Steht in der IngridQuery also "partner:bw",
                                 dann wird dies zu "&lt;gemapptes Feld von Partner&gt;:bw".</li>
-                                <li>Wird die Checkbox "als Parameter hinzufügen" ausgewählt, dann wird das gemappte 
-                                Feld inkl. Wert als Parameter an die Opensearch-Query angehängt. Ansonsten wird 
+                                <li>Wird die Checkbox "als Parameter hinzufï¿½gen" ausgewï¿½hlt, dann wird das gemappte 
+                                Feld inkl. Wert als Parameter an die Opensearch-Query angehï¿½ngt. Ansonsten wird 
                                 dieser innerhalb des Suchbegriffs aufgenommen.</li>
                                 <li>Wird im Feld "zu mappen auf" die Zeichenfolge '[]' (eckige-Klammer-auf eckige-Klammer-zu) 
                                 eingetragen, so wird der entsprechende Parametername weggelassen und der Wert dieses 
-                                Parameters als Bestandteil des Suchbegriffs übertragen. Eine InGridQuery 
+                                Parameters als Bestandteil des Suchbegriffs ï¿½bertragen. Eine InGridQuery 
                                 "site:www.uba.de bodenzustand" wird also zu "www.uba.de bodenzustand" umgeformt.</li>
                             </ul>
     						 
