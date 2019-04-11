@@ -121,7 +121,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-base-webapp</artifactId>
-      <version>5.0.0</version>
+      <version>5.0.1</version>
       <exclusions>
         <exclusion>
           <groupId>org.elasticsearch</groupId>
