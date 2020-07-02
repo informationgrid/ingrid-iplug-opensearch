@@ -28,6 +28,12 @@
     <author email="andre.wallat@wemove.com">André Wallat</author>
   </properties>
   <body>
+    <release version="5.5.0-SNAPSHOT" date="2020-xx-xx" description="Release 5.5.0">
+      <action type="add" dev="wemove" issue="1898">
+        Change the container’s privilege to a non-root user.
+      </action>
+    </release>
+
     <release version="5.0.1" date="2019-04-11" description="Release 5.0.1">
       <action type="fix" dev="wemove">
         Fix index name generation.
