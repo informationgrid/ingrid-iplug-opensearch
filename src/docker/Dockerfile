@@ -1,21 +1,21 @@
-FROM openjdk:8-jre-alpine
-ENV INGRID_USER=root
+FROM alpine AS builder
+
+COPY ingrid-iplug-*-installer.jar /
+RUN unzip ingrid-iplug-*-installer.jar -d /tmp \
+    && export INSTALL_DIR=`ls -d1 /tmp/ingrid-iplug-*` \
+    && sed -i -r 's/(<AppenderRef.*\/>)/\1<AppenderRef ref="Console" \/>/g' $INSTALL_DIR/conf/log4j2.xml \
+    && echo jetty.port=8080 > $INSTALL_DIR/conf/config.override.properties
+
+FROM docker-registry.wemove.com/ingrid-java:jre-8-alpine
+ENV INGRID_USER=ingrid
 ENV RUN_DIRECTLY=true
 
-ADD ingrid-iplug-*-installer.jar /
+# user, group ingrid (1000:1000) is created in base image
+COPY --chown=1000:1000 --from=builder /tmp/ingrid-iplug-* /opt/ingrid/ingrid-iplug-opensearch/
 
-RUN unzip ingrid-iplug-*-installer.jar -d /tmp \
-    && mkdir -p /opt/ingrid/ingrid-iplug-opensearch \
-    && cp -R /tmp/ingrid-iplug-opensearch-*/* /opt/ingrid/ingrid-iplug-opensearch/ \
-    && rm -Rf /tmp/* \
-    && rm ingrid-*.jar
+USER ingrid
 
-# forward request and error logs to docker log collector
-RUN ln -sf /dev/stdout /opt/ingrid/ingrid-iplug-opensearch/log.log
-  # && ln -sf /dev/stderr /var/log/nginx/error.log
-
-RUN echo jetty.port=80 > /opt/ingrid/ingrid-iplug-opensearch/conf/config.override.properties
 WORKDIR /opt/ingrid/ingrid-iplug-opensearch
-EXPOSE 80
+EXPOSE 8080
 
-CMD /bin/sh start.sh start
+CMD /bin/sh start.sh start && tail -f /dev/null

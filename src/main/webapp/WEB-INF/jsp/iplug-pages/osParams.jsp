@@ -2,7 +2,7 @@
   **************************************************-
   ingrid-iplug-opensearch:war
   ==================================================
-  Copyright (C) 2014 - 2019 wemove digital solutions GmbH
+  Copyright (C) 2014 - 2020 wemove digital solutions GmbH
   ==================================================
   Licensed under the EUPL, Version 1.1 or – as soon they will be
   approved by the European Commission - subsequent versions of the
@@ -56,7 +56,7 @@
 </head>
 <body onLoad="setListener()">
     <div id="header">
-        <img src="../images/base/logo.gif" width="168" height="60" alt="Portal U" />
+        <img src="../images/base/logo.gif" width="168" height="60" alt="Portal" />
         <h1><fmt:message key="OpensearchConfig.main.configuration"/></h1>
         <%
           java.security.Principal  principal = request.getUserPrincipal();
