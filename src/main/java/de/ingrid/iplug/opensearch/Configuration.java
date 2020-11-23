@@ -78,6 +78,9 @@ public class Configuration implements IConfig {
         // we also can process metainfo field ! so indicate this !
         // add "metainfo" field, so plug won't be filtered when field is part of query !
         PlugDescriptionUtil.addFieldToPlugDescription(pdObject, QueryUtil.FIELDNAME_METAINFO);
+        
+        // the field "isfolder" is now always request, so we have to add it
+        PlugDescriptionUtil.addFieldToPlugDescription(pdObject, "isfolder");
 
         // add datatype opensearch to PD
         pdObject.addDataType("opensearch");
