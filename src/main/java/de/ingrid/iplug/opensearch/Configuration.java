@@ -28,6 +28,7 @@ import de.ingrid.utils.tool.PlugDescriptionUtil;
 import de.ingrid.utils.tool.QueryUtil;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.List;
 import java.util.Properties;
 
 @org.springframework.context.annotation.Configuration
@@ -43,6 +44,9 @@ public class Configuration implements IConfig {
     
     @Value("${plugdescription.domainGroupingSupport:false}")
     public boolean domainGroupingSupport;
+
+    @Value("${plugdescription.ranking:score}")
+    public List<String> ranking;
 
     @Value("${plugdescription.rankingMul:1}")
     public String rankingMul;
@@ -86,7 +90,13 @@ public class Configuration implements IConfig {
         pdObject.addDataType("opensearch");
         
         // FIXME: use latest basewebapp to remove this line (wrong mapping of ranking:off, was 'notRanked')
-        if (pdObject.getRankingTypes().length == 0) pdObject.setRankinTypes( false, false, true );
+        if (pdObject.getRankingTypes().length == 0) {
+            pdObject.setRankinTypes( false, false, true );
+        } else {
+            for (String type : this.ranking) {
+                pdObject.addToList("ranking", type);
+            }
+        }
     }
 
     @Override

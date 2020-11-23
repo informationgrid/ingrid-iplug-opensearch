@@ -37,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import java.util.Arrays;
+
 /**
  * Control the page of Opensearch-specific parameters of the webapp.
  * @author André Wallat
@@ -105,6 +107,7 @@ public class OSParametersController extends AbstractController {
         } else {
             pdCommandObject.setRankinTypes(false, isDate, isOff);
     	}
+		opensearchConfig.ranking = Arrays.asList(pdCommandObject.getRankingTypes());
     	
     	// write information if Descriptor is used
     	if (commandObject.getOsDescriptor() != null && commandObject.getOsDescriptor().equals("descriptor")) { //useDescriptor.equals("descriptor")) {
