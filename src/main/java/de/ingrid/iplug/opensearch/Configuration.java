@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2020 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2021 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -28,6 +28,7 @@ import de.ingrid.utils.tool.PlugDescriptionUtil;
 import de.ingrid.utils.tool.QueryUtil;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.List;
 import java.util.Properties;
 
 @org.springframework.context.annotation.Configuration
@@ -43,6 +44,9 @@ public class Configuration implements IConfig {
     
     @Value("${plugdescription.domainGroupingSupport:false}")
     public boolean domainGroupingSupport;
+
+    @Value("${plugdescription.ranking:score}")
+    public List<String> ranking;
 
     @Value("${plugdescription.rankingMul:1}")
     public String rankingMul;
@@ -78,12 +82,21 @@ public class Configuration implements IConfig {
         // we also can process metainfo field ! so indicate this !
         // add "metainfo" field, so plug won't be filtered when field is part of query !
         PlugDescriptionUtil.addFieldToPlugDescription(pdObject, QueryUtil.FIELDNAME_METAINFO);
+        
+        // the field "isfolder" is now always request, so we have to add it
+        PlugDescriptionUtil.addFieldToPlugDescription(pdObject, "isfolder");
 
         // add datatype opensearch to PD
         pdObject.addDataType("opensearch");
         
         // FIXME: use latest basewebapp to remove this line (wrong mapping of ranking:off, was 'notRanked')
-        if (pdObject.getRankingTypes().length == 0) pdObject.setRankinTypes( false, false, true );
+        if (pdObject.getRankingTypes().length == 0) {
+            pdObject.setRankinTypes( false, false, true );
+        } else {
+            for (String type : this.ranking) {
+                pdObject.addToList("ranking", type);
+            }
+        }
     }
 
     @Override

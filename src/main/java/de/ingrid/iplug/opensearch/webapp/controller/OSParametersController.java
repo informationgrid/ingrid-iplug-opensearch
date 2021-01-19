@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2020 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2021 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -36,6 +36,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
+
+import java.util.Arrays;
 
 /**
  * Control the page of Opensearch-specific parameters of the webapp.
@@ -105,6 +107,7 @@ public class OSParametersController extends AbstractController {
         } else {
             pdCommandObject.setRankinTypes(false, isDate, isOff);
     	}
+		opensearchConfig.ranking = Arrays.asList(pdCommandObject.getRankingTypes());
     	
     	// write information if Descriptor is used
     	if (commandObject.getOsDescriptor() != null && commandObject.getOsDescriptor().equals("descriptor")) { //useDescriptor.equals("descriptor")) {
