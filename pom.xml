@@ -33,7 +33,7 @@
   <properties>
     <iplug.type>IPLUG_OPENSEARCH</iplug.type>
     <spring.version>4.3.20.RELEASE</spring.version>
-    <ingrid-base-webapp.version>5.10.0-SNAPSHOT</ingrid-base-webapp.version>
+    <ingrid-base-webapp.version>5.10.0</ingrid-base-webapp.version>
   </properties>
 
   <!-- ==================== DEPENDENCY MANAGEMENT ==================== -->
