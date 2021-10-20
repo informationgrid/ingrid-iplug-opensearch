@@ -7,7 +7,7 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ingrid-iplug-opensearch</artifactId>
-  <version>5.7.0</version>
+  <version>5.10.0</version>
   <packaging>jar</packaging>
   <name>InGrid iPlug Opensearch</name>
   <description>This iPlug indexes documents from an opensearch interface and can be queried by the iBus.</description>
@@ -33,7 +33,7 @@
   <properties>
     <iplug.type>IPLUG_OPENSEARCH</iplug.type>
     <spring.version>4.3.20.RELEASE</spring.version>
-    <ingrid-base-webapp.version>5.4.0</ingrid-base-webapp.version>
+    <ingrid-base-webapp.version>5.10.0</ingrid-base-webapp.version>
   </properties>
 
   <!-- ==================== DEPENDENCY MANAGEMENT ==================== -->
@@ -106,7 +106,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-utils</artifactId>
-      <version>5.4.0</version>
+      <version>5.10.0</version>
     </dependency>
     <dependency>
       <groupId>de.ingrid</groupId>
