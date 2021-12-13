@@ -34,6 +34,7 @@
     <iplug.type>IPLUG_OPENSEARCH</iplug.type>
     <spring.version>4.3.20.RELEASE</spring.version>
     <ingrid-base-webapp.version>5.10.0</ingrid-base-webapp.version>
+    <log4j2.version>2.15.0</log4j2.version>
   </properties>
 
   <!-- ==================== DEPENDENCY MANAGEMENT ==================== -->
@@ -168,6 +169,25 @@
       </exclusions>
     </dependency>
     <!-- End of Jetty - Dependencies -->
+
+    <!-- backward compatible -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-1.2-api</artifactId>
+      <version>${log4j2.version}</version>
+    </dependency>
+    <!-- end -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j2.version}</version>
+    </dependency>
+    
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
