@@ -3,7 +3,7 @@
   <parent>
     <groupId>de.ingrid</groupId>
     <artifactId>ingrid-releases-pom</artifactId>
-    <version>5.11.0-SNAPSHOT</version>
+    <version>5.11.0</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>ingrid-iplug-opensearch</artifactId>
@@ -33,7 +33,7 @@
   <properties>
     <iplug.type>IPLUG_OPENSEARCH</iplug.type>
     <spring.version>4.3.21.RELEASE</spring.version>
-    <ingrid-base-webapp.version>5.10.0</ingrid-base-webapp.version>
+    <ingrid-base-webapp.version>5.11.0</ingrid-base-webapp.version>
     <log4j2.version>2.17.1</log4j2.version>
   </properties>
 
@@ -107,7 +107,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-utils</artifactId>
-      <version>5.10.0</version>
+      <version>5.11.0</version>
     </dependency>
     <dependency>
       <groupId>de.ingrid</groupId>
@@ -187,7 +187,7 @@
       <artifactId>log4j-core</artifactId>
       <version>${log4j2.version}</version>
     </dependency>
-    
+
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
