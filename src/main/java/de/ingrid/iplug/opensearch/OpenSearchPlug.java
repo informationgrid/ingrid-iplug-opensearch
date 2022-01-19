@@ -27,6 +27,7 @@
 package de.ingrid.iplug.opensearch;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import de.ingrid.admin.JettyStarter;
 import de.ingrid.iplug.HeartBeatPlug;
 import de.ingrid.iplug.IPlugdescriptionFieldFilter;
@@ -148,6 +149,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
 			this.fServiceURL = opensearchConfig.serviceUrl;
 			
 			XStream xstream = new XStream();
+			xstream.addPermission(AnyTypePermission.ANY);
             //mapping = (List<OSMapping>) fPlugDesc.get("mapping");
 			mapping = (List<OSMapping>)(List<?>) xstream.fromXML(opensearchConfig.mapping);
 			

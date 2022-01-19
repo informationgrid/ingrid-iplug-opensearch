@@ -23,6 +23,7 @@
 package de.ingrid.iplug.opensearch.webapp.controller;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import de.ingrid.admin.command.PlugdescriptionCommandObject;
 import de.ingrid.admin.controller.AbstractController;
 import de.ingrid.iplug.opensearch.Configuration;
@@ -95,6 +96,8 @@ public class OSMappingController extends AbstractController {
     private void mapConfigToPD(MappingConfig commandObject,
             PlugdescriptionCommandObject pdCommandObject) {
         XStream xstream = new XStream();
+        xstream.addPermission(AnyTypePermission.ANY);
+        
         List<Object> osMappings = new ArrayList<Object>();
         
         // add mapping-support
@@ -150,6 +153,7 @@ public class OSMappingController extends AbstractController {
             PlugdescriptionCommandObject commandObject) {
         
         XStream xstream = new XStream();
+        xstream.addPermission(AnyTypePermission.ANY);
         List<OSMapping> mappings = (List<OSMapping>)(List<?>) xstream.fromXML(opensearchConfig.mapping);
         
         if (mappings == null) return;
