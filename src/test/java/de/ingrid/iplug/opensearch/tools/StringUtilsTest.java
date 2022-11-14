@@ -22,10 +22,16 @@
  */
 package de.ingrid.iplug.opensearch.tools;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class StringUtilsTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+public class StringUtilsTest {
+
+	@Test
 	public final void testParameterExists() {
 		assertTrue(StringUtils.parameterExists("abcdef{param1}xyz", "param1"));
 		assertFalse(StringUtils.parameterExists("abcdef{param1}xyz", "param2"));
@@ -33,20 +39,22 @@ public class StringUtilsTest extends TestCase {
 		assertFalse(StringUtils.parameterExists("abcdef{optional?}xyz", "optional2"));
 	}
 
+	@Test
 	public final void testReplaceParameter() {
-		assertTrue(StringUtils.replaceParameter("a;f={param1};xyz", "param1", "insert").equals("a;f=insert;xyz"));
-		assertFalse(StringUtils.replaceParameter("a;f={param1};xyz", "param2", "insert").equals("a;f=insert;xyz"));
-		assertTrue(StringUtils.replaceParameter("a;f={param1?};xyz", "param1", "insert").equals("a;f=insert;xyz"));
-		assertFalse(StringUtils.replaceParameter("a;f={param1?};xyz", "param2", "insert").equals("a;f=insert;xyz"));
+		assertEquals(StringUtils.replaceParameter("a;f={param1};xyz","param1","insert"),"a;f=insert;xyz");
+		assertNotEquals(StringUtils.replaceParameter("a;f={param1};xyz","param2","insert"),"a;f=insert;xyz");
+		assertEquals(StringUtils.replaceParameter("a;f={param1?};xyz","param1","insert"),"a;f=insert;xyz");
+		assertNotEquals(StringUtils.replaceParameter("a;f={param1?};xyz","param2","insert"),"a;f=insert;xyz");
 	}
-	
+
+	@Test
 	public final void testRemoveUnusedParameter() {
-		assertTrue(StringUtils.removeUnusedParameter("query?q=Wasser&bbox={geo:box?}&p={startPage?}").equals("query?q=Wasser"));
-		assertTrue(StringUtils.removeUnusedParameter("query?q=Wasser&bbox={geo:box?}&p=2").equals("query?q=Wasser&p=2"));
-		assertTrue(StringUtils.removeUnusedParameter("query?bbox={geo:box?}&q=Wasser&p=2").equals("query?q=Wasser&p=2"));
-		assertTrue(StringUtils.removeUnusedParameter("query?p=1&q=Wasser").equals("query?p=1&q=Wasser"));
-		assertTrue(StringUtils.removeUnusedParameter("query?p=1&bbox={geo:box?}&q=Wasser").equals("query?p=1&q=Wasser"));
-		assertTrue(StringUtils.removeUnusedParameter("query?p=1&bbox={geo:box?}&h=10&q=Wasser").equals("query?p=1&h=10&q=Wasser"));
-		assertTrue(StringUtils.removeUnusedParameter("http://localhost:8181/query?q=wasser+lufts+boden&bbox={geo:box?}&p=0&h=10&xml={ingridsearch:xml?}&format=rss").equals("http://localhost:8181/query?q=wasser+lufts+boden&p=0&h=10&format=rss"));
+		assertEquals(StringUtils.removeUnusedParameter("query?q=Wasser&bbox={geo:box?}&p={startPage?}"),"query?q=Wasser");
+		assertEquals(StringUtils.removeUnusedParameter("query?q=Wasser&bbox={geo:box?}&p=2"),"query?q=Wasser&p=2");
+		assertEquals(StringUtils.removeUnusedParameter("query?bbox={geo:box?}&q=Wasser&p=2"),"query?q=Wasser&p=2");
+		assertEquals(StringUtils.removeUnusedParameter("query?p=1&q=Wasser"),"query?p=1&q=Wasser");
+		assertEquals(StringUtils.removeUnusedParameter("query?p=1&bbox={geo:box?}&q=Wasser"),"query?p=1&q=Wasser");
+		assertEquals(StringUtils.removeUnusedParameter("query?p=1&bbox={geo:box?}&h=10&q=Wasser"),"query?p=1&h=10&q=Wasser");
+		assertEquals(StringUtils.removeUnusedParameter("http://localhost:8181/query?q=wasser+lufts+boden&bbox={geo:box?}&p=0&h=10&xml={ingridsearch:xml?}&format=rss"),"http://localhost:8181/query?q=wasser+lufts+boden&p=0&h=10&format=rss");
 	}
 }

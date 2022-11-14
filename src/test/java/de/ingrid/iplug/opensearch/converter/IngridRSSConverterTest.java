@@ -25,29 +25,32 @@ package de.ingrid.iplug.opensearch.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import de.ingrid.utils.IngridHits;
 
-public class IngridRSSConverterTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+public class IngridRSSConverterTest {
 
     private final String XML_INPUT_FILE = "response_example2.xml";
     private final String XML_INPUT_FILE_EUROPEANA = "response_europeana.xml";
 
     IngridRSSConverter ingridConverter = new IngridRSSConverter();
 
-    @Override
-    protected void setUp() throws Exception {
+	@BeforeEach
+	public void setUp() throws Exception {
         List<RankingModifier> l = new ArrayList<RankingModifier>();
         l.add(new RankingModifierFromPD());
         ingridConverter.setRankingModifiers(l);
-        super.setUp();
     }
 
-    public final void testProcessResult() {
+	@Test
+	public final void testProcessResult() {
         try {
             Resource resource = new ClassPathResource(XML_INPUT_FILE);
             IngridHits hits = ingridConverter.processResult("bla", resource.getInputStream(), null);
@@ -58,7 +61,8 @@ public class IngridRSSConverterTest extends TestCase {
         }
     }
 
-    public final void testProcessResultFromEuropeana() {
+	@Test
+	public final void testProcessResultFromEuropeana() {
         try {
             Resource resource = new ClassPathResource(XML_INPUT_FILE_EUROPEANA);
             IngridHits hits = ingridConverter.processResult("bla", resource.getInputStream(), null);
