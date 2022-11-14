@@ -9,10 +9,10 @@
         <Logger name="de.ingrid" level="debug" additivity="false">
             <AppenderRef ref="Console" />
         </Logger>
-        <Logger name="org.springframework" level="info" additivity="false">
+        <Logger name="org" level="info" additivity="false">
             <AppenderRef ref="Console" />
         </Logger>
-        <Root level="error">
+        <Root level="warn">
             <AppenderRef ref="Console" />
         </Root>
     </Loggers>
