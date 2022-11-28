@@ -84,8 +84,6 @@ import java.util.List;
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.elasticsearch.ElasticsearchNodeFactoryBean"),
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.admin.controller.IndexController"),
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.admin.controller.SchedulingController"),
-
-
         })
 public class OpenSearchPlug extends HeartBeatPlug {
 
