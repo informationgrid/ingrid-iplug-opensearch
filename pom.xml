@@ -32,7 +32,7 @@
   <!-- ==================== PROPERTIES ==================== -->
   <properties>
     <iplug.type>IPLUG_OPENSEARCH</iplug.type>
-    <spring.version>2.7.5</spring.version>
+    <spring.version>2.7.7</spring.version>
     <ingrid-base-webapp.version>5.15.0.3324-SNAPSHOT</ingrid-base-webapp.version>
     <log4j2.version>2.19.0</log4j2.version>
   </properties>
@@ -102,7 +102,7 @@
     <dependency>
       <groupId>de.ingrid</groupId>
       <artifactId>ingrid-search-utils</artifactId>
-      <version>3.5.0</version>
+      <version>5.15.0.3324-SNAPSHOT</version>
       <exclusions>
         <exclusion>
           <artifactId>log4j</artifactId>

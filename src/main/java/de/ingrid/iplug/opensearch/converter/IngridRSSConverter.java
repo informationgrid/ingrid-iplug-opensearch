@@ -329,7 +329,6 @@ public class IngridRSSConverter extends IngridDefaultConverter {
      * @return
      */
     private boolean getIsRanked(Document doc) {
-        // TODO: !!!
         return true;
     }
 
