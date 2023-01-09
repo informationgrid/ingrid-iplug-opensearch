@@ -29,6 +29,7 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+import net.sf.ehcache.config.CacheConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -57,11 +58,12 @@ public abstract class IngridDefaultConverter implements IngridConverter{
 		cache = cacheManager.getCache("detail-cache"); 
 		if (cache == null) {
 			log.warn("Cache settings 'detail-cache' not found! Using default values.");
-			if (!cacheManager.cacheExists("default")) {
-                cache = new Cache("default", 1000, false, false, 600, 600);
+			String defaultCacheName = "default-opensearch";
+			if (!cacheManager.cacheExists(defaultCacheName)) {
+                cache = new Cache(defaultCacheName, 1000, false, false, 600, 600);
                 cacheManager.addCache(cache);
             } else {
-                cache = cacheManager.getCache("default");
+                cache = cacheManager.getCache(defaultCacheName);
             }
 		}
 	}
@@ -108,7 +110,7 @@ public abstract class IngridDefaultConverter implements IngridConverter{
 	public IngridHitDetail getHitDetailFromCache(String docId) {
 		Element element = cache.get(docId);
 		if (element != null) {
-			return (IngridHitDetail)element.getValue();	
+			return (IngridHitDetail)element.getObjectValue();	
 		}
 		return null;
 		
