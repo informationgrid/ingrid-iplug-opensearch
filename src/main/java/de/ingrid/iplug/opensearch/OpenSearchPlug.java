@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2022 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2023 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -28,7 +28,7 @@ package de.ingrid.iplug.opensearch;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.AnyTypePermission;
-import de.ingrid.admin.JettyStarter;
+import de.ingrid.admin.Config;
 import de.ingrid.iplug.HeartBeatPlug;
 import de.ingrid.iplug.IPlugdescriptionFieldFilter;
 import de.ingrid.iplug.PlugDescriptionFieldFilters;
@@ -49,12 +49,17 @@ import de.ingrid.utils.tool.QueryUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.ImportResource;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,264 +67,284 @@ import java.util.List;
  * This iPlug connects to the iBus and offers requests to a defined Opensearch-
  * Interface. Its results will be converted into a format that the portal can
  * understand.
- * @author André Wallat
  *
+ * @author André Wallat
  */
-@Service
+@ImportResource({"/springapp-servlet.xml", "/override/*.xml"})
+@SpringBootApplication(scanBasePackages = "de.ingrid")
+@ComponentScan(
+        basePackages = "de.ingrid",
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.admin.object.DefaultDataType"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.admin.object.BasePlug"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.admin.BaseWebappApplication"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.admin.controller.RedirectController"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.elasticsearch.*"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.admin.elasticsearch.*"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.elasticsearch.ElasticsearchNodeFactoryBean"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.admin.controller.IndexController"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "de.ingrid.admin.controller.SchedulingController"),
+        })
 public class OpenSearchPlug extends HeartBeatPlug {
 
-	/**
-	 * The logging object
-	 */
-	private static Log log 				= LogFactory.getLog(OpenSearchPlug.class);
+    /**
+     * The logging object
+     */
+    private static final Log log = LogFactory.getLog(OpenSearchPlug.class);
 
-	/**
-	 * The <code>PlugDescription</code> object passed at startup
-	 */
-	private PlugDescription fPlugDesc 	= null;
+    /**
+     * The <code>PlugDescription</code> object passed at startup
+     */
+    private PlugDescription fPlugDesc = null;
 
-	/**
-	 * Does this iPlug return ranked hits?
-	 */
-	private boolean fIsRanked 			= false;
+    /**
+     * Does this iPlug return ranked hits?
+     */
+    private boolean fIsRanked = false;
 
-	/**
-	 * Unique Plug-iD
-	 */
-	private String fPlugID 				= null;
+    /**
+     * Unique Plug-iD
+     */
+    private String fPlugID = null;
 
-	/**
-	 * SOAP-Service URL
-	 */
-	private String fServiceURL 			= null;
+    /**
+     * SOAP-Service URL
+     */
+    private String fServiceURL = null;
 
-	private IngridConverter ingridConverter;
-	
-	private OSDescriptor osDescriptor 	= null;
+    private IngridConverter ingridConverter;
 
-	private boolean fUseDescriptor = true;
-	
-	// injected by Spring!
-	private ConverterFactory converterFactory;
+    private OSDescriptor osDescriptor = null;
+
+    private boolean fUseDescriptor = true;
+
+    // injected by Spring!
+    private ConverterFactory converterFactory;
 
     private List<OSMapping> mapping;
 
     // injected by Spring!
     private OSQueryBuilder queryBuilder;
-    
+
     @Autowired
     private IFacetManager facetManager;
 
     @Autowired
-	private Configuration opensearchConfig;
+    private Configuration opensearchConfig;
 
-	@Autowired
-	public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters, 
-			IMetadataInjector[] injector,
-			IPreProcessor[] preProcessors,
-			IPostProcessor[] postProcessors) {
-		super(30000, new PlugDescriptionFieldFilters(fieldFilters), injector, preProcessors, postProcessors);
-	}
-	
-	/**
-	 * This methode is called by the iBus to initialize the iPlug. If it was
-	 * impossible to initialize the iPlug correctly, it will return no hits in
-	 * case of an incomming search.
-	 * 
-	 * @param plugDescription
-	 *            Descriptionfile for initialization
-	 */
-	@SuppressWarnings("unchecked")
+    @Autowired
+    public OpenSearchPlug(IPlugdescriptionFieldFilter[] fieldFilters,
+                          Config baseConfig,
+                          Configuration externalConfig,
+                          IMetadataInjector[] injector,
+                          IPreProcessor[] preProcessors,
+                          IPostProcessor[] postProcessors) {
+        super(30000, new PlugDescriptionFieldFilters(fieldFilters), injector, preProcessors, postProcessors);
+
+        try {
+            baseConfig.initialize();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        if (externalConfig != null) {
+            externalConfig.initialize();
+        } else {
+            log.info("No external configuration found.");
+        }
+    }
+
+    /**
+     * This methode is called by the iBus to initialize the iPlug. If it was
+     * impossible to initialize the iPlug correctly, it will return no hits in
+     * case of an incomming search.
+     *
+     * @param plugDescription Descriptionfile for initialization
+     */
+    @SuppressWarnings("unchecked")
     @Override
-	public final void configure(final PlugDescription plugDescription) {
-		super.configure(plugDescription);
-		log.info("Configuring OpenSearch-iPlug...");		
-		this.fPlugDesc = plugDescription;
+    public final void configure(final PlugDescription plugDescription) {
+        super.configure(plugDescription);
+        log.info("Configuring OpenSearch-iPlug...");
+        this.fPlugDesc = plugDescription;
 
-		try {
-		
-			if (fPlugDesc.getRankingTypes()[0].equals("off")) {
-				this.fIsRanked = false;
-			} else {
-				this.fIsRanked = true;
-			}
-				
-			this.fPlugID = fPlugDesc.getPlugId();
-			this.fUseDescriptor  = opensearchConfig.useDescriptor;
-			this.fServiceURL = opensearchConfig.serviceUrl;
-			
-			XStream xstream = new XStream();
-			xstream.addPermission(AnyTypePermission.ANY);
+        try {
+
+            this.fIsRanked = !fPlugDesc.getRankingTypes()[0].equals("off");
+
+            this.fPlugID = fPlugDesc.getPlugId();
+            this.fUseDescriptor = opensearchConfig.useDescriptor;
+            this.fServiceURL = opensearchConfig.serviceUrl;
+
+            XStream xstream = new XStream();
+            xstream.addPermission(AnyTypePermission.ANY);
             //mapping = (List<OSMapping>) fPlugDesc.get("mapping");
-			mapping = (List<OSMapping>)(List<?>) xstream.fromXML(opensearchConfig.mapping);
-			
-			if (mapping == null)
-			    mapping = new ArrayList<OSMapping>();
-			
-			// TODO Disconnect iPlug from iBus if configuration wasn't succesfull
-			// Throw Exception for disconnect iPlug
-			// Write logging information...
-	
-			log.info("  - Plug-ID: " + fPlugID);
-			log.info("  - SOAP-Service URL: " + fServiceURL);
-				
-			log.info("Receiving OpenSearch-Descriptor ... using one: " + fUseDescriptor);
-			OSDescriptorBuilder descrBuilder = new OSDescriptorBuilder();
-			osDescriptor = descrBuilder.createDescriptor(fServiceURL, fUseDescriptor);
-			log.info("OpenSearch-Descriptor received");
-			
-			ingridConverter = converterFactory.getConverter(osDescriptor);
-			
+            mapping = (List<OSMapping>) xstream.fromXML(opensearchConfig.mapping);
+
+            if (mapping == null)
+                mapping = new ArrayList<>();
+
+            // TODO Disconnect iPlug from iBus if configuration wasn't succesfull
+            // Throw Exception for disconnect iPlug
+            // Write logging information...
+
+            log.info("  - Plug-ID: " + fPlugID);
+            log.info("  - SOAP-Service URL: " + fServiceURL);
+
+            log.info("Receiving OpenSearch-Descriptor ... using one: " + fUseDescriptor);
+            OSDescriptorBuilder descrBuilder = new OSDescriptorBuilder();
+            osDescriptor = descrBuilder.createDescriptor(fServiceURL, fUseDescriptor);
+            log.info("OpenSearch-Descriptor received");
+
+            ingridConverter = converterFactory.getConverter(osDescriptor);
+
             if (facetManager != null) {
                 facetManager.initialize();
             }
-			
-			log.info("iPlug initialized; waiting for incoming queries.");
-		} catch (IOException e) {
-			log.error("Error during configuration", e);
-		} catch (Exception e) {
-			log.error("Error reading Descriptor: ", e);
-		}
-	}
-	
 
-	/**
-	 * This method is called by the iBus to invoke an Opensearch search. If no hits can
-	 * be found, an empty <code>IngridHits</code> object will be returned.
-	 * 
-	 * @param query
-	 *            The search query. Holds search terms, clauses and fields
-	 * @param start
-	 *            Index of the first returned hit
-	 * @param length
-	 *            Number of hits to return, beginning at <code>start</code>
-	 * @return Hits in the specified range
-	 * @throws Exception e
-	 */
-	public final IngridHits search(final IngridQuery query, final int start, final int length)
-	throws Exception {
-		IngridHits hits 	= null;
-		InputStream result 	= null;
-		String url 			= null;
-		
-		if (log.isDebugEnabled()) {
-		    log.debug("Incoming query: " + query.toString() + ", start=" + start + ", length=" + length);
+            log.info("iPlug initialized; waiting for incoming queries.");
+        } catch (IOException e) {
+            log.error("Error during configuration", e);
+        } catch (Exception e) {
+            log.error("Error reading Descriptor: ", e);
+        }
+    }
+
+
+    /**
+     * This method is called by the iBus to invoke an Opensearch search. If no hits can
+     * be found, an empty <code>IngridHits</code> object will be returned.
+     *
+     * @param query  The search query. Holds search terms, clauses and fields
+     * @param start  Index of the first returned hit
+     * @param length Number of hits to return, beginning at <code>start</code>
+     * @return Hits in the specified range
+     * @throws Exception e
+     */
+    public final IngridHits search(final IngridQuery query, final int start, final int length)
+            throws Exception {
+        IngridHits hits;
+        InputStream result = null;
+        String url = null;
+
+        if (log.isDebugEnabled()) {
+            log.debug("Incoming query: " + query.toString() + ", start=" + start + ", length=" + length);
         }
 
-		// HANDLE METAINFO !!! e.g. add "reject search" metainfo etc.
+        // HANDLE METAINFO !!! e.g. add "reject search" metainfo etc.
         preProcess(query);
 
         // check if query is rejected and return 0 hits instead of search within the iplug
         if (query.isRejected()) {
-            return new IngridHits(fPlugID, 0, new IngridHit[] {}, fIsRanked);
-        }
-        
-    	// remove "meta" field from query so search works !
-    	QueryUtil.removeFieldFromQuery(query, QueryUtil.FIELDNAME_METAINFO);
-
-		if (log.isDebugEnabled()) {
-		    log.debug("After preprocessing -> query: " + query.toString() + ", start=" + start + ", length=" + length);
+            return new IngridHits(fPlugID, 0, new IngridHit[]{}, fIsRanked);
         }
 
-		try {
-		    // check if possibly fields are supported by this iPlug
-			// DISABLED! See INGRID-2214
+        // remove "meta" field from query so search works !
+        QueryUtil.removeFieldFromQuery(query, QueryUtil.FIELDNAME_METAINFO);
+
+        if (log.isDebugEnabled()) {
+            log.debug("After preprocessing -> query: " + query + ", start=" + start + ", length=" + length);
+        }
+
+        try {
+            // check if possibly fields are supported by this iPlug
+            // DISABLED! See INGRID-2214
 		    /*if (!allFieldsSupported(query)) {
 		        log.warn("Not all fields of this query are supported! Returning zero hits! (query: "+query.toString()+")");
 		        return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
 		    }*/
-		    
-			OSQuery osQuery = queryBuilder.createQuery(query, start, length, mapping);
-			
-			OSCommunication comm = new OSCommunication();
-			url = OSRequest.getOSQueryString(osQuery, query, osDescriptor, opensearchConfig);
-			result = comm.sendRequest(url);
-			hits = ingridConverter.processResult(fPlugID, result, query.getGrouped());
-			
-			// set the ranking received from the plugdescription
-			if (hits != null)
-				hits.setRanked(fIsRanked);
-			
-			comm.releaseConnection();
-		
-	        facetManager.addFacets(hits, query);
-			
-			return hits;
-		} catch (Exception se) {
-			if (result == null) {
-				log.error("Could not receive answer from: " + url, se);
-			} else {
-				log.warn("An error has occured! Returning no hits!", se);
-			}
-			return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
-		}
-	}
+
+            OSQuery osQuery = queryBuilder.createQuery(query, start, length, mapping);
+
+            OSCommunication comm = new OSCommunication();
+            url = OSRequest.getOSQueryString(osQuery, query, osDescriptor, opensearchConfig);
+            result = comm.sendRequest(url);
+            hits = ingridConverter.processResult(fPlugID, result, query.getGrouped());
+
+            // set the ranking received from the plugdescription
+            if (hits != null)
+                hits.setRanked(fIsRanked);
+
+            comm.releaseConnection();
+
+            facetManager.addFacets(hits, query);
+
+            return hits;
+        } catch (Exception se) {
+            if (result == null) {
+                log.error("Could not receive answer from: " + url, se);
+            } else {
+                log.warn("An error has occured! Returning no hits!", se);
+            }
+            return new IngridHits(fPlugID, 0, new IngridHit[0], fIsRanked);
+        }
+    }
 
     /**
-	 * Return all metadata information for a given hit.
-	 * This is not supported by Opensearch!
-	 * 
-	 * @param hit
-	 * @return a record object for a given hit.
-	 * @throws Exception
-	 * @throws IOException
-	 */
-	public Record getRecord(IngridHit hit) throws Exception {
-		log.debug("getRecord");
-		return null;
-	}
+     * Return all metadata information for a given hit.
+     * This is not supported by Opensearch!
+     *
+     * @param hit
+     * @return a record object for a given hit.
+     * @throws Exception
+     * @throws IOException
+     */
+    public Record getRecord(IngridHit hit) throws Exception {
+        log.debug("getRecord");
+        return null;
+    }
 
-	/**
-	 * Inherited by iDetailer. Should not be filled with code.
-	 * 
-	 * @throws Exception e
-	 */
-	public void close() throws Exception {
-		// nothing to do.
-	}
+    /**
+     * Inherited by iDetailer. Should not be filled with code.
+     *
+     * @throws Exception e
+     */
+    public void close() {
+        // nothing to do.
+    }
 
-	@Override
-	public IngridHitDetail getDetail(IngridHit hit, IngridQuery query,
-			String[] arg2) throws Exception {
-		IngridHitDetail hitDetail = ingridConverter.getHitDetailFromCache(hit.getDocumentId());
-		
-		if (hitDetail == null) { // this shouldn't happen
-			log.warn("IngridHitDetail not found in cache! Creating one with fewer information.");
-			hitDetail = new IngridHitDetail(hit, hit.getString("title"), hit.getString("abstract"));
-			hitDetail.setDocumentId(hit.getDocumentId());
-			hitDetail.setPlugId(hit.getPlugId());
-			hitDetail.setDataSourceId(hit.getDataSourceId());
-			hitDetail.put("url", hit.get("url"));
-		}
-		
-		return hitDetail;
-	}
+    @Override
+    public IngridHitDetail getDetail(IngridHit hit, IngridQuery query,
+                                     String[] arg2) {
+        IngridHitDetail hitDetail = ingridConverter.getHitDetailFromCache(hit.getDocumentId());
 
-	@Override
-	public IngridHitDetail[] getDetails(IngridHit[] hits, IngridQuery query,
-			String[] arg2) throws Exception {
-		IngridHitDetail[] hitDetails = new IngridHitDetail[hits.length];
-		int c = 0;
-		for (IngridHit singleHit : hits) {
-			hitDetails[c] = getDetail(singleHit, query, arg2);
-			c++;
-		}
-		return hitDetails;
-	}
+        if (hitDetail == null) { // this shouldn't happen
+            log.warn("IngridHitDetail not found in cache! Creating one with fewer information.");
+            hitDetail = new IngridHitDetail(hit, hit.getString("title"), hit.getString("abstract"));
+            hitDetail.setDocumentId(hit.getDocumentId());
+            hitDetail.setPlugId(hit.getPlugId());
+            hitDetail.setDataSourceId(hit.getDataSourceId());
+            hitDetail.put("url", hit.get("url"));
+        }
 
-	@Autowired
-	public void setConverterFactory(ConverterFactory converterFactory) {
-		this.converterFactory = converterFactory;
-	}
-	
-	/**
-	 * This method creates a readable String out of an InputStream. This is
-	 * only used for testing purpose!
-	 * @param is
-	 * @return
-	 * @throws IOException
-	 */
-	public String convertStreamToString(InputStream is) throws IOException {
+        return hitDetail;
+    }
+
+    @Override
+    public IngridHitDetail[] getDetails(IngridHit[] hits, IngridQuery query,
+                                        String[] arg2) throws Exception {
+        IngridHitDetail[] hitDetails = new IngridHitDetail[hits.length];
+        int c = 0;
+        for (IngridHit singleHit : hits) {
+            hitDetails[c] = getDetail(singleHit, query, arg2);
+            c++;
+        }
+        return hitDetails;
+    }
+
+    @Autowired
+    public void setConverterFactory(ConverterFactory converterFactory) {
+        this.converterFactory = converterFactory;
+    }
+
+    /**
+     * This method creates a readable String out of an InputStream. This is
+     * only used for testing purpose!
+     *
+     * @param is
+     * @return
+     * @throws IOException
+     */
+    public String convertStreamToString(InputStream is) throws IOException {
         /*
          * To convert the InputStream to String we use the BufferedReader.readLine()
          * method. We iterate until the BufferedReader return null which means
@@ -331,7 +356,7 @@ public class OpenSearchPlug extends HeartBeatPlug {
             String line;
 
             try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
                 while ((line = reader.readLine()) != null) {
                     sb.append(line).append("\n");
                 }
@@ -339,12 +364,12 @@ public class OpenSearchPlug extends HeartBeatPlug {
                 is.close();
             }
             return sb.toString();
-        } else {        
+        } else {
             return "";
         }
     }
-	
-	@Autowired
+
+    @Autowired
     public void setQueryBuilder(OSQueryBuilder queryBuilder) {
         this.queryBuilder = queryBuilder;
     }
@@ -352,13 +377,13 @@ public class OpenSearchPlug extends HeartBeatPlug {
     public void setFacetManager(FacetManager facetManager) {
         this.facetManager = facetManager;
     }
-	
+
     public static void main(String[] args) throws Exception {
-        new JettyStarter(Configuration.class);
+        SpringApplication.run(OpenSearchPlug.class, args);
     }
 
     @Override
     public IngridDocument call(IngridCall targetInfo) {
-        throw new RuntimeException( "call-function not implemented in OpenSearch-iPlug" );
+        throw new RuntimeException("call-function not implemented in OpenSearch-iPlug");
     }
 }

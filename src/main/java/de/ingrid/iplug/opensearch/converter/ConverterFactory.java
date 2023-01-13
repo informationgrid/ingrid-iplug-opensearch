@@ -2,7 +2,7 @@
  * **************************************************-
  * ingrid-iplug-opensearch:war
  * ==================================================
- * Copyright (C) 2014 - 2022 wemove digital solutions GmbH
+ * Copyright (C) 2014 - 2023 wemove digital solutions GmbH
  * ==================================================
  * Licensed under the EUPL, Version 1.1 or – as soon they will be
  * approved by the European Commission - subsequent versions of the
@@ -38,7 +38,7 @@ import de.ingrid.iplug.opensearch.query.OSDescriptor;
  *
  */
 public class ConverterFactory {
-	private static Log log = LogFactory.getLog(ConverterFactory.class);
+	private static final Log log = LogFactory.getLog(ConverterFactory.class);
 	
 	// injected by Spring
 	private OpensearchRequestStrategy opensearchRequestStrategy;
@@ -53,7 +53,7 @@ public class ConverterFactory {
 	 * Standard initialisation: No ranking modification
 	 */
 	public ConverterFactory() {
-		rankingModifiers = new ArrayList<RankingModifier>();
+		rankingModifiers = new ArrayList<>();
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class ConverterFactory {
 				descriptor.setUsedType(type);
 				
 				// return the class that is used for the conversion
-				IngridConverter iConverter = (IngridConverter)Class.forName(converterMap.get(type)).newInstance();
+				IngridConverter iConverter = (IngridConverter)Class.forName(converterMap.get(type)).getDeclaredConstructor().newInstance();
 				iConverter.setRankingModifiers(rankingModifiers);
 				if (log.isDebugEnabled()) {
 					for (RankingModifier rmf : rankingModifiers) {
@@ -88,7 +88,6 @@ public class ConverterFactory {
 	
 	/**
 	 * Get the strategies which converter should be prefered over the other.
-	 * @return
 	 */
 	public OpensearchRequestStrategy getOpensearchRequestStrategy() {
 		return opensearchRequestStrategy;
@@ -96,7 +95,6 @@ public class ConverterFactory {
 
 	/**
 	 * Set the strategies which converter should be prefered over the other.
-	 * @param opensearchRequestStrategy
 	 */
 	public void setOpensearchRequestStrategy(
 			OpensearchRequestStrategy opensearchRequestStrategy) {
@@ -105,7 +103,6 @@ public class ConverterFactory {
 	
 	/**
 	 * Get the map which holds a converter for each strategy (like rss, atom, ...).
-	 * @return
 	 */
 	public Map<String, String> getConverterMap() {
 		return converterMap;
@@ -113,7 +110,6 @@ public class ConverterFactory {
 
 	/**
 	 * Set the map which holds a converter for each strategy.
-	 * @param converterMap
 	 */
 	public void setConverterMap(Map<String, String> converterMap) {
 		this.converterMap = converterMap;
@@ -122,7 +118,6 @@ public class ConverterFactory {
 	/**
 	 * Set the modifier who influences the ranking, before it is returned
 	 * to the requesting client.
-	 * @param rankingModifier
 	 */
 	public void setRankingModifiers(List<RankingModifier> rankingModifiers) {
 		this.rankingModifiers = rankingModifiers;
