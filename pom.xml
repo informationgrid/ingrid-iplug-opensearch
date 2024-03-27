@@ -33,7 +33,7 @@
   <properties>
     <iplug.type>IPLUG_OPENSEARCH</iplug.type>
     <spring.version>2.7.17</spring.version>
-    <ingrid-base-webapp.version>7.0.0</ingrid-base-webapp.version>
+    <ingrid-base-webapp.version>7.1.0-SNAPSHOT</ingrid-base-webapp.version>
     <log4j2.version>2.22.1</log4j2.version>
   </properties>
 
